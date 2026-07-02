@@ -340,6 +340,284 @@ const PORTFOLIO_BLUEPRINTS = {
   },
 };
 
+// ─── Platforms catalog ─────────────────────────────────────────────────────────
+
+const PLATFORMS = {
+  roboadvisors: [
+    {
+      id: 'indexa',
+      name: 'Indexa Capital',
+      logo: '🔵',
+      url: 'https://indexacapital.com',
+      fees: '0.40–0.54% total/año',
+      min: '3.000 €',
+      badge: '⭐ Mejor valorado',
+      est_returns: { conservador: '3–5%', moderado: '5–7%', dinamico: '7–9%', agresivo: '8–11%' },
+      pros: ['Fondos Vanguard + Dimensional', 'Rebalanceo automático', 'Sin coste de entrada/salida', 'Perfil personalizado 1–10'],
+      cons: ['Mínimo 3.000€', 'Sin cuenta remunerada incluida'],
+      highlight: ['conservador', 'moderado'],
+    },
+    {
+      id: 'myinvestor_carteras',
+      name: 'MyInvestor Carteras',
+      logo: '🟠',
+      url: 'https://myinvestor.es',
+      fees: '~0.37–0.45% total/año',
+      min: 'Sin mínimo',
+      badge: null,
+      est_returns: { conservador: '3–4%', moderado: '5–6%', dinamico: '7–8%', agresivo: '8–10%' },
+      pros: ['Sin mínimo de entrada', 'Comisión de gestión muy baja', 'Cuenta remunerada 2.5% integrada', 'Fondos Vanguard y Amundi'],
+      cons: ['Menos personalización de perfil', 'Plataforma más genérica'],
+      highlight: [],
+    },
+    {
+      id: 'finizens',
+      name: 'Finizens',
+      logo: '🟢',
+      url: 'https://finizens.com',
+      fees: '0.34% total/año',
+      min: '1.000 €',
+      badge: null,
+      est_returns: { conservador: '3–5%', moderado: '5–7%', dinamico: '7–9%', agresivo: '8–10%' },
+      pros: ['Fondos Vanguard de bajo coste', 'Ajuste automático según edad', 'Plan de pensiones indexado integrado'],
+      cons: ['Menos reconocido que Indexa', 'Menor track record público'],
+      highlight: [],
+    },
+    {
+      id: 'inbestme',
+      name: 'inbestMe',
+      logo: '🔷',
+      url: 'https://inbestme.com',
+      fees: '0.36–0.48% total/año',
+      min: '1.000 €',
+      badge: null,
+      est_returns: { conservador: '3–5%', moderado: '5–7%', dinamico: '7–9%', agresivo: '9–11%' },
+      pros: ['Mayor personalización (ISR, factores)', 'Hasta 10 perfiles de riesgo distintos', 'Análisis fiscal detallado', 'Plan de pensiones integrado'],
+      cons: ['Interfaz más compleja', 'Menor notoriedad de marca'],
+      highlight: ['dinamico', 'agresivo'],
+    },
+  ],
+
+  brokers: [
+    {
+      id: 'myinvestor_broker',
+      name: 'MyInvestor',
+      logo: '🟠',
+      url: 'https://myinvestor.es',
+      fees: '0% custodia + 0% comisión en fondos',
+      min: '1 €',
+      badge: '✅ Mejor para fondos',
+      est_returns: null,
+      pros: ['Sin custodia en fondos de inversión', 'Vanguard, Amundi, iShares disponibles', 'Cuenta remunerada 2.5% incluida', 'Traspaso entre fondos sin tributar'],
+      cons: ['ETFs con tarifa de custodia separada', 'App mejorable respecto a competidores'],
+    },
+    {
+      id: 'trade_republic',
+      name: 'Trade Republic',
+      logo: '🖤',
+      url: 'https://traderepublic.com/es-es',
+      fees: '1 € por operación · 0% custodia',
+      min: '1 €',
+      badge: '⭐ Mejor para ETFs',
+      est_returns: null,
+      pros: ['1€ por operación en ETFs', 'Cuenta remunerada 3.25% integrada', 'Planes de ahorro automáticos gratis', 'App muy bien valorada'],
+      cons: ['Solo app (sin plataforma web de operativa)', 'Sin fondos de inversión tradicionales'],
+    },
+    {
+      id: 'degiro',
+      name: 'DEGIRO',
+      logo: '🔴',
+      url: 'https://degiro.es',
+      fees: '~2€ + 0.038%/op · 2.5€/posición/año custodia',
+      min: '1 €',
+      badge: null,
+      est_returns: null,
+      pros: ['Acceso a más de 50 mercados globales', 'Gran catálogo de ETFs', 'Tarifas competitivas en ETFs europeos'],
+      cons: ['Sin cuenta remunerada', 'Sin fondos de inversión', 'Custodia anual por posición ETF'],
+    },
+    {
+      id: 'xtb',
+      name: 'XTB',
+      logo: '🔵',
+      url: 'https://xtb.com/es',
+      fees: '0% ETFs hasta 100k€/mes · 0.2% después',
+      min: '1 €',
+      badge: null,
+      est_returns: null,
+      pros: ['0% comisiones en ETFs (límite 100k€/mes)', 'Planes de ahorro automáticos', 'Cuenta remunerada 3.8%', 'Plataforma de análisis potente'],
+      cons: ['Sin fondos de inversión tradicionales', 'Comisión tras 100k€/mes de operaciones'],
+    },
+  ],
+
+  savings: [
+    {
+      id: 'trade_republic_savings',
+      name: 'Trade Republic',
+      logo: '🖤',
+      url: 'https://traderepublic.com/es-es',
+      fees: 'Sin comisiones',
+      min: 'Sin mínimo',
+      badge: '⭐ Mejor TAE',
+      est_return: '3.25% TAE',
+      pros: ['3.25% TAE liquidación diaria', 'Liquidez inmediata', 'Garantía FGD hasta 100.000€', 'Sin plazo ni penalización'],
+      cons: ['Solo accesible vía app móvil', 'Sin acceso web de operativa'],
+    },
+    {
+      id: 'xtb_savings',
+      name: 'XTB (cuenta)',
+      logo: '🔵',
+      url: 'https://xtb.com/es',
+      fees: 'Sin comisiones',
+      min: 'Sin mínimo',
+      badge: null,
+      est_return: '3.8% TAE',
+      pros: ['3.8% TAE (la más alta del mercado)', 'Disponible vía web y app', 'Sin plazo mínimo'],
+      cons: ['Plataforma pensada para trading', 'Requiere abrir cuenta de broker'],
+    },
+    {
+      id: 'revolut_savings',
+      name: 'Revolut Savings',
+      logo: '🟣',
+      url: 'https://revolut.com/es',
+      fees: 'Sin comisiones (plan básico)',
+      min: 'Sin mínimo',
+      badge: null,
+      est_return: '~3.0% TAE',
+      pros: ['Apertura inmediata', 'Liquidez total', 'Integrado con cuenta corriente Revolut'],
+      cons: ['Tipo variable sin garantía de permanencia', 'No es banco tradicional (e-money)'],
+    },
+    {
+      id: 'raisin',
+      name: 'Raisin',
+      logo: '💛',
+      url: 'https://raisin.es',
+      fees: 'Sin comisiones al inversor',
+      min: '1.000 €',
+      badge: null,
+      est_return: 'Hasta 3.5% TAE en depósitos',
+      pros: ['Acceso a depósitos bancarios europeos', 'Garantía FGD europea por banco', 'Hasta 3.5% TAE en plazos fijos'],
+      cons: ['Mínimo 1.000€', 'Depósitos a plazo son ilíquidos', 'Alta más laboriosa'],
+    },
+  ],
+
+  real_estate: [
+    {
+      id: 'urbanitae',
+      name: 'Urbanitae',
+      logo: '🏙️',
+      url: 'https://urbanitae.com',
+      fees: 'Sin comisión al inversor',
+      min: '500 €',
+      badge: '🏆 Líder en España',
+      est_return: '12–18% TIR proyectado',
+      pros: ['Mayor plataforma española de crowdfunding', 'Regulada por CNMV', 'Proyectos en Madrid, Barcelona, Valencia', 'Due diligence riguroso'],
+      cons: ['Ilíquido (12–36 meses)', 'Rentabilidad no garantizada', 'Riesgo de promotor'],
+    },
+    {
+      id: 'wecity',
+      name: 'Wecity',
+      logo: '🏘️',
+      url: 'https://wecity.eu',
+      fees: 'Sin comisión al inversor',
+      min: '500 €',
+      badge: null,
+      est_return: '8–14% TIR proyectado',
+      pros: ['Regulada por CNMV', 'Proyectos residenciales y terciarios diversificados', 'Historial de rentabilidades sólido'],
+      cons: ['Ilíquido', 'Menor volumen de proyectos que Urbanitae'],
+    },
+    {
+      id: 'civislend',
+      name: 'Civislend',
+      logo: '🏛️',
+      url: 'https://civislend.com',
+      fees: 'Sin comisión al inversor',
+      min: '250 €',
+      badge: null,
+      est_return: '8–12% TIR proyectado',
+      pros: ['Mínimo de entrada más bajo (250€)', 'Regulada por CNMV', 'Préstamos con garantía hipotecaria'],
+      cons: ['Ilíquido', 'Menos proyectos activos que Urbanitae'],
+    },
+  ],
+
+  crypto: [
+    {
+      id: 'coinbase',
+      name: 'Coinbase',
+      logo: '🔵',
+      url: 'https://coinbase.com',
+      fees: '0.5–1.5%/operación (spread)',
+      min: 'Sin mínimo',
+      badge: '✅ Más regulada',
+      est_return: null,
+      pros: ['Empresa cotizada NASDAQ (máxima transparencia)', 'Regulada en EE.UU. y Europa', 'App muy fácil de usar', 'Seguros sobre activos en custodia'],
+      cons: ['Comisiones más altas que exchanges profesionales', 'Custodia en plataforma (riesgo exchange)'],
+    },
+    {
+      id: 'kraken',
+      name: 'Kraken',
+      logo: '🟣',
+      url: 'https://kraken.com',
+      fees: '0.16–0.26% maker/taker',
+      min: 'Sin mínimo',
+      badge: null,
+      est_return: null,
+      pros: ['Comisiones profesionales más bajas', 'Historial de seguridad excelente', 'Gran variedad de activos y staking', 'Opción de autocustodia sencilla'],
+      cons: ['Interfaz más técnica', 'Verificación KYC más rigurosa y lenta'],
+    },
+    {
+      id: 'bit2me',
+      name: 'Bit2Me',
+      logo: '🇪🇸',
+      url: 'https://bit2me.com',
+      fees: '0.80–1.49%/operación',
+      min: '5 €',
+      badge: null,
+      est_return: null,
+      pros: ['Exchange español con soporte en español 24/7', 'Regulado en España (inscrito AEPD)', 'Integración bancaria española más fácil'],
+      cons: ['Comisiones más altas que Kraken o Coinbase', 'Menor liquidez en pares no mayores'],
+    },
+  ],
+
+  pensions: [
+    {
+      id: 'indexa_pension',
+      name: 'Indexa Planes',
+      logo: '🔵',
+      url: 'https://indexacapital.com/planes-pensiones',
+      fees: '0.29–0.42% total/año',
+      min: 'Sin mínimo',
+      badge: '💸 Comisión más baja',
+      est_returns: { conservador: '3–5%', moderado: '5–7%', dinamico: '7–9%', agresivo: '8–11%' },
+      pros: ['La comisión más baja del mercado', 'Misma gestión automática que el fondo', 'Ajuste de riesgo automático según edad', 'Traspaso desde cualquier plan sin tributar'],
+      cons: ['Ilíquido hasta jubilación (salvo contingencias legales)', 'Límite 1.500€/año aportación individual'],
+    },
+    {
+      id: 'myinvestor_pension',
+      name: 'MyInvestor Pensiones',
+      logo: '🟠',
+      url: 'https://myinvestor.es/plan-pensiones',
+      fees: '0.25% gestión + 0.10% depósito/año',
+      min: 'Sin mínimo',
+      badge: null,
+      est_returns: { conservador: '3–5%', moderado: '5–7%', dinamico: '7–9%', agresivo: '8–10%' },
+      pros: ['Comisiones muy bajas', 'Fondos Vanguard y Amundi', 'Integrado en MyInvestor si ya tienes cuenta', 'Sin mínimo de aportación'],
+      cons: ['Ilíquido hasta jubilación', 'Límite 1.500€/año individual'],
+    },
+    {
+      id: 'finizens_pension',
+      name: 'Finizens Pensiones',
+      logo: '🟢',
+      url: 'https://finizens.com/plan-de-pensiones',
+      fees: '0.34% total/año',
+      min: 'Sin mínimo',
+      badge: null,
+      est_returns: { conservador: '3–5%', moderado: '5–7%', dinamico: '7–9%', agresivo: '8–10%' },
+      pros: ['Gestión automatizada con perfil de riesgo dinámico', 'Sin comisión de traspaso saliente', 'Opción ISR (inversión sostenible)', 'Sin mínimo de aportación'],
+      cons: ['Ilíquido hasta jubilación', 'Límite 1.500€/año individual'],
+    },
+  ],
+};
+
 // ─── Known funds catalog (ISIN → profile) ─────────────────────────────────────
 
 const KNOWN_FUNDS = {
@@ -1118,124 +1396,89 @@ function findEquivalentUserFund(blueprintProduct, analysis) {
 
 // ─── Products ─────────────────────────────────────────────────────────────────
 
-function renderProductCards(riskProfile, objetivos, ccaa, inversiones, step1, step5) {
-  const complexity = getPortfolioComplexity(step1, step5);
-  const blueprint = PORTFOLIO_BLUEPRINTS[riskProfile]?.[complexity];
-  if (!blueprint) return '<p class="text-gray-400 text-sm">No hay cartera disponible para tu perfil.</p>';
+function renderPlatformSection({ title, subtitle, platforms, riskProfile, disclaimer = false, warning = null, compact = false }) {
+  const cardHtml = platforms.map(p => {
+    const isBadged = !!p.badge;
+    const borderClass = isBadged ? 'border-blue-300 shadow-md' : 'border-gray-200 shadow-sm';
+    const estReturn = p.est_returns ? (p.est_returns[riskProfile] || '') : (p.est_return || '');
+    const returnLine = estReturn ? `<span class="text-xs text-green-700 font-medium">📈 ~${estReturn}</span>` : '';
 
-  const ctx = detectUserPlatformContext(inversiones);
-  const TIER_LABELS = { 1: 'Nivel 1', 2: 'Nivel 2', 3: 'Nivel 3', 4: 'Nivel 4', 5: 'Nivel 5', 6: 'Nivel 6' };
-  const isManaged = !!blueprint.managed;
-  const managedPlatform = isManaged ? blueprint.products[0]?.platform : null;
+    const prosHtml = p.pros.slice(0, compact ? 2 : 3).map(pro =>
+      `<li class="flex items-start gap-1.5 text-xs text-gray-600"><span class="text-green-500 shrink-0 font-bold">✓</span><span>${pro}</span></li>`
+    ).join('');
+    const conHtml = (p.cons || []).slice(0, 1).map(con =>
+      `<li class="flex items-start gap-1.5 text-xs text-gray-400"><span class="text-gray-300 shrink-0 font-bold">−</span><span>${con}</span></li>`
+    ).join('');
 
-  // Platform-aware context banner
-  let contextBanner = '';
-  if (ctx.hasHighFeeFunds) {
-    contextBanner = `
-      <div class="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-xl">
-        <p class="text-sm font-semibold text-amber-800">⚠️ Tienes fondos de gestión activa con comisiones altas</p>
-        <p class="text-xs text-amber-700 mt-1">Traspasándolos a estos fondos indexados ahorrarías ~<strong>${fmtEur(ctx.switchSavings)}/año</strong> en comisiones. El traspaso entre fondos de inversión es <strong>sin coste fiscal en España</strong> — no tributas hasta que retires el dinero.</p>
+    return `
+      <div class="relative p-4 bg-white rounded-xl border-2 ${borderClass} flex flex-col">
+        ${isBadged ? `<span class="absolute -top-3 left-3 bg-blue-600 text-white text-xs font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap">${p.badge}</span>` : ''}
+        <div class="flex items-start gap-2.5 ${isBadged ? 'mt-1.5' : ''}">
+          <span class="text-2xl shrink-0 leading-none mt-0.5">${p.logo}</span>
+          <div class="min-w-0 flex-1">
+            <p class="font-bold text-gray-900 text-sm leading-tight">${p.name}</p>
+            <p class="text-xs text-gray-500 mt-0.5 leading-tight">${p.fees}${p.min && p.min !== 'Sin mínimo' ? ' · Mín ' + p.min : (p.min === 'Sin mínimo' ? ' · Sin mínimo' : '')}</p>
+            ${returnLine ? `<div class="mt-1">${returnLine}</div>` : ''}
+          </div>
+        </div>
+        <ul class="mt-3 space-y-1 flex-1">${prosHtml}${conHtml}</ul>
+        <a href="${p.url}" target="_blank" rel="noopener noreferrer"
+          class="mt-3 block text-center py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition-colors">
+          Ver plataforma →
+        </a>
       </div>`;
-  } else if (isManaged && managedPlatform === 'Indexa Capital' && ctx.hasIndexa) {
-    contextBanner = `
-      <div class="mb-4 p-3 bg-green-50 border border-green-200 rounded-xl">
-        <p class="text-sm font-semibold text-green-800">✅ Ya estás en la plataforma correcta — Indexa Capital</p>
-        <p class="text-xs text-green-700 mt-1">No necesitas hacer ningún cambio. Sigue aportando mensualmente y deja que Indexa rebalancee automáticamente por ti.</p>
-      </div>`;
-  } else if (isManaged && managedPlatform === 'MyInvestor' && ctx.hasMyInvestor) {
-    contextBanner = `
-      <div class="mb-4 p-3 bg-green-50 border border-green-200 rounded-xl">
-        <p class="text-sm font-semibold text-green-800">✅ Ya estás en la plataforma correcta — MyInvestor</p>
-        <p class="text-xs text-green-700 mt-1">No necesitas hacer ningún cambio. Sigue aportando a tu Cartera Indexada de MyInvestor — ellos rebalancean automáticamente por ti.</p>
-      </div>`;
-  } else if (!isManaged && ctx.hasIndexa) {
-    contextBanner = `
-      <div class="mb-4 p-3 bg-blue-50 border border-blue-100 rounded-xl">
-        <p class="text-sm font-semibold text-blue-800">💡 Actualmente con Indexa Capital — ¿merece la pena cambiar?</p>
-        <p class="text-xs text-blue-700 mt-1">Indexa es perfectamente válido (~0.42%/año, gestión automática, sin que tengas que decidir nada). Esta alternativa DIY te da más control y menor coste (~0.15-0.30%/año), pero requiere que gestiones tú los rebalanceos. El cambio solo compensa si quieres aprender o tienes más de 50.000 € invertidos.</p>
-      </div>`;
-  } else if (!isManaged && ctx.hasMyInvestor) {
-    contextBanner = `
-      <div class="mb-4 p-3 bg-green-50 border border-green-200 rounded-xl">
-        <p class="text-sm font-semibold text-green-800">✅ Ya tienes cuenta en MyInvestor</p>
-        <p class="text-xs text-green-700 mt-1">No necesitas abrir nada nuevo. Contrata directamente estos fondos desde tu cuenta de MyInvestor y configura aportaciones automáticas.</p>
-      </div>`;
-  }
+  }).join('');
 
-  const ahorros = step1?.ahorros_liquidos || 0;
-  let platformJustification;
-  if (isManaged) {
-    if (managedPlatform === 'Indexa Capital') {
-      platformJustification = 'La hemos elegido porque para tu perfil la gestión automática tiene más sentido que hacerlo tú mismo. Defines el perfil de riesgo una vez, aportas mensualmente, y Indexa rebalancea por ti sin que tengas que tomar ninguna decisión. El coste total es ~0.4-0.6%/año — entre 5 y 10 veces menos que la media de los fondos que ofrece un banco.';
-    } else {
-      platformJustification = 'La gestión automática tiene sentido para tu perfil: defines el riesgo una vez, aportas mensualmente, y la plataforma lo gestiona por ti. El coste total es ~0.4-0.6%/año — entre 5 y 10 veces menos que la media bancaria.';
-    }
-  } else if (complexity >= 4) {
-    platformJustification = 'Con tu nivel de experiencia y capital puedes gestionar los fondos directamente. El coste baja a 0.15-0.25%/año, pero necesitarás revisar y rebalancear la cartera una vez al año. Si en algún momento quieres simplificarlo, Indexa Capital es una buena alternativa con gestión automática.';
-  } else {
-    platformJustification = ahorros > 30000
-      ? 'MyInvestor te da acceso a los mejores fondos indexados del mercado con comisiones mínimas. Con tu capital, merece la pena hacerlo directamente — más control y menor coste que las carteras gestionadas.'
-      : 'Hemos elegido MyInvestor porque combina acceso a fondos indexados de primera línea con una interfaz sencilla. Puedes empezar con un solo fondo y añadir más cuando te sientas cómodo.';
-  }
+  const cols = platforms.length === 2 ? 'sm:grid-cols-2' : platforms.length >= 3 ? 'sm:grid-cols-2 lg:grid-cols-3' : '';
+  const warningHtml = warning
+    ? `<div class="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800">${warning}</div>` : '';
+  const disclaimerHtml = disclaimer
+    ? `<p class="text-xs text-gray-400 text-center mt-2">🔍 No recibimos ningún pago por estas recomendaciones</p>` : '';
 
-  let html = contextBanner + `
-    <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4 mb-2">
-      <div class="flex items-center gap-2 mb-1">
-        <span class="text-xs font-semibold text-blue-500 uppercase tracking-wide">${TIER_LABELS[complexity]}</span>
-        <span class="text-sm font-bold text-blue-900">${blueprint.label}</span>
-      </div>
-      <p class="text-xs text-gray-600">${blueprint.description}</p>
-      ${blueprint.note ? `<p class="text-xs text-blue-700 mt-1 font-medium">${blueprint.note}</p>` : ''}
-    </div>
-    <p class="text-xs text-gray-500 leading-relaxed mb-4 px-1">${platformJustification}</p>`;
+  return `
+    <section class="mb-8">
+      <h2 class="text-sm font-bold text-gray-800 uppercase tracking-wide mb-1">${title}</h2>
+      <p class="text-xs text-gray-500 leading-relaxed mb-4">${subtitle}</p>
+      <div class="grid grid-cols-1 ${cols} gap-3">${cardHtml}</div>
+      ${warningHtml}${disclaimerHtml}
+    </section>`;
+}
 
-  const productsToRender = blueprint.products;
-  const altProduct = null;
-
+function renderDiyPortfolioSection(blueprint, riskProfile, inversiones) {
   const portfolioAnalysis = analyzePortfolioFunds(inversiones);
+  let inner = '';
 
-  productsToRender.forEach(p => {
-    const weightBadge = !isManaged && p.pct
-      ? `<span class="tag bg-blue-50 text-blue-700 text-xs font-semibold">${p.pct}%</span>` : '';
-    const isinBadge = p.isin
-      ? `<span class="tag bg-gray-100 text-gray-500 font-mono text-xs">${p.isin}</span>` : '';
-    const equivalent = !isManaged ? findEquivalentUserFund(p, portfolioAnalysis) : null;
+  blueprint.products.forEach(p => {
+    const weightBadge = p.pct ? `<span class="tag bg-blue-50 text-blue-700 text-xs font-semibold">${p.pct}%</span>` : '';
+    const isinBadge = p.isin ? `<span class="tag bg-gray-100 text-gray-500 font-mono text-xs">${p.isin}</span>` : '';
+    const equivalent = findEquivalentUserFund(p, portfolioAnalysis);
 
     if (equivalent && !equivalent.partial) {
       const existingName = equivalent.fundInfo?.name || equivalent.inv?.isin || 'tu fondo actual';
       const existingIsin = equivalent.inv?.isin || '';
-      const existingIsinBadge = existingIsin
-        ? `<span class="tag bg-gray-100 text-gray-500 font-mono text-xs">${existingIsin}</span>` : '';
-      html += `
-        <div class="flex items-center gap-3 p-3 bg-green-50 rounded-xl border border-green-200 mb-2">
+      inner += `
+        <div class="flex items-center gap-3 p-3 bg-green-50 rounded-xl border border-green-200">
           <span class="text-xl shrink-0">✅</span>
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2 flex-wrap">
               <span class="font-semibold text-green-900 text-sm">Mantén: ${existingName}</span>
-              ${existingIsinBadge}
-              ${weightBadge}
+              ${existingIsin ? `<span class="tag bg-gray-100 text-gray-500 font-mono text-xs">${existingIsin}</span>` : ''}${weightBadge}
             </div>
-            <p class="text-xs text-green-700 mt-0.5">Ya cubre el papel de «${p.name}» — misma categoría de activo. No necesitas cambiar nada.</p>
+            <p class="text-xs text-green-700 mt-0.5">Ya cubre el papel de «${p.name}» — no necesitas cambiar nada.</p>
           </div>
-          <span class="shrink-0 text-xs font-semibold text-green-700">Ya lo tienes</span>
         </div>`;
     } else if (equivalent && equivalent.partial) {
       const existingName = equivalent.fundInfo?.name || equivalent.inv?.isin || 'tu fondo actual';
-      const existingIsin = equivalent.inv?.isin || '';
-      const existingIsinBadge = existingIsin
-        ? `<span class="tag bg-gray-100 text-gray-500 font-mono text-xs">${existingIsin}</span>` : '';
-      html += `
-        <div class="flex items-center gap-3 p-3 bg-amber-50 rounded-xl border border-amber-200 mb-2">
+      inner += `
+        <div class="flex items-center gap-3 p-3 bg-amber-50 rounded-xl border border-amber-200">
           <span class="text-xl shrink-0">⚠️</span>
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2 flex-wrap">
               <span class="font-semibold text-amber-900 text-sm">Tienes: ${existingName}</span>
-              ${existingIsinBadge}
               ${weightBadge}
             </div>
-            <p class="text-xs text-amber-700 mt-0.5">Cubre ~65% del MSCI World (solo EE.UU.). Puedes mantenerlo, pero considera añadir mercados internacionales para completar la cobertura global.</p>
+            <p class="text-xs text-amber-700 mt-0.5">Cubre ~65% del MSCI World (solo EE.UU.). Considera añadir mercados internacionales para completar la cobertura global.</p>
           </div>
-          <span class="shrink-0 text-xs font-semibold text-amber-700">Parcial</span>
         </div>`;
     } else {
       const compositionHtml = p.composition ? `
@@ -1248,15 +1491,14 @@ function renderProductCards(riskProfile, objetivos, ccaa, inversiones, step1, st
       const estReturnBadge = p.est_return
         ? `<span class="inline-block mt-1.5 text-xs bg-green-50 text-green-700 px-2 py-0.5 rounded-full border border-green-100 font-medium">📈 ${p.est_return}</span>`
         : '';
-      html += `
-        <div class="p-3 bg-white rounded-xl border border-gray-100 shadow-sm mb-2">
+      inner += `
+        <div class="p-3 bg-white rounded-xl border border-gray-100 shadow-sm">
           <div class="flex items-center gap-3">
             <span class="text-xl shrink-0">${p.logo}</span>
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-2 flex-wrap">
                 <span class="font-semibold text-gray-900 text-sm">${p.name}</span>
-                ${isinBadge}
-                ${weightBadge}
+                ${isinBadge}${weightBadge}
               </div>
               <p class="text-xs text-gray-400 mt-0.5">${p.fees}${p.min ? ' · mín. ' + p.min : ''}</p>
               ${p.rationale ? `<p class="text-xs text-gray-500 mt-0.5">${p.rationale}</p>` : ''}
@@ -1272,20 +1514,133 @@ function renderProductCards(riskProfile, objetivos, ccaa, inversiones, step1, st
     }
   });
 
-  if (altProduct) {
-    const primaryProduct = productsToRender[0];
-    const primaryMin = primaryProduct?.min;
-    const minText = primaryMin && !primaryMin.toLowerCase().includes('sin mínimo')
-      ? `¿Sin los ${primaryMin} de mínimo de ${primaryProduct.platform}?`
-      : '¿Prefieres otra opción?';
-    html += `<p class="text-xs text-gray-400 px-1 mb-1">${minText} Prueba <a href="${altProduct.url}" target="_blank" rel="noopener" class="underline hover:text-gray-600">${altProduct.platform}</a> — ${altProduct.fees}${altProduct.min && !altProduct.min.toLowerCase().includes('sin mínimo') ? ', mín. ' + altProduct.min : ', sin mínimo de entrada'}.</p>`;
+  return `
+    <section class="mb-8">
+      <h2 class="text-sm font-bold text-gray-800 uppercase tracking-wide mb-1">📊 Tu cartera de fondos indexados</h2>
+      <p class="text-xs text-gray-500 leading-relaxed mb-3">${blueprint.description}</p>
+      <div class="space-y-2">${inner}</div>
+      <p class="text-xs text-gray-400 mt-3 px-1">💡 Revisa y rebalancea una vez al año. El traspaso entre fondos de inversión no tributa en España.</p>
+    </section>`;
+}
+
+function renderProductCards(riskProfile, objetivos, ccaa, inversiones, step1, step5) {
+  const complexity = getPortfolioComplexity(step1, step5);
+  const blueprint = PORTFOLIO_BLUEPRINTS[riskProfile]?.[complexity];
+  if (!blueprint) return '<p class="text-gray-400 text-sm">No hay cartera disponible para tu perfil.</p>';
+
+  const ctx = detectUserPlatformContext(inversiones);
+  const horizonKey = objetivos.length > 0
+    ? getHorizonKey(Math.max(...objetivos.filter(o => o.plazo > 0).map(o => o.plazo), 1))
+    : getHorizonKey(20);
+  const allocation = ALLOCATIONS[riskProfile]?.[horizonKey] || {};
+  const isManaged = !!blueprint.managed;
+  const isSavingsMode = !!blueprint.savings_mode;
+  const showRealEstate = (allocation.alternatives || 0) > 0 && complexity >= 2;
+  const showCrypto = riskProfile === 'dinamico' || riskProfile === 'agresivo';
+  const isEpsv = ccaa === 'PVA';
+
+  // Context banner (high fee funds alert)
+  let contextBanner = '';
+  if (ctx.hasHighFeeFunds) {
+    contextBanner = `
+      <div class="mb-6 p-3 bg-amber-50 border border-amber-200 rounded-xl">
+        <p class="text-sm font-semibold text-amber-800">⚠️ Tienes fondos de gestión activa con comisiones altas</p>
+        <p class="text-xs text-amber-700 mt-1">Traspasándolos a fondos indexados ahorrarías ~<strong>${fmtEur(ctx.switchSavings)}/año</strong> en comisiones. El traspaso entre fondos de inversión es <strong>sin coste fiscal en España</strong>.</p>
+      </div>`;
   }
 
-  // Pension/EPSV note at the bottom
-  const pensionNote = ccaa === 'PVA'
-    ? 'Considera una EPSV para el tramo de pensión — fiscalmente más eficiente que el plan de pensiones en Euskadi.'
-    : 'Considera un plan de pensiones o PIAS para el tramo destinado a jubilación si tu tramo IRPF lo justifica.';
-  html += `<p class="text-xs text-gray-400 mt-3 px-1">🏦 ${pensionNote}</p>`;
+  let html = contextBanner;
+
+  // ── Section 1: Main investment ────────────────────────────────────────────
+  if (isSavingsMode) {
+    html += renderPlatformSection({
+      title: '💰 Ahorra primero, invierte después',
+      subtitle: `Con menos de 3.000€ lo mejor es un depósito remunerado mientras llegas al mínimo de los roboadvisores. Apunta al ${PLATFORMS.roboadvisors[0].name} cuando llegues.`,
+      platforms: PLATFORMS.savings,
+      riskProfile,
+      disclaimer: false,
+    });
+    html += `<div class="mb-6 p-3 bg-blue-50 border border-blue-100 rounded-xl text-sm text-blue-800">
+      💡 <strong>Objetivo: 3.000€</strong> — Cuando llegues, traspasa a un roboadvisor indexado. Rentabilidad esperada ~${PLATFORMS.roboadvisors[0].est_returns[riskProfile]}/año, comisión total ~0.4–0.5%/año.
+    </div>`;
+    html += renderPlatformSection({
+      title: '📊 Tu próximo paso — roboadvisor indexado',
+      subtitle: 'Para cuando superes los 3.000€. Compara las mejores opciones del mercado español:',
+      platforms: PLATFORMS.roboadvisors.slice(0, 3),
+      riskProfile,
+      disclaimer: true,
+      compact: true,
+    });
+  } else if (isManaged) {
+    const advisors = showCrypto ? PLATFORMS.roboadvisors : PLATFORMS.roboadvisors.filter(p => p.id !== 'inbestme');
+    html += renderPlatformSection({
+      title: '📊 Las mejores carteras gestionadas para tu perfil',
+      subtitle: `Elige una plataforma, configura tu perfil de riesgo, aporta mensualmente — ellos invierten y rebalancean por ti. Rentabilidad esperada ~${PLATFORMS.roboadvisors[0].est_returns[riskProfile]}/año.`,
+      platforms: advisors,
+      riskProfile,
+      disclaimer: true,
+    });
+  } else {
+    // DIY mode: ETF portfolio + broker comparison
+    html += renderDiyPortfolioSection(blueprint, riskProfile, inversiones);
+    html += renderPlatformSection({
+      title: '🏦 Dónde comprar estos fondos y ETFs',
+      subtitle: 'Compara los mejores brokers y plataformas de fondos del mercado español — elige uno y contrata los productos de arriba:',
+      platforms: PLATFORMS.brokers,
+      riskProfile,
+      disclaimer: false,
+    });
+  }
+
+  // ── Section 2: Savings / cash ─────────────────────────────────────────────
+  if (!isSavingsMode) {
+    html += renderPlatformSection({
+      title: '💰 Ahorro remunerado — para tu liquidez y fondo de emergencia',
+      subtitle: 'Mantén aquí tu fondo de emergencia y el efectivo que aún no has invertido. Hasta un 3.8% TAE sin riesgo, con liquidez inmediata.',
+      platforms: PLATFORMS.savings,
+      riskProfile,
+      disclaimer: false,
+    });
+  }
+
+  // ── Section 3: Real estate crowdfunding ──────────────────────────────────
+  if (showRealEstate) {
+    const reAlloc = allocation.alternatives || 0;
+    html += renderPlatformSection({
+      title: `🏢 Diversificación inmobiliaria (${reAlloc}% de tu cartera)`,
+      subtitle: 'Crowdfunding inmobiliario regulado por CNMV — accede a proyectos de promotora desde 250–500€ como complemento a tu cartera indexada.',
+      platforms: PLATFORMS.real_estate,
+      riskProfile,
+      disclaimer: false,
+      warning: '⚠️ Activos ilíquidos (12–36 meses). Solo para capital que no vayas a necesitar a corto plazo. Las rentabilidades proyectadas no son garantizadas.',
+    });
+  }
+
+  // ── Section 4: Crypto ─────────────────────────────────────────────────────
+  if (showCrypto) {
+    const cryptoAlloc = allocation.crypto || 0;
+    const cryptoLabel = cryptoAlloc > 0 ? `${cryptoAlloc}% de tu cartera` : 'máximo 5% como satélite';
+    html += renderPlatformSection({
+      title: `₿ Criptomonedas (${cryptoLabel})`,
+      subtitle: 'Solo si aceptas alta volatilidad. Limita a BTC y ETH — el resto son activos especulativos. Usa siempre exchanges regulados.',
+      platforms: PLATFORMS.crypto,
+      riskProfile,
+      disclaimer: false,
+      warning: '⚠️ Activo de muy alto riesgo. Nunca inviertas más de lo que puedas perder completamente. Los saldos en exchanges no tienen garantía FGD.',
+    });
+  }
+
+  // ── Section 5: Pension plans ──────────────────────────────────────────────
+  const pensionSubtitle = isEpsv
+    ? 'EPSV (Euskadi): hasta 5.000€/año deducibles en IRPF foral, más eficiente que el plan de pensiones estándar. Para plan de pensiones convencional, MyInvestor o Finizens son excelentes opciones.'
+    : 'Plan de pensiones indexado: deducción directa en IRPF (límite 1.500€/año individual). Aporta cada enero para maximizar el tiempo en mercado. El traspaso desde otro plan no tributa.';
+  html += renderPlatformSection({
+    title: '🏦 Plan de pensiones indexado (deducción IRPF)',
+    subtitle: pensionSubtitle,
+    platforms: PLATFORMS.pensions,
+    riskProfile,
+    disclaimer: false,
+  });
 
   return html;
 }

@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InvestWise — Recomendador de Carteras</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+  <header class="bg-white border-b border-gray-200 px-6 py-4">
+    <div class="max-w-3xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+          <span class="text-white font-bold text-sm">IW</span>
+        </div>
+        <span class="font-semibold text-gray-900">InvestWise</span>
+      </div>
+      <nav class="flex gap-4 text-sm text-gray-500 items-center">
+        <a href="markets.html" class="hover:text-gray-900 transition-colors">Mercados</a>
+        <button id="btn-reset" class="hover:text-red-500 transition-colors" title="Borrar datos y empezar de nuevo">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-8 items-start">
+
+      <!-- LEFT: fast-track question panel -->
+      <div id="question-panel" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 min-h-[440px] flex flex-col">
+
+        <!-- "X de 10" progress -->
+        <div class="flex items-center gap-3 mb-8">
+          <span id="q-counter" class="text-sm text-gray-400 tabular-nums w-16">1 de 10</span>
+          <div class="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden">
+            <div id="q-progress-bar" class="h-1 bg-blue-500 rounded-full transition-all duration-400" style="width:10%"></div>
+          </div>
+        </div>
+
+        <!-- Question screens -->
+        <div id="q-screens" class="flex-1">
+
+          <!-- Q1: edad -->
+          <div class="q-screen hidden" data-q="1">
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">¿Cuántos años tienes?</h2>
+            <p class="text-sm text-gray-400 mb-8">Tu edad define cuánto tiempo tienes para invertir. Con más años por delante puedes asumir más volatilidad a cambio de mayor rentabilidad potencial. Si te acercas a la jubilación, la cartera cambia para proteger lo que ya has acumulado.</p>
+            <input type="number" id="q-edad"
+              class="w-full text-4xl font-bold text-center border-b-2 border-gray-200 focus:border-blue-500 outline-none py-3 bg-transparent"
+              placeholder="35" min="18" max="80" inputmode="numeric">
+            <p id="q-edad-err" class="hidden text-xs text-red-500 mt-2 text-center">Introduce tu edad (18–80).</p>
+          </div>
+
+          <!-- Q2: ahorros_liquidos -->
+          <div class="q-screen hidden" data-q="2">
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">¿Cuánto tienes ahorrado? (€)</h2>
+            <p class="text-sm text-gray-400 mb-8">Lo primero que miramos es si tienes cubierto el colchón de emergencia — entre 3 y 6 meses de gastos. Si no lo tienes, la recomendación cambia: primero el colchón, luego invertir. Incluye cuenta corriente y cuentas remuneradas; no lo que ya tengas en fondos o acciones.</p>
+            <input type="text" id="q-ahorros"
+              class="w-full text-4xl font-bold text-center border-b-2 border-gray-200 focus:border-blue-500 outline-none py-3 bg-transparent"
+              placeholder="10.000" inputmode="numeric" pattern="[0-9]*"
+              onblur="ftFormatNum(this)" onfocus="ftDeformatNum(this)">
+            <p id="q-ahorros-err" class="hidden text-xs text-red-500 mt-2 text-center">Introduce tu ahorro actual (puede ser 0).</p>
+          </div>
+
+          <!-- Q3: ingresos -->
+          <div class="q-screen hidden" data-q="3">
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Tus ingresos netos al mes (€)</h2>
+            <p class="text-sm text-gray-400 mb-8">Lo usamos para calcular tu tasa de ahorro y entender la estabilidad de tu situación. Unos ingresos estables también nos dicen que podrías mantener las aportaciones aunque el mercado baje — y eso influye directamente en la cartera que te recomendamos.</p>
+            <input type="text" id="q-ingresos"
+              class="w-full text-4xl font-bold text-center border-b-2 border-gray-200 focus:border-blue-500 outline-none py-3 bg-transparent"
+              placeholder="2.000" inputmode="numeric" pattern="[0-9]*"
+              onblur="ftFormatNum(this)" onfocus="ftDeformatNum(this)">
+            <p id="q-ingresos-err" class="hidden text-xs text-red-500 mt-2 text-center">Introduce tus ingresos netos mensuales.</p>
+          </div>
+
+          <!-- Q4: ahorro_mensual -->
+          <div class="q-screen hidden" data-q="4">
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">¿Cuánto ahorras cada mes? (€)</h2>
+            <p class="text-sm text-gray-400 mb-8">El ahorro mensual constante suele ser más importante que el capital que ya tienes. Con aportaciones regulares, el interés compuesto trabaja para ti aunque empieces con poco. Es también la variable que más mueve la simulación de crecimiento de tu cartera.</p>
+            <input type="text" id="q-ahorro"
+              class="w-full text-4xl font-bold text-center border-b-2 border-gray-200 focus:border-blue-500 outline-none py-3 bg-transparent"
+              placeholder="400" inputmode="numeric" pattern="[0-9]*"
+              onblur="ftFormatNum(this)" onfocus="ftDeformatNum(this)">
+            <p id="q-ahorro-err" class="hidden text-xs text-red-500 mt-2 text-center">Introduce tu ahorro mensual.</p>
+          </div>
+
+          <!-- Q5: ya_inviertes -->
+          <div class="q-screen hidden" data-q="5">
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">¿Ya tienes alguna inversión?</h2>
+            <p class="text-sm text-gray-400 mb-8">Fondos, ETFs, acciones, Indexa, Urbanitae... lo que sea.</p>
+            <div class="grid grid-cols-2 gap-4">
+              <label class="option-card">
+                <input type="radio" name="q-ya-inviertes" value="no" class="hidden">
+                <div class="option-content py-7">
+                  <span class="text-3xl mb-2">🌱</span>
+                  <span class="text-sm font-semibold text-gray-800">Estoy empezando</span>
+                  <span class="text-xs text-gray-400 mt-1">No tengo nada todavía</span>
+                </div>
+              </label>
+              <label class="option-card">
+                <input type="radio" name="q-ya-inviertes" value="si" class="hidden">
+                <div class="option-content py-7">
+                  <span class="text-3xl mb-2">📊</span>
+                  <span class="text-sm font-semibold text-gray-800">Sí, ya invierto</span>
+                  <span class="text-xs text-gray-400 mt-1">Tengo alguna inversión</span>
+                </div>
+              </label>
+            </div>
+            <p id="q-ya-inviertes-err" class="hidden text-xs text-red-500 mt-3 text-center">Selecciona una opción.</p>
+          </div>
+
+          <!-- Portfolio input screen (conditional, shown when ya_inviertes=si) -->
+          <div class="q-screen hidden" data-q="portfolio-input">
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">¿Qué tienes ahora?</h2>
+            <p class="text-sm text-gray-400 mb-5">Busca por nombre o ISIN. Si tienes Urbanitae, cripto u otros, usa los accesos rápidos.</p>
+
+            <!-- Search + add row -->
+            <div class="relative mb-3">
+              <input type="text" id="ft-fund-name" placeholder="Amundi MSCI World, LU0996182563..."
+                class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-400"
+                oninput="ftFundSearch()" autocomplete="off">
+              <div id="ft-suggestions" class="hidden absolute left-0 right-0 top-full bg-white border border-gray-100 rounded-xl shadow-lg mt-1 z-10 max-h-52 overflow-y-auto text-sm"></div>
+            </div>
+            <div class="flex gap-2 mb-4">
+              <input type="number" id="ft-fund-amount" placeholder="Importe en €" min="1"
+                class="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-400">
+              <button onclick="ftAddFund()"
+                class="px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors whitespace-nowrap">+ Añadir</button>
+            </div>
+
+            <!-- Quick-add chips -->
+            <div class="flex flex-wrap gap-2 mb-5">
+              <button onclick="ftQuickAdd('crowdfunding', 'Urbanitae')" class="text-xs px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">🏠 Urbanitae</button>
+              <button onclick="ftQuickAdd('cripto', 'Bitcoin / ETH')" class="text-xs px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">₿ Cripto</button>
+              <button onclick="ftQuickAdd('plan_pensiones', 'Plan de pensiones')" class="text-xs px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">🏖️ Plan de pensiones</button>
+              <button onclick="ftQuickAdd('acciones', 'Acciones')" class="text-xs px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">📈 Acciones</button>
+            </div>
+
+            <!-- Added items list -->
+            <div id="ft-portfolio-list" class="space-y-2 mb-5 min-h-[36px]">
+              <p id="ft-empty-msg" class="text-xs text-gray-400 text-center py-2">Aún no has añadido nada — puedes continuar sin añadir</p>
+            </div>
+
+            <!-- Footer nav (own buttons, standard q-prev/q-next are hidden) -->
+            <div class="flex gap-2 pt-4 border-t border-gray-100">
+              <button onclick="ftBackFromPortfolio()"
+                class="px-4 py-2.5 text-sm text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">← Anterior</button>
+              <button onclick="ftSkipPortfolio()"
+                class="flex-1 px-4 py-2.5 border border-gray-200 text-gray-500 text-sm rounded-xl hover:bg-gray-50 transition-colors">Sin añadir</button>
+              <button onclick="ftSavePortfolio()"
+                class="flex-1 px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors">Continuar →</button>
+            </div>
+          </div>
+
+          <!-- Q6: riesgo_1 — experiencia -->
+          <div class="q-screen hidden" data-q="6">
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">¿Cuánta experiencia tienes invirtiendo?</h2>
+            <p class="text-sm text-gray-400 mb-6">No hay respuesta correcta. Si llevas tiempo invirtiendo y sabes que las caídas son temporales, puedes asumir más volatilidad sin ansiedad. Si estás empezando, te proponemos algo más sencillo para que entiendas bien lo que tienes.</p>
+            <div class="space-y-3">
+              <label class="risk-option"><input type="radio" name="q-r1" value="0" class="mr-3"><span class="text-sm text-gray-700">Ninguna — soy nuevo en esto</span></label>
+              <label class="risk-option"><input type="radio" name="q-r1" value="1" class="mr-3"><span class="text-sm text-gray-700">Algo de experiencia (menos de 2 años)</span></label>
+              <label class="risk-option"><input type="radio" name="q-r1" value="2" class="mr-3"><span class="text-sm text-gray-700">Experiencia moderada (2–5 años)</span></label>
+              <label class="risk-option"><input type="radio" name="q-r1" value="3" class="mr-3"><span class="text-sm text-gray-700">Inversor experimentado (+5 años)</span></label>
+            </div>
+            <p id="q-r1-err" class="hidden text-xs text-red-500 mt-3 text-center">Selecciona una opción.</p>
+          </div>
+
+          <!-- Q7: riesgo_2 — reacción caída -->
+          <div class="q-screen hidden" data-q="7">
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Tu cartera cae un 25% en 3 meses. ¿Qué haces?</h2>
+            <p class="text-sm text-gray-400 mb-6">La reacción ante las caídas es el factor que más determina si una inversión termina bien o mal. Vender cuando baja el mercado es el error más caro — y el más común. Tu respuesta aquí nos dice más que cualquier número.</p>
+            <div class="space-y-3">
+              <label class="risk-option"><input type="radio" name="q-r2" value="0" class="mr-3"><span class="text-sm text-gray-700">Vendo todo — no puedo con esa tensión</span></label>
+              <label class="risk-option"><input type="radio" name="q-r2" value="1" class="mr-3"><span class="text-sm text-gray-700">Espero a que se recupere sin tocar nada</span></label>
+              <label class="risk-option"><input type="radio" name="q-r2" value="2" class="mr-3"><span class="text-sm text-gray-700">Aprovecho para comprar más — es una oportunidad</span></label>
+            </div>
+            <p id="q-r2-err" class="hidden text-xs text-red-500 mt-3 text-center">Selecciona una opción.</p>
+          </div>
+
+          <!-- Q8: riesgo_3 — liquidez -->
+          <div class="q-screen hidden" data-q="8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">¿Cuándo necesitarías este dinero si surgiera una emergencia?</h2>
+            <p class="text-sm text-gray-400 mb-6">Una inversión en renta variable puede tardar 2-3 años en recuperarse de una caída fuerte. Necesitamos saber si puedes permitirte no tocar el dinero ese tiempo. Si no puedes, la cartera tiene que ser más conservadora, aunque eso implique menos rentabilidad.</p>
+            <div class="space-y-3">
+              <label class="risk-option"><input type="radio" name="q-r3" value="0" class="mr-3"><span class="text-sm text-gray-700">Podría necesitarlo en menos de 1 año</span></label>
+              <label class="risk-option"><input type="radio" name="q-r3" value="1" class="mr-3"><span class="text-sm text-gray-700">Probablemente en 1–3 años</span></label>
+              <label class="risk-option"><input type="radio" name="q-r3" value="2" class="mr-3"><span class="text-sm text-gray-700">No lo necesitaría antes de 3+ años</span></label>
+            </div>
+            <p id="q-r3-err" class="hidden text-xs text-red-500 mt-3 text-center">Selecciona una opción.</p>
+          </div>
+
+          <!-- Q9: riesgo_7 — impacto caída 40% -->
+          <div class="q-screen hidden" data-q="9">
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Si tu cartera cayera un 40% y tardara 3 años en recuperarse...</h2>
+            <p class="text-sm text-gray-400 mb-1">¿Afectaría a tu nivel de vida?</p>
+            <p class="text-sm text-gray-400 mb-6">Este escenario es real — ocurrió en 2008, en 2020 y en 2022. Te lo preguntamos para asegurarnos de que la cartera que te proponemos es una con la que podrías dormir bien aunque las cosas se pusieran difíciles durante un tiempo.</p>
+            <div class="space-y-3">
+              <label class="risk-option"><input type="radio" name="q-r7" value="2" class="mr-3"><span class="text-sm text-gray-700">Podría prescindir de ese dinero fácilmente</span></label>
+              <label class="risk-option"><input type="radio" name="q-r7" value="1" class="mr-3"><span class="text-sm text-gray-700">Sería incómodo pero aguantaría sin problema</span></label>
+              <label class="risk-option"><input type="radio" name="q-r7" value="0" class="mr-3"><span class="text-sm text-gray-700">Necesitaría parte de ese dinero en ese plazo</span></label>
+              <label class="risk-option"><input type="radio" name="q-r7" value="-1" class="mr-3"><span class="text-sm text-gray-700">Me comprometería seriamente el nivel de vida</span></label>
+            </div>
+            <p id="q-r7-err" class="hidden text-xs text-red-500 mt-3 text-center">Selecciona una opción.</p>
+          </div>
+
+          <!-- Q10: CTA -->
+          <div class="q-screen hidden" data-q="10">
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Listo para tu análisis 🎉</h2>
+            <p class="text-sm text-gray-400 mb-8">Con estas respuestas tenemos suficiente para recomendarte una cartera personalizada.</p>
+            <a href="results.html"
+               class="block w-full text-center px-6 py-3.5 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors mb-3">
+              Ver mi análisis completo →
+            </a>
+          </div>
+
+        </div>
+
+        <!-- Fast-track nav buttons -->
+        <div class="flex justify-between items-center mt-8 pt-6 border-t border-gray-100">
+          <button id="q-prev" class="hidden px-5 py-2.5 text-sm text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">← Anterior</button>
+          <span class="flex-1"></span>
+          <button id="q-next" class="px-6 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors">Continuar →</button>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: live dashboard (desktop only, sticky) -->
+      <div id="live-dashboard" class="hidden lg:flex flex-col gap-3 sticky top-8">
+        <p id="dash-empty" class="text-sm text-gray-400 text-center py-10 px-4">Tu análisis aparece aquí mientras respondes →</p>
+      </div>
+
+    </div>
+
+    <!-- Refinar análisis — revealed after fast-track completes -->
+    <div id="refinar-wrap" class="hidden mt-8">
+      <details id="refinar-details" class="bg-white rounded-2xl shadow-sm border border-gray-100">
+        <summary class="p-6 cursor-pointer text-sm font-medium text-blue-600 hover:text-blue-700 select-none list-none">
+          ⚙️ Refinar mi análisis <span class="font-normal text-gray-400">(opcional — más precisión en la recomendación)</span>
+        </summary>
+        <div id="refinar-body" class="px-8 pb-8">
+
+          <!-- Step progress (reused by showStep) -->
+          <div class="mb-8 pt-2">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-sm font-medium text-gray-700" id="step-label">Paso 1 de 5</span>
+              <span class="text-sm text-gray-500" id="step-name">Datos personales</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+              <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" id="progress-bar" style="width:20%"></div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-gray-100 p-8">
+
+      <!-- ============================================================
+           STEP 1: Datos personales + perfil fiscal
+      ============================================================ -->
+      <div id="step-1" class="step-content">
+        <h2 class="text-xl font-semibold text-gray-900 mb-1">Datos personales</h2>
+        <p class="text-gray-500 text-sm mb-6">Empecemos por lo básico para personalizar tu análisis y recomendaciones fiscales.</p>
+        <div class="space-y-5">
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Edad</label>
+              <input type="number" id="edad" min="18" max="80" placeholder="35"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Comunidad autónoma</label>
+              <select id="ccaa" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">Selecciona...</option>
+                <option value="AND">Andalucía</option>
+                <option value="ARA">Aragón</option>
+                <option value="AST">Asturias</option>
+                <option value="BAL">Baleares</option>
+                <option value="CAN">Canarias</option>
+                <option value="CTB">Cantabria</option>
+                <option value="CLM">Castilla-La Mancha</option>
+                <option value="CYL">Castilla y León</option>
+                <option value="CAT">Cataluña</option>
+                <option value="EXT">Extremadura</option>
+                <option value="GAL">Galicia</option>
+                <option value="RIO">La Rioja</option>
+                <option value="MAD">Madrid</option>
+                <option value="MUR">Murcia</option>
+                <option value="NAV">Navarra</option>
+                <option value="PVA">País Vasco</option>
+                <option value="VAL">Valencia</option>
+                <option value="CEU">Ceuta</option>
+                <option value="MEL">Melilla</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Ahorros líquidos (€)</label>
+              <input type="number" id="ahorros_liquidos" placeholder="15000" min="0"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <p class="text-xs text-gray-400 mt-1">Cuenta corriente + cuentas remuneradas. Las inversiones van en el paso 3.</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Años cotizando a la S.S.</label>
+              <input type="number" id="anios_cotizados" placeholder="10" min="0" max="50"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <p class="text-xs text-gray-400 mt-1">Para estimar tu pensión pública futura.</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Situación laboral</label>
+            <div class="grid grid-cols-4 gap-2">
+              <label class="option-card"><input type="radio" name="laboral" value="asalariado" class="hidden">
+                <div class="option-content"><span class="text-xl">👔</span><span class="text-xs font-medium">Asalariado</span></div></label>
+              <label class="option-card"><input type="radio" name="laboral" value="autonomo" class="hidden">
+                <div class="option-content"><span class="text-xl">💼</span><span class="text-xs font-medium">Autónomo</span></div></label>
+              <label class="option-card"><input type="radio" name="laboral" value="empresario" class="hidden">
+                <div class="option-content"><span class="text-xl">🏢</span><span class="text-xs font-medium">Empresario</span></div></label>
+              <label class="option-card"><input type="radio" name="laboral" value="otro" class="hidden">
+                <div class="option-content"><span class="text-xl">🎓</span><span class="text-xs font-medium">Otro</span></div></label>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Estabilidad de ingresos</label>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <label class="option-card"><input type="radio" name="estabilidad_ingresos" value="nomina_fija" class="hidden">
+                <div class="option-content"><span class="text-xl">📅</span><span class="text-xs font-medium">Nómina fija</span></div></label>
+              <label class="option-card"><input type="radio" name="estabilidad_ingresos" value="variable_base" class="hidden">
+                <div class="option-content"><span class="text-xl">📊</span><span class="text-xs font-medium">Variable con base fija</span></div></label>
+              <label class="option-card"><input type="radio" name="estabilidad_ingresos" value="irregular" class="hidden">
+                <div class="option-content"><span class="text-xl">🌊</span><span class="text-xs font-medium">Variable / Irregular</span></div></label>
+              <label class="option-card"><input type="radio" name="estabilidad_ingresos" value="emprendedor" class="hidden">
+                <div class="option-content"><span class="text-xl">🚀</span><span class="text-xs font-medium">Emprendedor</span></div></label>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Situación familiar</label>
+            <div class="grid grid-cols-4 gap-2">
+              <label class="option-card"><input type="radio" name="familiar" value="soltero" class="hidden">
+                <div class="option-content"><span class="text-xl">🧑</span><span class="text-xs font-medium">Soltero/a</span></div></label>
+              <label class="option-card"><input type="radio" name="familiar" value="pareja" class="hidden">
+                <div class="option-content"><span class="text-xl">👫</span><span class="text-xs font-medium">En pareja</span></div></label>
+              <label class="option-card"><input type="radio" name="familiar" value="familia" class="hidden">
+                <div class="option-content"><span class="text-xl">👨‍👩‍👦</span><span class="text-xs font-medium">Con hijos</span></div></label>
+              <label class="option-card"><input type="radio" name="familiar" value="monoparental" class="hidden">
+                <div class="option-content"><span class="text-xl">🧑‍👦</span><span class="text-xs font-medium">Monoparental</span></div></label>
+            </div>
+          </div>
+
+          <!-- Pareja toggle: visible when familiar = pareja | familia -->
+          <div id="pareja-ingresos-wrap" class="hidden p-3 bg-blue-50 rounded-xl border border-blue-100">
+            <label class="flex items-center gap-3 cursor-pointer">
+              <input type="checkbox" id="pareja_ingresos_propios" class="w-4 h-4 rounded border-gray-300 accent-blue-600">
+              <div>
+                <span class="text-sm font-medium text-gray-700">¿Tu pareja tiene ingresos propios?</span>
+                <p class="text-xs text-gray-500 mt-0.5">Ajusta el fondo de emergencia recomendado y la capacidad de inversión conjunta.</p>
+              </div>
+            </label>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Situación de vivienda</label>
+              <div class="grid grid-cols-2 gap-2">
+                <label class="option-card"><input type="radio" name="vivienda" value="alquiler" class="hidden">
+                  <div class="option-content"><span class="text-xl">🏠</span><span class="text-xs font-medium">Alquiler</span></div></label>
+                <label class="option-card"><input type="radio" name="vivienda" value="hipoteca" class="hidden">
+                  <div class="option-content"><span class="text-xl">🏦</span><span class="text-xs font-medium">Hipoteca</span></div></label>
+                <label class="option-card"><input type="radio" name="vivienda" value="propietario" class="hidden">
+                  <div class="option-content"><span class="text-xl">🔑</span><span class="text-xs font-medium">Propietario sin carga</span></div></label>
+                <label class="option-card"><input type="radio" name="vivienda" value="familia" class="hidden">
+                  <div class="option-content"><span class="text-xl">👪</span><span class="text-xs font-medium">Con familia</span></div></label>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Personas a tu cargo</label>
+              <select id="dependientes" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="0">0 — Sin dependientes</option>
+                <option value="1">1 persona</option>
+                <option value="2">2 personas</option>
+                <option value="3">3 personas</option>
+                <option value="4">4 o más</option>
+              </select>
+              <p class="text-xs text-gray-400 mt-1">Hijos u otros familiares a cargo económico tuyo.</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Protección personal</label>
+            <p class="text-xs text-gray-400 mb-2">Si ya lo tienes cubierto, el análisis no te lo recomendará.</p>
+            <div class="grid grid-cols-2 gap-2">
+              <label class="option-card-small"><input type="checkbox" id="tiene_seguro_vida" class="hidden">
+                <div class="option-content-small">🛡️ Tengo seguro de vida</div></label>
+              <label class="option-card-small"><input type="checkbox" id="tiene_seguro_invalidez" class="hidden">
+                <div class="option-content-small">♿ Tengo seguro de invalidez</div></label>
+            </div>
+          </div>
+
+          <!-- Dynamic vivienda detail fields -->
+          <div id="vivienda-alquiler-fields" class="hidden mt-2 p-4 bg-blue-50 rounded-xl border border-blue-100">
+            <div class="max-w-xs">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Coste del alquiler mensual (€)</label>
+              <input type="number" id="alquiler_mensual" placeholder="900" min="0"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+          </div>
+
+          <div id="vivienda-hipoteca-fields" class="hidden mt-2 p-4 bg-blue-50 rounded-xl border border-blue-100 space-y-4">
+            <p class="text-xs font-semibold text-blue-700 uppercase tracking-wide">Detalle de tu hipoteca</p>
+            <div class="grid grid-cols-3 gap-3">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Capital pendiente (€)</label>
+                <input type="number" id="hipoteca_capital" placeholder="120000" min="0"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Cuota mensual (€)</label>
+                <input type="number" id="hipoteca_cuota" placeholder="700" min="0"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Años restantes</label>
+                <input type="number" id="hipoteca_anos" placeholder="20" min="0" max="40"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+              </div>
+            </div>
+
+            <details class="mt-1">
+              <summary class="cursor-pointer text-xs text-blue-600 font-medium select-none list-none hover:text-blue-800 flex items-center gap-1">
+                ▸ Datos avanzados (tipo de interés y bonificaciones)
+              </summary>
+              <div class="space-y-4 mt-3">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de interés</label>
+                  <div class="flex gap-2">
+                    <label class="option-card-small flex-1"><input type="radio" name="hipoteca_tipo" value="fijo" class="hidden" onchange="onHipotecaTipoChange()">
+                      <div class="option-content-small">🔒 Fijo</div></label>
+                    <label class="option-card-small flex-1"><input type="radio" name="hipoteca_tipo" value="variable" class="hidden" onchange="onHipotecaTipoChange()">
+                      <div class="option-content-small">📈 Variable</div></label>
+                    <label class="option-card-small flex-1"><input type="radio" name="hipoteca_tipo" value="mixto" class="hidden" onchange="onHipotecaTipoChange()">
+                      <div class="option-content-small">⚖️ Mixto</div></label>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label id="hipoteca_tin_label" class="block text-sm font-medium text-gray-700 mb-1">TIN (%)</label>
+                    <input type="number" id="hipoteca_tin" placeholder="2.50" min="0" max="20" step="0.01"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <p id="hipoteca_tin_hint" class="text-xs text-gray-400 mt-1">Tipo de interés nominal anual fijo.</p>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Euribor en tu última revisión (%)</label>
+                    <input type="number" id="hipoteca_euribor" placeholder="2.50" min="0" max="10" step="0.01"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <p class="text-xs text-gray-400 mt-1">Solo si es variable o mixta.</p>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Bonificaciones contratadas</label>
+                  <p class="text-xs text-gray-400 mb-3">Marca las que tienes y añade el coste anual real.</p>
+                  <div class="space-y-2">
+                    <div class="flex items-center gap-3 p-2 bg-white rounded-lg border border-gray-200">
+                      <input type="checkbox" id="boni_seguro_hogar" name="hipoteca_bonificacion" value="seguro_hogar" class="w-4 h-4 rounded accent-blue-600">
+                      <label for="boni_seguro_hogar" class="flex-1 text-sm text-gray-700">🏠 Seguro de hogar</label>
+                      <input type="number" id="boni_seguro_hogar_coste" placeholder="350" min="0"
+                        class="w-20 px-2 py-1 border border-gray-300 rounded text-xs bg-gray-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500">
+                      <span class="text-xs text-gray-400">€/año</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-2 bg-white rounded-lg border border-gray-200">
+                      <input type="checkbox" id="boni_seguro_vida" name="hipoteca_bonificacion" value="seguro_vida" class="w-4 h-4 rounded accent-blue-600">
+                      <label for="boni_seguro_vida" class="flex-1 text-sm text-gray-700">🛡️ Seguro de vida/amortización</label>
+                      <input type="number" id="boni_seguro_vida_coste" placeholder="600" min="0"
+                        class="w-20 px-2 py-1 border border-gray-300 rounded text-xs bg-gray-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500">
+                      <span class="text-xs text-gray-400">€/año</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-2 bg-white rounded-lg border border-gray-200">
+                      <input type="checkbox" id="boni_nomina" name="hipoteca_bonificacion" value="nomina" class="w-4 h-4 rounded accent-blue-600">
+                      <label for="boni_nomina" class="flex-1 text-sm text-gray-700">💰 Domiciliación de nómina</label>
+                      <input type="number" id="boni_nomina_coste" placeholder="0" min="0"
+                        class="w-20 px-2 py-1 border border-gray-300 rounded text-xs bg-gray-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500">
+                      <span class="text-xs text-gray-400">€/año</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-2 bg-white rounded-lg border border-gray-200">
+                      <input type="checkbox" id="boni_tarjetas" name="hipoteca_bonificacion" value="tarjetas" class="w-4 h-4 rounded accent-blue-600">
+                      <label for="boni_tarjetas" class="flex-1 text-sm text-gray-700">💳 Uso de tarjetas del banco</label>
+                      <input type="number" id="boni_tarjetas_coste" placeholder="0" min="0"
+                        class="w-20 px-2 py-1 border border-gray-300 rounded text-xs bg-gray-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500">
+                      <span class="text-xs text-gray-400">€/año</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-2 bg-white rounded-lg border border-gray-200">
+                      <input type="checkbox" id="boni_plan_pensiones" name="hipoteca_bonificacion" value="plan_pensiones" class="w-4 h-4 rounded accent-blue-600">
+                      <label for="boni_plan_pensiones" class="flex-1 text-sm text-gray-700">📈 Plan de pensiones con el banco</label>
+                      <input type="number" id="boni_plan_pensiones_coste" placeholder="0" min="0"
+                        class="w-20 px-2 py-1 border border-gray-300 rounded text-xs bg-gray-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500">
+                      <span class="text-xs text-gray-400">€/año</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-2 bg-white rounded-lg border border-gray-200">
+                      <input type="checkbox" id="boni_alarma" name="hipoteca_bonificacion" value="alarma" class="w-4 h-4 rounded accent-blue-600">
+                      <label for="boni_alarma" class="flex-1 text-sm text-gray-700">🚨 Alarma / seguridad del hogar</label>
+                      <input type="number" id="boni_alarma_coste" placeholder="240" min="0"
+                        class="w-20 px-2 py-1 border border-gray-300 rounded text-xs bg-gray-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500">
+                      <span class="text-xs text-gray-400">€/año</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </details>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============================================================
+           STEP 2: Situación financiera
+      ============================================================ -->
+      <div id="step-2" class="step-content hidden">
+        <div id="step2-callout" class="hidden mb-4"></div>
+        <h2 class="text-xl font-semibold text-gray-900 mb-1">Situación financiera actual</h2>
+        <p class="text-gray-500 text-sm mb-6">Tu realidad económica para darte recomendaciones honestas.</p>
+        <div class="space-y-4">
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Tus ingresos netos mensuales (€)</label>
+              <input type="number" id="ingresos" placeholder="2000" min="0"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <p class="text-xs text-gray-400 mt-1">Lo que recibes en cuenta cada mes.</p>
+            </div>
+            <div id="pareja-netos-col" class="hidden">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Ingresos netos mensuales pareja (€)</label>
+              <input type="number" id="pareja_ingresos" placeholder="1800" min="0"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                oninput="updateHogarAhorroHint(); updateAhorroHint();">
+              <p class="text-xs text-gray-400 mt-1">Lo que recibe en cuenta cada mes.</p>
+            </div>
+          </div>
+
+          <!-- Doble ingreso: visible cuando step1.familiar = pareja | familia -->
+          <div id="pareja-ingreso-step2-wrap" class="hidden p-3 bg-green-50 rounded-xl border border-green-100">
+            <label class="flex items-center gap-3 cursor-pointer">
+              <input type="checkbox" id="pareja_tiene_ingresos" class="w-4 h-4 rounded border-gray-300 accent-green-600" onchange="onParejaIngresosChange()">
+              <div>
+                <span class="text-sm font-medium text-gray-700">¿Tu pareja también tiene ingresos?</span>
+                <p class="text-xs text-gray-500 mt-0.5">Los ingresos del hogar se suman para calcular tu capacidad de ahorro.</p>
+              </div>
+            </label>
+            <div id="hogar-ahorro-hint" class="hidden mt-2 px-3 py-1.5 bg-white rounded-lg border border-green-200 text-xs text-green-800"></div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Alquiler o hipoteca mensual (€)</label>
+              <input type="number" id="vivienda_coste" placeholder="900" min="0"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <p class="text-xs text-gray-400 mt-1">Cuota mensual de vivienda (alquiler o hipoteca).</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Capacidad de ahorro mensual (€)</label>
+              <input type="number" id="ahorro_mensual" placeholder="400" min="0"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <p class="text-xs text-blue-600 mt-1 font-medium" id="ahorro-hint"></p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">De eso, ¿cuánto es a corto plazo? (€)</label>
+              <input type="number" id="ahorro_corto_plazo" placeholder="0" min="0"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <p class="text-xs text-gray-400 mt-1">Dinero que necesitas en &lt;3 años. No se invierte en renta variable.</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Fondo de emergencia actual (€)</label>
+              <input type="number" id="fondo_emergencia" placeholder="6000" min="0"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <p class="text-xs text-gray-400 mt-1">Recomendado: 3-6 meses de gastos totales.</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Total deudas actuales (€)</label>
+              <input type="number" id="deudas" placeholder="0" min="0"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <p class="text-xs text-gray-400 mt-1">Excluye la hipoteca si ya la indicaste arriba.</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de deudas (si tienes)</label>
+            <div class="grid grid-cols-4 gap-2">
+              <label id="tipo-deuda-hipoteca-label" class="option-card-small"><input type="checkbox" name="tipo_deuda" value="hipoteca" class="hidden">
+                <div class="option-content-small">Hipoteca</div></label>
+              <label class="option-card-small"><input type="checkbox" name="tipo_deuda" value="prestamo_personal" class="hidden">
+                <div class="option-content-small">Préstamo personal</div></label>
+              <label class="option-card-small"><input type="checkbox" name="tipo_deuda" value="tarjeta" class="hidden">
+                <div class="option-content-small">Tarjeta crédito</div></label>
+              <label class="option-card-small"><input type="checkbox" name="tipo_deuda" value="coche" class="hidden">
+                <div class="option-content-small">Coche</div></label>
+            </div>
+          </div>
+
+          <div id="deuda-tae-wrap" class="hidden">
+            <p class="text-xs font-medium text-gray-600 mb-2">¿A qué tipo de interés aproximado?</p>
+            <div class="space-y-3">
+              <div id="tae-prestamo_personal" class="hidden">
+                <p class="text-xs text-gray-500 mb-1">Préstamo personal</p>
+                <div class="flex gap-2 flex-wrap">
+                  <label class="option-card-small"><input type="radio" name="tae_prestamo_personal" value="baja" class="hidden"><div class="option-content-small">🟢 Baja (&lt;3%)</div></label>
+                  <label class="option-card-small"><input type="radio" name="tae_prestamo_personal" value="media" class="hidden"><div class="option-content-small">🟡 Media (3–8%)</div></label>
+                  <label class="option-card-small"><input type="radio" name="tae_prestamo_personal" value="alta" class="hidden"><div class="option-content-small">🔴 Alta (&gt;8%)</div></label>
+                </div>
+              </div>
+              <div id="tae-tarjeta" class="hidden">
+                <p class="text-xs text-gray-500 mb-1">Tarjeta de crédito</p>
+                <div class="flex gap-2 flex-wrap">
+                  <label class="option-card-small"><input type="radio" name="tae_tarjeta" value="baja" class="hidden"><div class="option-content-small">🟢 Baja (&lt;3%)</div></label>
+                  <label class="option-card-small"><input type="radio" name="tae_tarjeta" value="media" class="hidden"><div class="option-content-small">🟡 Media (3–8%)</div></label>
+                  <label class="option-card-small"><input type="radio" name="tae_tarjeta" value="alta" class="hidden"><div class="option-content-small">🔴 Alta (&gt;8%)</div></label>
+                </div>
+              </div>
+              <div id="tae-coche" class="hidden">
+                <p class="text-xs text-gray-500 mb-1">Coche</p>
+                <div class="flex gap-2 flex-wrap">
+                  <label class="option-card-small"><input type="radio" name="tae_coche" value="baja" class="hidden"><div class="option-content-small">🟢 Baja (&lt;3%)</div></label>
+                  <label class="option-card-small"><input type="radio" name="tae_coche" value="media" class="hidden"><div class="option-content-small">🟡 Media (3–8%)</div></label>
+                  <label class="option-card-small"><input type="radio" name="tae_coche" value="alta" class="hidden"><div class="option-content-small">🔴 Alta (&gt;8%)</div></label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Beneficios de tu empresa (si aplica)</label>
+            <p class="text-xs text-gray-400 mb-2">Esto afecta a qué productos te recomendamos — p.ej. si tu empresa ya aporta a pensiones, no tiene sentido duplicar.</p>
+            <div class="grid grid-cols-3 gap-2">
+              <label class="option-card-small"><input type="checkbox" name="beneficios_empresa" value="seguro_medico" class="hidden">
+                <div class="option-content-small">🏥 Seguro médico</div></label>
+              <label class="option-card-small"><input type="checkbox" name="beneficios_empresa" value="plan_pensiones_empresa" class="hidden">
+                <div class="option-content-small">🏛️ Plan pensiones empresa</div></label>
+              <label class="option-card-small"><input type="checkbox" name="beneficios_empresa" value="coche_empresa" class="hidden">
+                <div class="option-content-small">🚗 Coche empresa</div></label>
+              <label class="option-card-small"><input type="checkbox" name="beneficios_empresa" value="ticket_restaurant" class="hidden">
+                <div class="option-content-small">🍽️ Ticket restaurant</div></label>
+              <label class="option-card-small"><input type="checkbox" name="beneficios_empresa" value="seguro_vida" class="hidden">
+                <div class="option-content-small">🛡️ Seguro de vida</div></label>
+              <label class="option-card-small"><input type="checkbox" name="beneficios_empresa" value="formacion" class="hidden">
+                <div class="option-content-small">🎓 Formación</div></label>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============================================================
+           STEP 3: Inversiones actuales
+      ============================================================ -->
+      <div id="step-3" class="step-content hidden">
+        <div id="step3-callout" class="hidden mb-4"></div>
+        <button onclick="skipStep3()" class="w-full mb-4 py-3 px-4 rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 text-sm text-gray-500 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-colors text-left">
+          🚀 <strong>Empiezo desde cero, no tengo nada invertido</strong> → Saltar al paso 4
+        </button>
+        <h2 class="text-xl font-semibold text-gray-900 mb-1">¿Qué tienes ya invertido?</h2>
+        <p class="text-gray-500 text-sm mb-4">Analizaremos si está optimizado y qué puedes mejorar.</p>
+
+        <!-- PDF upload area -->
+        <div class="mb-5 p-4 border-2 border-dashed border-blue-200 rounded-xl bg-blue-50">
+          <p class="text-sm font-medium text-blue-800 mb-1">📄 ¿Tienes un estado de cuenta en PDF?</p>
+          <p class="text-xs text-blue-600 mb-3">Súbelo y lo analizamos automáticamente para extraer tus posiciones.</p>
+          <div class="flex items-center gap-3">
+            <button onclick="document.getElementById('pdf-input').click()"
+              class="px-4 py-2 text-sm font-medium text-blue-700 bg-white border border-blue-300 rounded-lg hover:bg-blue-100 transition-colors">
+              Subir PDF →
+            </button>
+            <span class="text-xs text-blue-500">Soporta: Indexa Capital, MyInvestor, DEGIRO y otros</span>
+          </div>
+          <input type="file" id="pdf-input" accept=".pdf" class="hidden">
+          <div id="pdf-upload-result" class="mt-3"></div>
+        </div>
+
+        <div id="inversiones-container" class="space-y-3 mb-4"></div>
+        <button id="add-inversion"
+          class="w-full py-3 border-2 border-dashed border-gray-300 rounded-xl text-sm text-gray-500 hover:border-blue-400 hover:text-blue-600 transition-colors">
+          + Añadir inversión manualmente
+        </button>
+
+        <!-- Inmuebles -->
+        <div class="mt-6 pt-5 border-t border-gray-200">
+          <h3 class="text-sm font-semibold text-gray-800 mb-1">🏠 Inmuebles en propiedad</h3>
+          <p class="text-xs text-gray-500 mb-3">Tu vivienda habitual, segunda residencia o inmueble en alquiler. Distinto de los productos de inversión.</p>
+          <div id="inmuebles-container" class="space-y-3 mb-3"></div>
+          <button id="add-inmueble"
+            class="w-full py-3 border-2 border-dashed border-gray-300 rounded-xl text-sm text-gray-500 hover:border-blue-400 hover:text-blue-600 transition-colors">
+            + Añadir inmueble
+          </button>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           STEP 4: Objetivos (rediseño guiado)
+      ============================================================ -->
+      <div id="step-4" class="step-content hidden">
+        <h2 class="text-xl font-semibold text-gray-900 mb-1">¿Qué quieres conseguir?</h2>
+        <p class="text-gray-500 text-sm mb-6">Tres preguntas para construir tu plan de objetivos financieros.</p>
+
+        <!-- SECCIÓN A: Independencia financiera -->
+        <div class="mb-6 p-4 bg-gray-50 rounded-xl">
+          <h3 class="text-sm font-semibold text-gray-800 mb-1">🦋 Independencia financiera</h3>
+          <p class="text-sm text-gray-600 mb-3">¿Quieres vivir de tus inversiones en algún momento?</p>
+          <div class="grid grid-cols-3 gap-2 mb-3">
+            <label class="option-card"><input type="radio" name="independencia_quiere" value="si" class="hidden">
+              <div class="option-content"><span class="text-xl">💰</span><span class="text-xs font-medium">Sí, es mi meta</span></div></label>
+            <label class="option-card"><input type="radio" name="independencia_quiere" value="probablemente" class="hidden">
+              <div class="option-content"><span class="text-xl">🤔</span><span class="text-xs font-medium">Sería genial</span></div></label>
+            <label class="option-card"><input type="radio" name="independencia_quiere" value="no" class="hidden">
+              <div class="option-content"><span class="text-xl">🎯</span><span class="text-xs font-medium">No es prioritario</span></div></label>
+          </div>
+
+          <div id="independencia-details" class="hidden space-y-3 pt-2">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">¿Con cuánto quieres vivir al mes? (€)</label>
+              <input type="number" id="independencia_renta" placeholder="2000" min="100"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <div id="independencia-calc" class="mt-2 text-sm text-blue-700 font-medium hidden bg-blue-50 rounded-lg px-3 py-2"></div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">¿En cuántos años quieres conseguirlo?</label>
+              <input type="number" id="independencia_plazo" placeholder="20" min="1" max="50"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+          </div>
+        </div>
+
+        <!-- SECCIÓN B: Grandes gastos -->
+        <details class="mb-6">
+          <summary class="cursor-pointer p-4 bg-gray-50 rounded-xl select-none list-none flex items-center justify-between hover:bg-gray-100 transition-colors">
+            <span class="text-sm font-semibold text-gray-800">💸 Grandes hitos económicos</span>
+            <span class="text-xs text-gray-400">¿Comprar vivienda, coche, negocio? (opcional)</span>
+          </summary>
+          <div class="mt-2 p-4 bg-gray-50 rounded-xl">
+            <p class="text-sm text-gray-600 mb-3">¿Tienes alguno de estos gastos previstos? (selecciona todos los que apliquen)</p>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-3" id="grandes-gastos-cards">
+              <label class="option-card-small">
+                <input type="checkbox" id="gasto_vivienda" name="grandes_gastos" value="vivienda" class="hidden" onchange="toggleBigExpenseForm('vivienda', this.checked)">
+                <div class="option-content-small">🏠 Comprar vivienda</div>
+              </label>
+              <label class="option-card-small">
+                <input type="checkbox" id="gasto_educacion" name="grandes_gastos" value="educacion" class="hidden" onchange="toggleBigExpenseForm('educacion', this.checked)">
+                <div class="option-content-small">🎓 Educación hijos</div>
+              </label>
+              <label class="option-card-small">
+                <input type="checkbox" id="gasto_coche" name="grandes_gastos" value="coche" class="hidden" onchange="toggleBigExpenseForm('coche', this.checked)">
+                <div class="option-content-small">🚗 Coche</div>
+              </label>
+              <label class="option-card-small">
+                <input type="checkbox" id="gasto_negocio" name="grandes_gastos" value="negocio" class="hidden" onchange="toggleBigExpenseForm('negocio', this.checked)">
+                <div class="option-content-small">💼 Montar negocio</div>
+              </label>
+              <label class="option-card-small">
+                <input type="checkbox" id="gasto_proyecto" name="grandes_gastos" value="proyecto" class="hidden" onchange="toggleBigExpenseForm('proyecto', this.checked)">
+                <div class="option-content-small">✈️ Proyecto personal</div>
+              </label>
+            </div>
+            <div id="grandes-gastos-forms" class="space-y-3"></div>
+          </div>
+        </details>
+
+        <!-- SECCIÓN C: Jubilación -->
+        <div class="p-4 bg-gray-50 rounded-xl">
+          <h3 class="text-sm font-semibold text-gray-800 mb-1">🏖️ Jubilación</h3>
+          <p class="text-sm text-gray-600 mb-3">¿A qué edad te gustaría jubilarte?</p>
+          <div class="flex items-center gap-4">
+            <input type="range" id="edad_jubilacion" min="45" max="75" value="65" step="1"
+              class="flex-1 accent-blue-600" style="height:6px">
+            <div class="text-center min-w-[80px]">
+              <p class="text-3xl font-bold text-blue-600" id="jubilacion-edad-display">65</p>
+              <p class="text-xs text-gray-500">años</p>
+            </div>
+          </div>
+          <p class="text-xs text-gray-500 mt-2" id="jubilacion-plazo-info">Introduce tu edad en el paso 1 para ver cuántos años faltan.</p>
+          <div class="mt-3">
+            <label class="block text-sm font-medium text-gray-700 mb-1">¿De cuánto quieres vivir al mes en jubilación? (€)</label>
+            <input type="number" id="jubilacion_renta_mensual" placeholder="2000" min="0"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <p class="text-xs text-gray-400 mt-1">Renta objetivo neta mensual (en euros de hoy). Define la brecha a cubrir con tu cartera.</p>
+          </div>
+        </div>
+
+        <p id="no-objetivo-warning" class="text-xs text-center text-red-500 mt-3 hidden">
+          Define al menos tu objetivo de independencia financiera o jubilación para continuar.
+        </p>
+      </div>
+
+      <!-- ============================================================
+           STEP 5: Perfil de riesgo
+      ============================================================ -->
+      <div id="step-5" class="step-content hidden">
+        <h2 class="text-xl font-semibold text-gray-900 mb-1">Tu perfil de riesgo</h2>
+        <p class="text-gray-500 text-sm mb-6">5 preguntas para entender cómo te relacionas con el riesgo y la volatilidad.</p>
+        <div class="space-y-6">
+
+          <div>
+            <p class="text-sm font-medium text-gray-800 mb-3">1. ¿Cuánta experiencia tienes invirtiendo?</p>
+            <div class="space-y-2">
+              <label class="risk-option"><input type="radio" name="riesgo_1" value="0" class="mr-3"><span class="text-sm text-gray-700">Ninguna, soy nuevo en esto</span></label>
+              <label class="risk-option"><input type="radio" name="riesgo_1" value="1" class="mr-3"><span class="text-sm text-gray-700">Algo de experiencia (menos de 2 años)</span></label>
+              <label class="risk-option"><input type="radio" name="riesgo_1" value="2" class="mr-3"><span class="text-sm text-gray-700">Experiencia moderada (2-5 años)</span></label>
+              <label class="risk-option"><input type="radio" name="riesgo_1" value="3" class="mr-3"><span class="text-sm text-gray-700">Inversor experimentado (+5 años)</span></label>
+            </div>
+          </div>
+
+          <div>
+            <p class="text-sm font-medium text-gray-800 mb-3">2. Tu cartera cae un 25% en 3 meses. ¿Qué haces?</p>
+            <div class="space-y-2">
+              <label class="risk-option"><input type="radio" name="riesgo_2" value="0" class="mr-3"><span class="text-sm text-gray-700">Vendo todo, no puedo con esa tensión</span></label>
+              <label class="risk-option"><input type="radio" name="riesgo_2" value="1" class="mr-3"><span class="text-sm text-gray-700">Espero a que se recupere sin tocar nada</span></label>
+              <label class="risk-option"><input type="radio" name="riesgo_2" value="2" class="mr-3"><span class="text-sm text-gray-700">Aprovecho para comprar más, es una oportunidad</span></label>
+            </div>
+          </div>
+
+          <div>
+            <p class="text-sm font-medium text-gray-800 mb-3">3. ¿Cuándo necesitarías este dinero si surgiera una emergencia?</p>
+            <div class="space-y-2">
+              <label class="risk-option"><input type="radio" name="riesgo_3" value="0" class="mr-3"><span class="text-sm text-gray-700">Podría necesitarlo en menos de 1 año</span></label>
+              <label class="risk-option"><input type="radio" name="riesgo_3" value="1" class="mr-3"><span class="text-sm text-gray-700">Probablemente en 1-3 años</span></label>
+              <label class="risk-option"><input type="radio" name="riesgo_3" value="2" class="mr-3"><span class="text-sm text-gray-700">No lo necesitaría antes de 3+ años</span></label>
+            </div>
+          </div>
+
+          <div>
+            <p class="text-sm font-medium text-gray-800 mb-3">4. ¿Qué porcentaje de tus ahorros totales invertirás?</p>
+            <div class="space-y-2">
+              <label class="risk-option"><input type="radio" name="riesgo_5" value="0" class="mr-3"><span class="text-sm text-gray-700">Más del 75% de mis ahorros</span></label>
+              <label class="risk-option"><input type="radio" name="riesgo_5" value="1" class="mr-3"><span class="text-sm text-gray-700">Entre el 25% y el 75%</span></label>
+              <label class="risk-option"><input type="radio" name="riesgo_5" value="2" class="mr-3"><span class="text-sm text-gray-700">Menos del 25% de mis ahorros</span></label>
+            </div>
+          </div>
+
+          <div>
+            <p class="text-sm font-medium text-gray-800 mb-3">5. Si tu cartera cayera un 40% y tardara 3 años en recuperarse, ¿afectaría a tu nivel de vida?</p>
+            <div class="space-y-2">
+              <label class="risk-option"><input type="radio" name="riesgo_7" value="2" class="mr-3"><span class="text-sm text-gray-700">Podría prescindir de ese dinero fácilmente</span></label>
+              <label class="risk-option"><input type="radio" name="riesgo_7" value="1" class="mr-3"><span class="text-sm text-gray-700">Sería incómodo pero aguantaría sin problema</span></label>
+              <label class="risk-option"><input type="radio" name="riesgo_7" value="0" class="mr-3"><span class="text-sm text-gray-700">Necesitaría parte de ese dinero en ese plazo</span></label>
+              <label class="risk-option"><input type="radio" name="riesgo_7" value="-1" class="mr-3"><span class="text-sm text-gray-700">Me comprometería seriamente el nivel de vida</span></label>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <div class="flex justify-between items-center mt-8 pt-6 border-t border-gray-100">
+        <button id="btn-prev" class="px-5 py-2.5 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors hidden">
+          ← Anterior
+        </button>
+        <div class="flex-1"></div>
+        <button id="btn-next" class="px-6 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
+          Continuar →
+        </button>
+        <button id="btn-submit" class="px-6 py-2.5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors hidden">
+          Ver mi análisis →
+        </button>
+      </div>
+          </div>
+
+        </div><!-- /#refinar-body -->
+      </details><!-- /#refinar-details -->
+    </div><!-- /#refinar-wrap -->
+
+  </main>
+
+  <script src="js/wizard.js?v=2"></script>
+</body>
+</html>

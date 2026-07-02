@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mercados — InvestWise</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+  <header class="bg-white border-b border-gray-200 px-6 py-4">
+    <div class="max-w-5xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+          <span class="text-white font-bold text-sm">IW</span>
+        </div>
+        <span class="font-semibold text-gray-900">InvestWise</span>
+      </div>
+      <nav class="flex gap-4 text-sm text-gray-500">
+        <a href="index.html" class="hover:text-gray-900 transition-colors">Perfil</a>
+        <a href="results.html" class="hover:text-gray-900 transition-colors">Mi análisis</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-6 py-10">
+
+    <div class="mb-8 flex items-center justify-between flex-wrap gap-3">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900 mb-1">Mercados</h1>
+        <p class="text-gray-500 text-sm">Datos actualizados al cargar la página. Recarga para refrescar.</p>
+      </div>
+      <button onclick="location.reload()" class="px-4 py-2 text-sm font-medium text-blue-600 border border-blue-200 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+        ↻ Actualizar
+      </button>
+    </div>
+
+    <!-- Top movers + commodities side panel -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+
+      <!-- Gainers -->
+      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+        <h2 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+          <span class="text-green-500">▲</span> Top subidas (cripto 24h)
+        </h2>
+        <div id="top-gainers">
+          <div class="flex items-center gap-2 py-4 text-gray-400 text-sm"><span class="loader"></span> Cargando...</div>
+        </div>
+      </div>
+
+      <!-- Losers -->
+      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+        <h2 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+          <span class="text-red-500">▼</span> Top caídas (cripto 24h)
+        </h2>
+        <div id="top-losers">
+          <div class="flex items-center gap-2 py-4 text-gray-400 text-sm"><span class="loader"></span> Cargando...</div>
+        </div>
+      </div>
+
+      <!-- Quick links -->
+      <div class="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-5 text-white">
+        <h2 class="text-sm font-semibold mb-3 opacity-80">Plataformas para invertir</h2>
+        <div class="space-y-2">
+          <a href="https://indexacapital.com" target="_blank" rel="noopener" class="flex items-center justify-between py-2 px-3 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-sm">
+            <span>📊 Indexa Capital</span><span class="text-blue-200">→</span>
+          </a>
+          <a href="https://myinvestor.es" target="_blank" rel="noopener" class="flex items-center justify-between py-2 px-3 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-sm">
+            <span>🏦 MyInvestor</span><span class="text-blue-200">→</span>
+          </a>
+          <a href="https://traderepublic.com/es-es" target="_blank" rel="noopener" class="flex items-center justify-between py-2 px-3 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-sm">
+            <span>🟢 Trade Republic</span><span class="text-blue-200">→</span>
+          </a>
+          <a href="https://urbanitae.com" target="_blank" rel="noopener" class="flex items-center justify-between py-2 px-3 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-sm">
+            <span>🏗️ Urbanitae</span><span class="text-blue-200">→</span>
+          </a>
+          <a href="https://bit2me.com" target="_blank" rel="noopener" class="flex items-center justify-between py-2 px-3 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-sm">
+            <span>₿ Bit2Me</span><span class="text-blue-200">→</span>
+          </a>
+          <a href="https://degiro.es" target="_blank" rel="noopener" class="flex items-center justify-between py-2 px-3 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-sm">
+            <span>📉 DEGIRO</span><span class="text-blue-200">→</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Crypto -->
+    <section class="mb-10">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-semibold text-gray-900">₿ Criptomonedas</h2>
+        <span class="text-xs text-gray-400" id="crypto-updated">Cargando...</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="crypto-grid">
+        <div class="col-span-full flex items-center gap-2 py-8 text-gray-400 text-sm justify-center">
+          <span class="loader"></span> Cargando criptomonedas...
+        </div>
+      </div>
+    </section>
+
+    <!-- Stocks -->
+    <section class="mb-10">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-semibold text-gray-900">📈 Acciones</h2>
+        <span class="text-xs text-gray-400" id="stocks-updated">Cargando...</span>
+      </div>
+      <p class="text-xs text-gray-400 mb-4">Datos via Financial Modeling Prep. Las cotizaciones pueden tener hasta 15 min de retraso en la clave demo.</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="stocks-grid">
+        <div class="col-span-full flex items-center gap-2 py-8 text-gray-400 text-sm justify-center">
+          <span class="loader"></span> Cargando cotizaciones...
+        </div>
+      </div>
+    </section>
+
+    <!-- Commodities -->
+    <section class="mb-10">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">🛢️ Materias primas y metales</h2>
+      <p class="text-xs text-gray-400 mb-4">Referencia informativa. Precios en tiempo real disponibles en las plataformas enlazadas.</p>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="commodities-grid"></div>
+    </section>
+
+    <!-- Disclaimer -->
+    <div class="bg-gray-100 rounded-xl p-4 text-xs text-gray-500 text-center">
+      Datos orientativos. No constituyen asesoramiento de inversión. Los precios de mercado fluctúan constantemente — consulta siempre la plataforma correspondiente antes de operar.
+    </div>
+
+  </main>
+
+  <script src="js/markets.js"></script>
+</body>
+</html>

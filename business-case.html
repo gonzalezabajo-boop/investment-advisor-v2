@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InvestWise — Business Case</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .gradient-text {
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-gradient {
+      background: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 50%, #faf5ff 100%);
+    }
+    .section-divider {
+      border: none;
+      height: 1px;
+      background: linear-gradient(to right, transparent, #e5e7eb, transparent);
+    }
+    .card-hover {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    }
+    .funnel-step {
+      position: relative;
+    }
+    .funnel-step::after {
+      content: '↓';
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #9ca3af;
+      font-size: 18px;
+      z-index: 10;
+    }
+    .funnel-step:last-child::after { display: none; }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -29px;
+      top: 6px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #2563eb;
+      border: 2px solid white;
+      box-shadow: 0 0 0 2px #2563eb;
+    }
+    .timeline-line {
+      border-left: 2px solid #e5e7eb;
+      padding-left: 24px;
+    }
+    @media print {
+      .no-print { display: none; }
+      body { background: white; }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+  <!-- NAV -->
+  <nav class="no-print sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-gray-100 px-6 py-3">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center">
+          <span class="text-white font-bold text-xs">IW</span>
+        </div>
+        <span class="font-semibold text-gray-900 text-sm">InvestWise</span>
+        <span class="text-gray-300 text-sm">·</span>
+        <span class="text-gray-400 text-xs">Business Case</span>
+      </div>
+      <div class="flex gap-5 text-xs text-gray-500">
+        <a href="#problema" class="hover:text-blue-600 transition-colors">Problema</a>
+        <a href="#solucion" class="hover:text-blue-600 transition-colors">Solución</a>
+        <a href="#modelo" class="hover:text-blue-600 transition-colors">Modelo</a>
+        <a href="#funnel" class="hover:text-blue-600 transition-colors">Funnel</a>
+        <a href="#proyeccion" class="hover:text-blue-600 transition-colors">Proyección</a>
+        <a href="#roadmap" class="hover:text-blue-600 transition-colors">Roadmap</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero-gradient px-6 py-20">
+    <div class="max-w-4xl mx-auto">
+      <p class="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-4">Business Case · Julio 2026</p>
+      <h1 class="text-5xl font-extrabold leading-tight mb-6">
+        <span class="gradient-text">InvestWise</span><br>
+        <span class="text-gray-800">Democratizar la inversión<br>inteligente en España</span>
+      </h1>
+      <p class="text-xl text-gray-500 max-w-2xl leading-relaxed mb-10">
+        Una herramienta gratuita de diagnóstico financiero que convierte a inversores particulares en clientes de asesoramiento independiente, sin intermediarios bancarios ni comisiones ocultas.
+      </p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 text-center">
+          <p class="text-2xl font-bold text-blue-600">€600B+</p>
+          <p class="text-xs text-gray-500 mt-1">Patrimonio en fondos bancarios españoles</p>
+        </div>
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 text-center">
+          <p class="text-2xl font-bold text-blue-600">1,5%+</p>
+          <p class="text-xs text-gray-500 mt-1">Comisión media fondos bancarios vs 0,2% indexados</p>
+        </div>
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 text-center">
+          <p class="text-2xl font-bold text-blue-600">&lt;5%</p>
+          <p class="text-xs text-gray-500 mt-1">Españoles que invierten en ETFs o fondos indexados</p>
+        </div>
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 text-center">
+          <p class="text-2xl font-bold text-blue-600">3.800</p>
+          <p class="text-xs text-gray-500 mt-1">EAFIs registradas en España — mercado muy poco saturado</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="max-w-4xl mx-auto px-6">
+
+    <!-- PROBLEMA -->
+    <section id="problema" class="py-16">
+      <p class="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">01 · El problema</p>
+      <h2 class="text-3xl font-bold text-gray-900 mb-8">El inversor particular español está solo — o mal acompañado</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-2xl p-6 border border-red-100 shadow-sm card-hover">
+          <div class="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center mb-4 text-xl">🏦</div>
+          <h3 class="font-semibold text-gray-900 mb-2">El banco no es tu amigo</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Los asesores bancarios colocan productos de la casa con TERs del 1,5-2,5%. No son independientes. No tienen obligación fiduciaria. Cobran aunque pierdas.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-orange-100 shadow-sm card-hover">
+          <div class="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center mb-4 text-xl">😵</div>
+          <h3 class="font-semibold text-gray-900 mb-2">Hacerlo solo es difícil</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Hay información abundante pero fragmentada, contradictoria y sin contexto personal. Sin conocimientos de base, el particular no sabe por dónde empezar ni si lo está haciendo bien.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-yellow-100 shadow-sm card-hover">
+          <div class="w-10 h-10 bg-yellow-50 rounded-xl flex items-center justify-center mb-4 text-xl">💸</div>
+          <h3 class="font-semibold text-gray-900 mb-2">El impacto es enorme</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Pagar 1,5% extra durante 20 años sobre 50.000€ equivale a perder más de 60.000€ en rentabilidad potencial. La mayoría no lo sabe.</p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- SOLUCIÓN -->
+    <section id="solucion" class="py-16">
+      <p class="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">02 · La solución</p>
+      <h2 class="text-3xl font-bold text-gray-900 mb-3">InvestWise: diagnóstico en 3 minutos, asesoramiento de por vida</h2>
+      <p class="text-gray-500 mb-10 max-w-2xl">Una app web gratuita que en 9 preguntas genera un perfil inversor, una cartera recomendada y — si el usuario ya invierte — un análisis crítico de lo que tiene. Sin registro, sin publicidad, sin intereses ocultos.</p>
+
+      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-8">
+        <div class="grid md:grid-cols-2">
+          <div class="p-8 border-r border-gray-100">
+            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-4">La app hace</p>
+            <ul class="space-y-3">
+              <li class="flex items-start gap-3"><span class="text-green-500 mt-0.5">✓</span><span class="text-sm text-gray-700">Perfil inversor completo en 9 preguntas (edad, ingresos, horizonte, riesgo)</span></li>
+              <li class="flex items-start gap-3"><span class="text-green-500 mt-0.5">✓</span><span class="text-sm text-gray-700">Cartera recomendada con productos concretos (ETFs, fondos indexados, bonos)</span></li>
+              <li class="flex items-start gap-3"><span class="text-green-500 mt-0.5">✓</span><span class="text-sm text-gray-700">Análisis crítico de fondos existentes: comisiones reales, calidad, alternativas</span></li>
+              <li class="flex items-start gap-3"><span class="text-green-500 mt-0.5">✓</span><span class="text-sm text-gray-700">Simulador interactivo de crecimiento patrimonial a largo plazo</span></li>
+              <li class="flex items-start gap-3"><span class="text-green-500 mt-0.5">✓</span><span class="text-sm text-gray-700">Salud financiera: fondo de emergencia, tasa de ahorro, situación inmobiliaria</span></li>
+            </ul>
+          </div>
+          <div class="p-8 bg-gray-50">
+            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-4">La app no hace</p>
+            <ul class="space-y-3">
+              <li class="flex items-start gap-3"><span class="text-red-400 mt-0.5">✗</span><span class="text-sm text-gray-500">Asesoramiento personalizado regulado (requiere EAFI)</span></li>
+              <li class="flex items-start gap-3"><span class="text-red-400 mt-0.5">✗</span><span class="text-sm text-gray-500">Ejecutar operaciones ni custodiar patrimonio</span></li>
+              <li class="flex items-start gap-3"><span class="text-red-400 mt-0.5">✗</span><span class="text-sm text-gray-500">Planificación fiscal ni optimización de herencias</span></li>
+              <li class="flex items-start gap-3"><span class="text-red-400 mt-0.5">✗</span><span class="text-sm text-gray-500">Seguimiento activo ni alertas de rebalanceo</span></li>
+              <li class="flex items-start gap-3"><span class="text-red-400 mt-0.5">✗</span><span class="text-sm text-gray-500">Adaptar la estrategia a cambios vitales del usuario</span></li>
+            </ul>
+            <div class="mt-5 p-3 bg-blue-50 rounded-xl">
+              <p class="text-xs text-blue-700"><strong>Ese gap es el negocio.</strong> Lo que la app no puede hacer, lo hace el servicio de asesoramiento.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Competencia -->
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Panorama competitivo</h3>
+      <div class="overflow-x-auto rounded-2xl border border-gray-100 shadow-sm">
+        <table class="w-full text-sm bg-white">
+          <thead>
+            <tr class="bg-gray-50 border-b border-gray-100">
+              <th class="text-left px-5 py-3 font-semibold text-gray-600">Competidor</th>
+              <th class="text-left px-5 py-3 font-semibold text-gray-600">Modelo</th>
+              <th class="text-left px-5 py-3 font-semibold text-gray-600">Coste</th>
+              <th class="text-left px-5 py-3 font-semibold text-gray-600">Independiente</th>
+              <th class="text-left px-5 py-3 font-semibold text-gray-600">Diagnóstico gratuito</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-50">
+            <tr class="bg-blue-50">
+              <td class="px-5 py-3 font-semibold text-blue-700">InvestWise</td>
+              <td class="px-5 py-3 text-gray-700">App + EAFI</td>
+              <td class="px-5 py-3 text-gray-700">Gratis + 50-150€/mes</td>
+              <td class="px-5 py-3"><span class="text-green-600 font-semibold">Sí</span></td>
+              <td class="px-5 py-3"><span class="text-green-600 font-semibold">Sí</span></td>
+            </tr>
+            <tr>
+              <td class="px-5 py-3 text-gray-700">Indexa Capital</td>
+              <td class="px-5 py-3 text-gray-500">Roboadvisor</td>
+              <td class="px-5 py-3 text-gray-500">0,45% AUM/año</td>
+              <td class="px-5 py-3"><span class="text-green-600">Sí</span></td>
+              <td class="px-5 py-3"><span class="text-orange-500">Parcial</span></td>
+            </tr>
+            <tr>
+              <td class="px-5 py-3 text-gray-700">MyInvestor</td>
+              <td class="px-5 py-3 text-gray-500">Neobroker</td>
+              <td class="px-5 py-3 text-gray-500">0% depósito, comisiones op.</td>
+              <td class="px-5 py-3"><span class="text-orange-500">Parcial</span></td>
+              <td class="px-5 py-3"><span class="text-red-500">No</span></td>
+            </tr>
+            <tr>
+              <td class="px-5 py-3 text-gray-700">Finizens</td>
+              <td class="px-5 py-3 text-gray-500">Roboadvisor</td>
+              <td class="px-5 py-3 text-gray-500">0,39-0,82% AUM/año</td>
+              <td class="px-5 py-3"><span class="text-green-600">Sí</span></td>
+              <td class="px-5 py-3"><span class="text-red-500">No</span></td>
+            </tr>
+            <tr>
+              <td class="px-5 py-3 text-gray-700">Asesor bancario</td>
+              <td class="px-5 py-3 text-gray-500">Captación bancaria</td>
+              <td class="px-5 py-3 text-gray-500">1,5-2,5% TER en producto</td>
+              <td class="px-5 py-3"><span class="text-red-500">No</span></td>
+              <td class="px-5 py-3"><span class="text-red-500">No</span></td>
+            </tr>
+            <tr>
+              <td class="px-5 py-3 text-gray-700">EAFI tradicional</td>
+              <td class="px-5 py-3 text-gray-500">Asesoramiento puro</td>
+              <td class="px-5 py-3 text-gray-500">1.000-5.000€/año</td>
+              <td class="px-5 py-3"><span class="text-green-600">Sí</span></td>
+              <td class="px-5 py-3"><span class="text-red-500">No</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- MODELO DE NEGOCIO -->
+    <section id="modelo" class="py-16">
+      <p class="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">03 · Modelo de negocio</p>
+      <h2 class="text-3xl font-bold text-gray-900 mb-3">Tres capas de ingresos, una sola misión</h2>
+      <p class="text-gray-500 mb-10 max-w-2xl">El modelo está diseñado para que InvestWise capture valor de todos los tipos de usuario — desde el que solo quiere orientación hasta el que necesita asesoramiento continuado.</p>
+
+      <div class="space-y-4 mb-12">
+        <!-- Capa 1 -->
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 card-hover">
+          <div class="flex items-start gap-5">
+            <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center text-xl shrink-0">🌱</div>
+            <div class="flex-1">
+              <div class="flex items-center gap-3 mb-2">
+                <h3 class="font-semibold text-gray-900">Capa 1 — Afiliados</h3>
+                <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">Activable desde el día 1</span>
+              </div>
+              <p class="text-sm text-gray-500 mb-4">Los usuarios que siguen la recomendación y abren cuenta en las plataformas sugeridas generan comisión por referido. Captura valor de los usuarios DIY sin cobrarles directamente.</p>
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div class="bg-gray-50 rounded-xl p-3 text-center">
+                  <p class="text-xs font-semibold text-gray-700">Trade Republic</p>
+                  <p class="text-sm font-bold text-green-600">20-40€/reg.</p>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-3 text-center">
+                  <p class="text-xs font-semibold text-gray-700">Indexa Capital</p>
+                  <p class="text-sm font-bold text-green-600">15-25€/reg.</p>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-3 text-center">
+                  <p class="text-xs font-semibold text-gray-700">Urbanitae</p>
+                  <p class="text-sm font-bold text-green-600">50-100€/reg.</p>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-3 text-center">
+                  <p class="text-xs font-semibold text-gray-700">MyInvestor</p>
+                  <p class="text-sm font-bold text-green-600">20-30€/reg.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Capa 2 -->
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 card-hover">
+          <div class="flex items-start gap-5">
+            <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-xl shrink-0">🔍</div>
+            <div class="flex-1">
+              <div class="flex items-center gap-3 mb-2">
+                <h3 class="font-semibold text-gray-900">Capa 2 — Auditoría puntual</h3>
+                <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">Ticket de entrada al servicio premium</span>
+              </div>
+              <p class="text-sm text-gray-500 mb-4">Un informe personalizado y una llamada de 45 minutos para usuarios que tienen inversiones existentes y quieren una segunda opinión profesional. Precio de fricción mínima, máximo valor percibido.</p>
+              <div class="grid grid-cols-3 gap-3">
+                <div class="bg-blue-50 rounded-xl p-4">
+                  <p class="text-lg font-bold text-blue-700">150-200€</p>
+                  <p class="text-xs text-blue-600">Pago único</p>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-4 col-span-2">
+                  <p class="text-xs font-semibold text-gray-600 mb-1">Incluye:</p>
+                  <p class="text-xs text-gray-500">Análisis detallado de cartera actual · Informe PDF firmado · Propuesta de optimización con productos concretos · Llamada de 45 min · Impacto proyectado a 10 y 20 años</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Capa 3 -->
+        <div class="bg-white rounded-2xl border border-purple-100 shadow-sm p-6 card-hover">
+          <div class="flex items-start gap-5">
+            <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center text-xl shrink-0">🏛️</div>
+            <div class="flex-1">
+              <div class="flex items-center gap-3 mb-2">
+                <h3 class="font-semibold text-gray-900">Capa 3 — Asesoramiento EAFI (recurrente)</h3>
+                <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-medium">El negocio principal a medio plazo</span>
+              </div>
+              <p class="text-sm text-gray-500 mb-4">Registro como EAFI en CNMV. Servicio de asesoramiento financiero independiente con obligación fiduciaria — el asesor trabaja para el cliente, no para el banco. Regulado por MiFID II.</p>
+              <div class="grid grid-cols-3 gap-3">
+                <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                  <p class="text-sm font-bold text-gray-900">Plan Básico</p>
+                  <p class="text-2xl font-extrabold text-gray-700 my-1">50€<span class="text-sm font-normal">/mes</span></p>
+                  <p class="text-xs text-gray-500">Cartera simple · 10k-50k€ · Revisión semestral</p>
+                </div>
+                <div class="bg-blue-600 rounded-xl p-4 text-white">
+                  <p class="text-sm font-bold">Plan Completo</p>
+                  <p class="text-2xl font-extrabold my-1">100€<span class="text-sm font-normal">/mes</span></p>
+                  <p class="text-xs text-blue-200">Cartera compleja · 50-200k€ · Trimestral + llamada</p>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                  <p class="text-sm font-bold text-gray-900">Plan Familia</p>
+                  <p class="text-2xl font-extrabold text-gray-700 my-1">150€<span class="text-sm font-normal">/mes</span></p>
+                  <p class="text-xs text-gray-500">Unidad familiar · +200k€ · Plan patrimonial completo</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Protección vs. leakage -->
+      <div class="bg-amber-50 rounded-2xl border border-amber-100 p-6">
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center text-xl shrink-0">🔒</div>
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-2">Protección contra el leakage — "el que se lo hace solo"</h3>
+            <p class="text-sm text-gray-600 mb-4">El riesgo obvio del modelo freemium es que el usuario tome la recomendación gratuita y no convierta. La realidad: ese usuario <strong>nunca iba a pagar</strong>. Pero hay cuatro barreras estructurales que protegen el negocio.</p>
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="bg-white rounded-xl p-4">
+                <p class="text-xs font-semibold text-gray-700 mb-1">1. Los afiliados capturan ese valor</p>
+                <p class="text-xs text-gray-500">Si el usuario DIY abre Trade Republic con tu link, cobras. No necesitas que pague el servicio.</p>
+              </div>
+              <div class="bg-white rounded-xl p-4">
+                <p class="text-xs font-semibold text-gray-700 mb-1">2. Gated execution</p>
+                <p class="text-xs text-gray-500">El perfil y tipo de cartera son gratis. Los productos concretos con ISIN y plataforma requieren dejar email.</p>
+              </div>
+              <div class="bg-white rounded-xl p-4">
+                <p class="text-xs font-semibold text-gray-700 mb-1">3. El análisis de cartera no es replicable</p>
+                <p class="text-xs text-gray-500">La funcionalidad más valiosa — analizar lo que ya tienes — es inherentemente personalizada. No se puede "trampar".</p>
+              </div>
+              <div class="bg-white rounded-xl p-4">
+                <p class="text-xs font-semibold text-gray-700 mb-1">4. La EAFI como moat definitivo</p>
+                <p class="text-xs text-gray-500">Solo una EAFI puede dar asesoramiento personalizado regulado. La app da orientación; el asesor tiene obligación fiduciaria. Eso no se sustituye.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- FUNNEL DE VENTA -->
+    <section id="funnel" class="py-16">
+      <p class="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">04 · Funnel de venta</p>
+      <h2 class="text-3xl font-bold text-gray-900 mb-3">Del desconocido al cliente fiel</h2>
+      <p class="text-gray-500 mb-10 max-w-2xl">El proceso tiene 5 etapas. El usuario no siente que le estás vendiendo nada hasta la etapa 4 — hasta entonces, solo recibe valor.</p>
+
+      <div class="space-y-5">
+        <!-- Paso 1 -->
+        <div class="funnel-step">
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex gap-5 items-center">
+            <div class="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center text-2xl shrink-0">📱</div>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-bold text-gray-400">ETAPA 1</span>
+                <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">Descubrimiento</span>
+              </div>
+              <h3 class="font-semibold text-gray-900 mb-1">Contenido en redes — el CTA siempre es la app</h3>
+              <p class="text-sm text-gray-500">Vídeos en TikTok/Instagram sobre "lo que te está costando tu fondo del banco" o "por qué el 80% de los españoles invierte mal". Al final: "calcula tu perfil gratis en investwise.es". El usuario no busca un asesor, busca orientación.</p>
+            </div>
+            <div class="shrink-0 text-right">
+              <p class="text-2xl font-bold text-gray-800">~500</p>
+              <p class="text-xs text-gray-400">usuarios/mes en wizard</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paso 2 -->
+        <div class="funnel-step pt-5">
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex gap-5 items-center">
+            <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-2xl shrink-0">🧙</div>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-bold text-gray-400">ETAPA 2</span>
+                <span class="text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full">El wizard</span>
+              </div>
+              <h3 class="font-semibold text-gray-900 mb-1">9 preguntas, resultados inmediatos — sin registro</h3>
+              <p class="text-sm text-gray-500">El usuario completa el wizard y recibe su perfil y cartera recomendada. Sin fricciones. Al final de los resultados, captura de email ligera: <em>"¿Quieres que revisemos tu situación personalmente?"</em> Solo nombre y email.</p>
+            </div>
+            <div class="shrink-0 text-right">
+              <p class="text-2xl font-bold text-blue-600">~75</p>
+              <p class="text-xs text-gray-400">leads/mes (15% cap.)</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paso 3 -->
+        <div class="funnel-step pt-5">
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex gap-5 items-center">
+            <div class="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center text-2xl shrink-0">⚡</div>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-bold text-gray-400">ETAPA 3</span>
+                <span class="text-xs bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full">El momento ajá</span>
+              </div>
+              <h3 class="font-semibold text-gray-900 mb-1">El análisis de cartera genera el gatillo de compra</h3>
+              <p class="text-sm text-gray-500">Si el usuario tiene inversiones previas, ve en pantalla el coste real de sus fondos y el impacto a 20 años. Ese es el momento en que piensa <em>"necesito que alguien me ayude en serio"</em>. La app muestra el CTA de auditoría justo ahí.</p>
+            </div>
+            <div class="shrink-0 text-right">
+              <p class="text-2xl font-bold text-amber-600">~8</p>
+              <p class="text-xs text-gray-400">auditorías/mes (10% conv.)</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paso 4 -->
+        <div class="funnel-step pt-5">
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex gap-5 items-center">
+            <div class="w-14 h-14 bg-green-50 rounded-2xl flex items-center justify-center text-2xl shrink-0">📋</div>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-bold text-gray-400">ETAPA 4</span>
+                <span class="text-xs bg-green-100 text-green-600 px-2 py-0.5 rounded-full">Auditoría de cartera · 150-200€</span>
+              </div>
+              <h3 class="font-semibold text-gray-900 mb-1">El primer ticket — baja fricción, alto valor percibido</h3>
+              <p class="text-sm text-gray-500">Pago único. Análisis completo + informe PDF + llamada 45 min. El proceso: pago por Stripe → formulario de inversiones actuales → Calendly para llamada → informe en 72h → llamada de cierre. <strong>Esta llamada es el momento de venta real.</strong></p>
+            </div>
+            <div class="shrink-0 text-right">
+              <p class="text-2xl font-bold text-green-600">1.200€</p>
+              <p class="text-xs text-gray-400">ingreso directo/mes (8×150€)</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paso 5 -->
+        <div class="funnel-step pt-5">
+          <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 flex gap-5 items-center text-white">
+            <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center text-2xl shrink-0">🤝</div>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-bold text-white/70">ETAPA 5</span>
+                <span class="text-xs bg-white/20 text-white px-2 py-0.5 rounded-full">Cliente recurrente EAFI</span>
+              </div>
+              <h3 class="font-semibold text-white mb-1">La conversión a suscripción — natural, no agresiva</h3>
+              <p class="text-sm text-white/80">Al final de la llamada de auditoría: <em>"Podemos hacer seguimiento trimestral de tu cartera por 50-100€/mes. Sin permanencia."</em> Los que tienen patrimonio complejo y quieren tranquilidad dicen que sí.</p>
+            </div>
+            <div class="shrink-0 text-right">
+              <p class="text-2xl font-bold text-white">~3-4</p>
+              <p class="text-xs text-white/70">clientes recurrentes nuevos/mes</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- PROYECCIÓN FINANCIERA -->
+    <section id="proyeccion" class="py-16">
+      <p class="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">05 · Proyección financiera</p>
+      <h2 class="text-3xl font-bold text-gray-900 mb-3">Del lanzamiento a la sostenibilidad</h2>
+      <p class="text-gray-500 mb-10 max-w-2xl">Proyección conservadora a 24 meses. Los ingresos crecen de forma compuesta porque la base de clientes recurrentes se acumula mes a mes.</p>
+
+      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-8">
+        <canvas id="revenue-chart" height="100"></canvas>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-4 mb-8">
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 text-center">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Mes 6</p>
+          <p class="text-3xl font-extrabold text-gray-800 mb-1">~1.500€</p>
+          <p class="text-xs text-gray-500">Primeras auditorías + afiliados · ~10 clientes recurrentes activos</p>
+        </div>
+        <div class="bg-white rounded-2xl border border-blue-100 shadow-sm p-6 text-center ring-2 ring-blue-200">
+          <p class="text-xs font-semibold text-blue-600 uppercase tracking-wide mb-2">Mes 12</p>
+          <p class="text-3xl font-extrabold text-blue-700 mb-1">~4.500€</p>
+          <p class="text-xs text-gray-500">~35 clientes recurrentes · 8 auditorías/mes · afiliados activos</p>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 text-center">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Mes 24</p>
+          <p class="text-3xl font-extrabold text-gray-800 mb-1">~8.500€</p>
+          <p class="text-xs text-gray-500">~65 clientes recurrentes · MRR base sólida · contenido apalancado</p>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl border border-gray-100 shadow-sm">
+        <table class="w-full text-sm bg-white">
+          <thead>
+            <tr class="bg-gray-50 border-b border-gray-100 text-xs text-gray-500">
+              <th class="text-left px-5 py-3">Mes</th>
+              <th class="text-right px-5 py-3">Clientes recurrentes</th>
+              <th class="text-right px-5 py-3">MRR suscripciones</th>
+              <th class="text-right px-5 py-3">Auditorías</th>
+              <th class="text-right px-5 py-3">Afiliados</th>
+              <th class="text-right px-5 py-3 font-semibold text-gray-700">Total mes</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-50 text-gray-600">
+            <tr><td class="px-5 py-3 font-medium text-gray-700">Mes 3</td><td class="px-5 py-3 text-right">3</td><td class="px-5 py-3 text-right">225€</td><td class="px-5 py-3 text-right">3 × 175€ = 525€</td><td class="px-5 py-3 text-right">~200€</td><td class="px-5 py-3 text-right font-semibold text-gray-800">~950€</td></tr>
+            <tr class="bg-gray-50/50"><td class="px-5 py-3 font-medium text-gray-700">Mes 6</td><td class="px-5 py-3 text-right">10</td><td class="px-5 py-3 text-right">800€</td><td class="px-5 py-3 text-right">5 × 175€ = 875€</td><td class="px-5 py-3 text-right">~400€</td><td class="px-5 py-3 text-right font-semibold text-gray-800">~2.075€</td></tr>
+            <tr><td class="px-5 py-3 font-medium text-gray-700">Mes 12</td><td class="px-5 py-3 text-right">35</td><td class="px-5 py-3 text-right">2.800€</td><td class="px-5 py-3 text-right">8 × 175€ = 1.400€</td><td class="px-5 py-3 text-right">~600€</td><td class="px-5 py-3 text-right font-semibold text-blue-700">~4.800€</td></tr>
+            <tr class="bg-gray-50/50"><td class="px-5 py-3 font-medium text-gray-700">Mes 18</td><td class="px-5 py-3 text-right">50</td><td class="px-5 py-3 text-right">4.500€</td><td class="px-5 py-3 text-right">8 × 175€ = 1.400€</td><td class="px-5 py-3 text-right">~800€</td><td class="px-5 py-3 text-right font-semibold text-gray-800">~6.700€</td></tr>
+            <tr><td class="px-5 py-3 font-medium text-gray-700">Mes 24</td><td class="px-5 py-3 text-right">65</td><td class="px-5 py-3 text-right">6.200€</td><td class="px-5 py-3 text-right">10 × 175€ = 1.750€</td><td class="px-5 py-3 text-right">~1.000€</td><td class="px-5 py-3 text-right font-semibold text-green-700">~8.950€</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-xs text-gray-400 mt-3 text-center">Supuesto: ticket medio auditoría 175€, cliente recurrente promedio 95€/mes, churn mensual 3%, afiliados 2€ por usuario activo.</p>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ROADMAP -->
+    <section id="roadmap" class="py-16">
+      <p class="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">06 · Roadmap</p>
+      <h2 class="text-3xl font-bold text-gray-900 mb-10">Del prototipo al negocio regulado</h2>
+
+      <div class="timeline-line ml-4 space-y-8">
+        <div class="timeline-item relative">
+          <div class="bg-white rounded-2xl border border-green-100 shadow-sm p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xs font-bold text-green-600 uppercase">Ahora · Ya hecho</span>
+              <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">App MVP en producción</h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="text-xs bg-green-50 text-green-700 px-2 py-1 rounded-lg">Wizard 9 preguntas</span>
+              <span class="text-xs bg-green-50 text-green-700 px-2 py-1 rounded-lg">Perfiles de riesgo</span>
+              <span class="text-xs bg-green-50 text-green-700 px-2 py-1 rounded-lg">Análisis cartera actual</span>
+              <span class="text-xs bg-green-50 text-green-700 px-2 py-1 rounded-lg">Simulador patrimonial</span>
+              <span class="text-xs bg-green-50 text-green-700 px-2 py-1 rounded-lg">GitHub Pages live</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item relative">
+          <div class="bg-white rounded-2xl border border-blue-100 shadow-sm p-5">
+            <p class="text-xs font-bold text-blue-600 uppercase mb-2">Mes 1-2 · Monetización básica</p>
+            <h3 class="font-semibold text-gray-900 mb-2">Primera línea de ingresos</h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-lg">Links afiliado (Trade Republic, Indexa)</span>
+              <span class="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-lg">Email corporativo</span>
+              <span class="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-lg">Página de venta auditoría (Carrd/Notion)</span>
+              <span class="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-lg">Stripe para cobros</span>
+              <span class="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-lg">Captura email en resultados</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item relative">
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <p class="text-xs font-bold text-gray-500 uppercase mb-2">Mes 3-6 · Contenido + primeros clientes</p>
+            <h3 class="font-semibold text-gray-900 mb-2">Construir audiencia y pipeline</h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-lg">Canal TikTok/Instagram activo</span>
+              <span class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-lg">Newsletter mensual</span>
+              <span class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-lg">Primeras 10 auditorías</span>
+              <span class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-lg">Plantilla informe auditoría</span>
+              <span class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-lg">CRM ligero (Notion/Airtable)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item relative">
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <p class="text-xs font-bold text-gray-500 uppercase mb-2">Mes 6-18 · EFA + proceso EAFI</p>
+            <h3 class="font-semibold text-gray-900 mb-2">Regulación y escalado</h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded-lg">Examen EFA (EFPA España)</span>
+              <span class="text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded-lg">Solicitud EAFI en CNMV</span>
+              <span class="text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded-lg">Contrato asesoramiento estándar</span>
+              <span class="text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded-lg">Seguro responsabilidad civil</span>
+              <span class="text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded-lg">30+ clientes recurrentes activos</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item relative">
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <p class="text-xs font-bold text-gray-500 uppercase mb-2">Mes 18-36 · Crecimiento</p>
+            <h3 class="font-semibold text-gray-900 mb-2">Escalado con licencia</h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-lg">Portal de cliente propio</span>
+              <span class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-lg">Segundo asesor</span>
+              <span class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-lg">100+ clientes recurrentes</span>
+              <span class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-lg">Posible SaaS o licencia tecnología</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- PRÓXIMOS PASOS -->
+    <section class="py-16 pb-24">
+      <p class="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">07 · Acción inmediata</p>
+      <h2 class="text-3xl font-bold text-gray-900 mb-8">Lo que hacemos esta semana</h2>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex items-start gap-4">
+          <div class="w-8 h-8 bg-blue-600 text-white rounded-xl flex items-center justify-center font-bold text-sm shrink-0">1</div>
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-1">Activar links de afiliado</h3>
+            <p class="text-sm text-gray-500">Registrarse en programas de Trade Republic e Indexa Capital. Insertar links en la sección "Empieza aquí" de la app. Tiempo: 2-3 horas.</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex items-start gap-4">
+          <div class="w-8 h-8 bg-blue-600 text-white rounded-xl flex items-center justify-center font-bold text-sm shrink-0">2</div>
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-1">Página de venta de la auditoría</h3>
+            <p class="text-sm text-gray-500">Una página simple (Carrd.co, 19$/año) con descripción, precio y botón de pago. Calendly gratuito para las llamadas. Stripe para cobrar. Tiempo: 3-4 horas.</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex items-start gap-4">
+          <div class="w-8 h-8 bg-blue-600 text-white rounded-xl flex items-center justify-center font-bold text-sm shrink-0">3</div>
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-1">CTA de auditoría en la app</h3>
+            <p class="text-sm text-gray-500">Añadir el botón de auditoría debajo del análisis de cartera existente — visible solo cuando el usuario tiene inversiones previas. Tiempo: 1 hora.</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex items-start gap-4">
+          <div class="w-8 h-8 bg-blue-600 text-white rounded-xl flex items-center justify-center font-bold text-sm shrink-0">4</div>
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-1">Primer vídeo de contenido</h3>
+            <p class="text-sm text-gray-500">Grabar el primer vídeo con el concepto "lo que te está costando tu fondo del banco". Sin producción cara — iPhone y luz natural. El CTA es la app.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-white py-10 px-6">
+    <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 bg-blue-500 rounded-lg flex items-center justify-center">
+          <span class="text-white font-bold text-xs">IW</span>
+        </div>
+        <span class="font-semibold text-sm">InvestWise</span>
+      </div>
+      <p class="text-xs text-gray-500 text-center">Business Case · Julio 2026 · Uso interno. No distribuir sin autorización.</p>
+      <a href="index.html" class="text-xs text-gray-400 hover:text-white transition-colors">← Volver a la app</a>
+    </div>
+  </footer>
+
+  <script>
+    // Revenue projection chart
+    const ctx = document.getElementById('revenue-chart').getContext('2d');
+    const months = ['M1','M2','M3','M4','M5','M6','M7','M8','M9','M10','M11','M12','M14','M16','M18','M20','M22','M24'];
+    const mrr =    [0, 0, 225, 375, 550, 800, 1000, 1300, 1600, 1900, 2300, 2800, 3400, 3900, 4500, 5100, 5700, 6200];
+    const auditorias = [0, 0, 525, 700, 700, 875, 875, 1050, 1050, 1225, 1225, 1400, 1400, 1400, 1400, 1575, 1575, 1750];
+    const afiliados = [0, 50, 100, 150, 200, 300, 350, 400, 450, 500, 550, 600, 650, 700, 800, 850, 950, 1000];
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: months,
+        datasets: [
+          {
+            label: 'Suscripciones EAFI',
+            data: mrr,
+            backgroundColor: 'rgba(37, 99, 235, 0.85)',
+            borderRadius: 4,
+            stack: 'total'
+          },
+          {
+            label: 'Auditorías',
+            data: auditorias,
+            backgroundColor: 'rgba(124, 58, 237, 0.85)',
+            borderRadius: 4,
+            stack: 'total'
+          },
+          {
+            label: 'Afiliados',
+            data: afiliados,
+            backgroundColor: 'rgba(16, 185, 129, 0.85)',
+            borderRadius: 4,
+            stack: 'total'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { font: { size: 11 }, padding: 16, usePointStyle: true }
+          },
+          tooltip: {
+            callbacks: {
+              footer: (items) => {
+                const total = items.reduce((sum, i) => sum + i.parsed.y, 0);
+                return `Total: ${total.toLocaleString('es-ES')}€`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: { stacked: true, grid: { display: false } },
+          y: {
+            stacked: true,
+            ticks: {
+              callback: val => val >= 1000 ? (val/1000).toFixed(1)+'k€' : val+'€'
+            },
+            grid: { color: '#f3f4f6' }
+          }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>

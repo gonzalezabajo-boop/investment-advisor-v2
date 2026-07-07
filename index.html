@@ -147,9 +147,9 @@
 
             <!-- Footer nav (own buttons, standard q-prev/q-next are hidden) -->
             <div class="flex gap-2 pt-4 border-t border-gray-100">
-              <button onclick="ftBackFromPortfolio()"
+              <button onclick="ftExitPortfolio(true)"
                 class="px-4 py-2.5 text-sm text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">← Anterior</button>
-              <button onclick="ftSkipPortfolio()"
+              <button onclick="ftExitPortfolio()"
                 class="flex-1 px-4 py-2.5 border border-gray-200 text-gray-500 text-sm rounded-xl hover:bg-gray-50 transition-colors">Sin añadir</button>
               <button onclick="ftSavePortfolio()"
                 class="flex-1 px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors">Continuar →</button>
@@ -873,6 +873,6 @@
 
   </main>
 
-  <script src="js/wizard.js?v=2"></script>
+  <script src="js/wizard.js?v=3"></script>
 </body>
 </html>

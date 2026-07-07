@@ -1710,11 +1710,13 @@ function prevQuestion() {
   if (currentQ > 0) { currentQ--; showQuestion(currentQ); }
 }
 
+const calcRiskScore = s5 =>
+  ['riesgo_1', 'riesgo_2', 'riesgo_3', 'riesgo_7'].reduce((t, k) => t + (Number(s5[k]) || 0), 0);
+
 function completeFastTrack() {
   const profile = JSON.parse(localStorage.getItem('iw_profile') || '{}');
   const s5 = profile.step5 || {};
-  const total = (Number(s5.riesgo_1) || 0) + (Number(s5.riesgo_2) || 0)
-              + (Number(s5.riesgo_3) || 0) + (Number(s5.riesgo_7) || 0);
+  const total = calcRiskScore(s5);
   const rp = total <= 3 ? 'conservador' : total <= 7 ? 'moderado' : total <= 10 ? 'dinamico' : 'agresivo';
   profile.step5 = profile.step5 || {};
   profile.step5.total = total;
@@ -1799,7 +1801,7 @@ const DASHBOARD_UPDATES = {
   riesgo_7: () => {
     const profile = JSON.parse(localStorage.getItem('iw_profile') || '{}');
     const s5 = profile.step5 || {};
-    const total = (Number(s5.riesgo_1)||0)+(Number(s5.riesgo_2)||0)+(Number(s5.riesgo_3)||0)+(Number(s5.riesgo_7)||0);
+    const total = calcRiskScore(s5);
     const rp = total <= 3 ? 'conservador' : total <= 7 ? 'moderado' : total <= 10 ? 'dinamico' : 'agresivo';
     showRiskProfileInDash(rp, total);
   },
@@ -1905,7 +1907,7 @@ function ftAddFund() {
     isin:      f?.isin || '',
     importe,
     ter:       f?.ter || 0,
-    tipo:      FT_TAG_TO_TIPO[f?.tag] || ftSelectedFund?.tipo || 'otros',
+    tipo:      FT_TAG_TO_TIPO[f?.tag] || f?.tipo || 'otros',
     plataforma: '',
   });
   ftSelectedFund = null;
@@ -1952,25 +1954,19 @@ function ftRenderList() {
   ).join('');
 }
 
-function ftBackFromPortfolio() {
-  currentQ = 4;
-  document.getElementById('q-next').classList.remove('hidden');
-  showQuestion(currentQ);
-}
-
-function ftSkipPortfolio() {
+function ftExitPortfolio(goBack = false) {
+  if (goBack) currentQ = 4;
   document.getElementById('q-next').classList.remove('hidden');
   showQuestion(currentQ);
 }
 
 function ftSavePortfolio() {
-  if (!ftPortfolio.length) { ftSkipPortfolio(); return; }
+  if (!ftPortfolio.length) { ftExitPortfolio(); return; }
   const profile = JSON.parse(localStorage.getItem('iw_profile') || '{}');
   profile.step3 = profile.step3 || {};
   profile.step3.inversiones = ftPortfolio;
   localStorage.setItem('iw_profile', JSON.stringify(profile));
   const total = ftPortfolio.reduce((s, x) => s + x.importe, 0);
   addDashCard('cartera', '📂', 'Cartera actual', fmtEur(total), `${ftPortfolio.length} posición${ftPortfolio.length !== 1 ? 'es' : ''}`);
-  document.getElementById('q-next').classList.remove('hidden');
-  showQuestion(currentQ);
+  ftExitPortfolio();
 }

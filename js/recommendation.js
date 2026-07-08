@@ -2547,7 +2547,6 @@ window.generateResults = function () {
     <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full ${profile.bg} border ${profile.border}">
       <span class="text-xl">${profile.emoji}</span>
       <span class="font-semibold ${profile.text}">Perfil ${profile.label}</span>
-      <span class="text-xs ${profile.text} opacity-70">(${step5?.total || 0}/${maxScore} pts)</span>
     </div>`;
 
   const healthEl = document.getElementById('financial-health');

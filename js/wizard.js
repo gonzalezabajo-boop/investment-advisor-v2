@@ -1630,7 +1630,6 @@ const FAST_TRACK = [
   { id: 'ahorro_mensual',   type: 'number', inputId: 'q-ahorro',     step: 2, required: true  },
   { id: 'ya_inviertes',     type: 'radio',  name:    'q-ya-inviertes', step: 1, required: true },
   { id: 'riesgo_1',         type: 'radio',  name:    'q-r1',         step: 5, required: true  },
-  { id: 'riesgo_2',         type: 'radio',  name:    'q-r2',         step: 5, required: true  },
   { id: 'riesgo_3',         type: 'radio',  name:    'q-r3',         step: 5, required: true  },
   { id: 'riesgo_7',         type: 'radio',  name:    'q-r7',         step: 5, required: true  },
 ];
@@ -1647,6 +1646,19 @@ function showQuestion(n) {
   document.getElementById('q-prev').classList.toggle('hidden', n === 0);
   const input = screen.querySelector('input[inputmode="numeric"], input[type="number"]');
   if (input) setTimeout(() => input.focus(), 80);
+
+  // Q6 (riesgo_1): filtrar opciones según si ya invierte o no
+  if (n + 1 === 6) {
+    const profile = JSON.parse(localStorage.getItem('iw_profile') || '{}');
+    const yaInviertes = profile.step1?.ya_inviertes;
+    document.querySelectorAll('[name="q-r1"]').forEach(radio => {
+      const label = radio.closest('label');
+      const v = Number(radio.value);
+      if (label) label.classList.toggle('hidden',
+        (yaInviertes === 'no' && v > 1) || (yaInviertes === 'si' && v < 2)
+      );
+    });
+  }
 }
 
 function ftFormatNum(el) {
@@ -1692,17 +1704,22 @@ function nextQuestion() {
   if (q.required && val === null) { showQError(q); return; }
   if (q.id === 'edad' && val !== null && (val < 18 || val > 80)) { showQError(q); return; }
   saveQAnswer(q, val);
-  updateDashboard(q.id, val);
-  if (q.id === 'ya_inviertes' && val === 'si') {
-    currentQ++;
-    ftShowPortfolioScreen();
-    return;
+  if (q.id === 'riesgo_7') {
+    const v = Number(val);
+    saveQAnswer({ id: 'riesgo_2', step: 5 }, v === 2 ? 2 : v >= 0 ? 1 : 0);
   }
+  updateDashboard(q.id, val);
   if (currentQ < FAST_TRACK.length - 1) {
     currentQ++;
     showQuestion(currentQ);
   } else {
-    completeFastTrack();
+    // Última pregunta — si ya invierte, mostrar pantalla de cartera antes del CTA
+    const profile = JSON.parse(localStorage.getItem('iw_profile') || '{}');
+    if (profile.step1?.ya_inviertes === 'si') {
+      ftShowPortfolioScreen();
+    } else {
+      completeFastTrack();
+    }
   }
 }
 
@@ -1744,23 +1761,38 @@ function openRefinar() {
 // ─── Live dashboard ───────────────────────────────────────────────────────────
 
 function addDashCard(key, emoji, label, value, sub) {
-  const dash = document.getElementById('live-dashboard');
-  if (!dash) return;
-  document.getElementById('dash-empty')?.classList.add('hidden');
-  let card = document.getElementById(`dash-${key}`);
-  if (!card) {
-    card = document.createElement('div');
-    card.id = `dash-${key}`;
-    card.className = 'dash-card bg-white rounded-xl border border-gray-100 shadow-sm p-4';
-    dash.appendChild(card);
-  }
-  card.innerHTML = `
+  const cardHTML = `
     <div class="flex items-center gap-2 mb-1">
       <span>${emoji}</span>
       <span class="text-xs text-gray-400 uppercase tracking-wide font-medium">${label}</span>
     </div>
     <div class="text-xl font-bold text-gray-900">${value}</div>
     <p class="text-xs text-gray-400 mt-0.5">${sub}</p>`;
+
+  const upsert = (containerId, cardId) => {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    let card = document.getElementById(cardId);
+    if (!card) {
+      card = document.createElement('div');
+      card.id = cardId;
+      card.className = 'dash-card bg-white rounded-xl border border-gray-100 shadow-sm p-4';
+      container.appendChild(card);
+    }
+    card.innerHTML = cardHTML;
+  };
+
+  const dash = document.getElementById('live-dashboard');
+  if (!dash) return;
+  document.getElementById('dash-empty')?.classList.add('hidden');
+  upsert('live-dashboard', `dash-${key}`);
+
+  // Mirror to mobile drawer
+  document.getElementById('mobile-dash-empty')?.classList.add('hidden');
+  upsert('mobile-dash', `mobile-dash-${key}`);
+  const count = document.getElementById('mobile-dash')?.querySelectorAll('.dash-card').length || 0;
+  const countEl = document.getElementById('mobile-dash-count');
+  if (countEl) { countEl.textContent = count; countEl.classList.remove('hidden'); }
 }
 
 const DASHBOARD_UPDATES = {
@@ -1826,6 +1858,23 @@ function updateDashboard(questionId, val) {
   if (fn) fn(val);
 }
 
+// Mobile drawer toggle
+function toggleMobileDrawer() {
+  const panel = document.getElementById('mobile-drawer-panel');
+  const arrow = document.getElementById('mobile-drawer-arrow');
+  if (!panel) return;
+  const isOpen = panel.dataset.open === '1';
+  if (isOpen) {
+    panel.style.maxHeight = '0';
+    panel.dataset.open = '';
+    arrow.textContent = '▲';
+  } else {
+    panel.style.maxHeight = '60vh';
+    panel.dataset.open = '1';
+    arrow.textContent = '▼';
+  }
+}
+
 // Wire fast-track nav
 document.getElementById('q-next').addEventListener('click', nextQuestion);
 document.getElementById('q-prev').addEventListener('click', prevQuestion);
@@ -1837,6 +1886,14 @@ document.addEventListener('keydown', e => {
   if (!panel || panel.classList.contains('hidden')) return;
   const active = document.querySelector('.q-screen:not(.hidden)');
   if (active && active.dataset.q !== '10' && active.dataset.q !== 'portfolio-input') nextQuestion();
+});
+
+// Auto-advance on radio selection (250ms delay for visual feedback)
+document.addEventListener('change', e => {
+  if (e.target.type !== 'radio') return;
+  const screen = e.target.closest('.q-screen');
+  if (!screen || screen.dataset.q === 'portfolio-input') return;
+  setTimeout(nextQuestion, 250);
 });
 
 showQuestion(0);
@@ -1857,7 +1914,7 @@ function ftShowPortfolioScreen() {
   document.getElementById('q-next').classList.add('hidden');
   document.getElementById('q-prev').classList.add('hidden');
   document.getElementById('q-counter').textContent = '📂 Cartera actual';
-  document.getElementById('q-progress-bar').style.width = '55%';
+  document.getElementById('q-progress-bar').style.width = '95%';
   ftRenderList();
 }
 
@@ -1955,9 +2012,12 @@ function ftRenderList() {
 }
 
 function ftExitPortfolio(goBack = false) {
-  if (goBack) currentQ = 4;
   document.getElementById('q-next').classList.remove('hidden');
-  showQuestion(currentQ);
+  if (goBack) {
+    showQuestion(currentQ); // vuelve a la última pregunta de riesgo
+  } else {
+    completeFastTrack();
+  }
 }
 
 function ftSavePortfolio() {

@@ -27,7 +27,7 @@
     </div>
   </header>
 
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 pb-20 lg:pb-8">
 
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-8 items-start">
 
@@ -48,7 +48,10 @@
           <!-- Q1: edad -->
           <div class="q-screen hidden" data-q="1">
             <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">¿Cuántos años tienes?</h2>
-            <p class="text-sm text-gray-400 mb-8">Tu edad define cuánto tiempo tienes para invertir. Con más años por delante puedes asumir más volatilidad a cambio de mayor rentabilidad potencial. Si te acercas a la jubilación, la cartera cambia para proteger lo que ya has acumulado.</p>
+            <details class="mb-8">
+              <summary class="cursor-pointer list-none text-xs text-gray-300 hover:text-gray-500 transition-colors select-none">¿Por qué te preguntamos esto? ▾</summary>
+              <p class="text-sm text-gray-400 mt-2">Tu edad define cuánto tiempo tienes para invertir. Con más años por delante puedes asumir más volatilidad a cambio de mayor rentabilidad potencial. Si te acercas a la jubilación, la cartera cambia para proteger lo que ya has acumulado.</p>
+            </details>
             <input type="number" id="q-edad"
               class="w-full text-4xl font-bold text-center border-b-2 border-gray-200 focus:border-blue-500 outline-none py-3 bg-transparent"
               placeholder="35" min="18" max="80" inputmode="numeric">
@@ -58,7 +61,10 @@
           <!-- Q2: ahorros_liquidos -->
           <div class="q-screen hidden" data-q="2">
             <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">¿Cuánto tienes ahorrado? (€)</h2>
-            <p class="text-sm text-gray-400 mb-8">Lo primero que miramos es si tienes cubierto el colchón de emergencia — entre 3 y 6 meses de gastos. Si no lo tienes, la recomendación cambia: primero el colchón, luego invertir. Incluye cuenta corriente y cuentas remuneradas; no lo que ya tengas en fondos o acciones.</p>
+            <details class="mb-8">
+              <summary class="cursor-pointer list-none text-xs text-gray-300 hover:text-gray-500 transition-colors select-none">¿Por qué te preguntamos esto? ▾</summary>
+              <p class="text-sm text-gray-400 mt-2">Lo primero que miramos es si tienes cubierto el colchón de emergencia — entre 3 y 6 meses de gastos. Si no lo tienes, la recomendación cambia: primero el colchón, luego invertir. Incluye cuenta corriente y cuentas remuneradas; no lo que ya tengas en fondos o acciones.</p>
+            </details>
             <input type="text" id="q-ahorros"
               class="w-full text-4xl font-bold text-center border-b-2 border-gray-200 focus:border-blue-500 outline-none py-3 bg-transparent"
               placeholder="10.000" inputmode="numeric" pattern="[0-9]*"
@@ -69,7 +75,10 @@
           <!-- Q3: ingresos -->
           <div class="q-screen hidden" data-q="3">
             <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Tus ingresos netos al mes (€)</h2>
-            <p class="text-sm text-gray-400 mb-8">Lo usamos para calcular tu tasa de ahorro y entender la estabilidad de tu situación. Unos ingresos estables también nos dicen que podrías mantener las aportaciones aunque el mercado baje — y eso influye directamente en la cartera que te recomendamos.</p>
+            <details class="mb-8">
+              <summary class="cursor-pointer list-none text-xs text-gray-300 hover:text-gray-500 transition-colors select-none">¿Por qué te preguntamos esto? ▾</summary>
+              <p class="text-sm text-gray-400 mt-2">Lo usamos para calcular tu tasa de ahorro y entender la estabilidad de tu situación. Unos ingresos estables también nos dicen que podrías mantener las aportaciones aunque el mercado baje — y eso influye directamente en la cartera que te recomendamos.</p>
+            </details>
             <input type="text" id="q-ingresos"
               class="w-full text-4xl font-bold text-center border-b-2 border-gray-200 focus:border-blue-500 outline-none py-3 bg-transparent"
               placeholder="2.000" inputmode="numeric" pattern="[0-9]*"
@@ -80,7 +89,10 @@
           <!-- Q4: ahorro_mensual -->
           <div class="q-screen hidden" data-q="4">
             <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">¿Cuánto ahorras cada mes? (€)</h2>
-            <p class="text-sm text-gray-400 mb-8">El ahorro mensual constante suele ser más importante que el capital que ya tienes. Con aportaciones regulares, el interés compuesto trabaja para ti aunque empieces con poco. Es también la variable que más mueve la simulación de crecimiento de tu cartera.</p>
+            <details class="mb-8">
+              <summary class="cursor-pointer list-none text-xs text-gray-300 hover:text-gray-500 transition-colors select-none">¿Por qué te preguntamos esto? ▾</summary>
+              <p class="text-sm text-gray-400 mt-2">El ahorro mensual constante suele ser más importante que el capital que ya tienes. Con aportaciones regulares, el interés compuesto trabaja para ti aunque empieces con poco. Es también la variable que más mueve la simulación de crecimiento de tu cartera.</p>
+            </details>
             <input type="text" id="q-ahorro"
               class="w-full text-4xl font-bold text-center border-b-2 border-gray-200 focus:border-blue-500 outline-none py-3 bg-transparent"
               placeholder="400" inputmode="numeric" pattern="[0-9]*"
@@ -150,7 +162,7 @@
               <button onclick="ftExitPortfolio(true)"
                 class="px-4 py-2.5 text-sm text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">← Anterior</button>
               <button onclick="ftExitPortfolio()"
-                class="flex-1 px-4 py-2.5 border border-gray-200 text-gray-500 text-sm rounded-xl hover:bg-gray-50 transition-colors">Sin añadir</button>
+                class="flex-1 text-sm text-gray-400 hover:text-gray-600 underline underline-offset-2 transition-colors">Sin añadir</button>
               <button onclick="ftSavePortfolio()"
                 class="flex-1 px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors">Continuar →</button>
             </div>
@@ -159,7 +171,10 @@
           <!-- Q6: riesgo_1 — experiencia -->
           <div class="q-screen hidden" data-q="6">
             <h2 class="text-2xl font-bold text-gray-900 mb-2">¿Cuánta experiencia tienes invirtiendo?</h2>
-            <p class="text-sm text-gray-400 mb-6">No hay respuesta correcta. Si llevas tiempo invirtiendo y sabes que las caídas son temporales, puedes asumir más volatilidad sin ansiedad. Si estás empezando, te proponemos algo más sencillo para que entiendas bien lo que tienes.</p>
+            <details class="mb-6">
+              <summary class="cursor-pointer list-none text-xs text-gray-300 hover:text-gray-500 transition-colors select-none">¿Por qué te preguntamos esto? ▾</summary>
+              <p class="text-sm text-gray-400 mt-2">No hay respuesta correcta. Si llevas tiempo invirtiendo y sabes que las caídas son temporales, puedes asumir más volatilidad sin ansiedad. Si estás empezando, te proponemos algo más sencillo para que entiendas bien lo que tienes.</p>
+            </details>
             <div class="space-y-3">
               <label class="risk-option"><input type="radio" name="q-r1" value="0" class="mr-3"><span class="text-sm text-gray-700">Ninguna — soy nuevo en esto</span></label>
               <label class="risk-option"><input type="radio" name="q-r1" value="1" class="mr-3"><span class="text-sm text-gray-700">Algo de experiencia (menos de 2 años)</span></label>
@@ -169,22 +184,13 @@
             <p id="q-r1-err" class="hidden text-xs text-red-500 mt-3 text-center">Selecciona una opción.</p>
           </div>
 
-          <!-- Q7: riesgo_2 — reacción caída -->
+          <!-- Q7: riesgo_3 — liquidez -->
           <div class="q-screen hidden" data-q="7">
-            <h2 class="text-2xl font-bold text-gray-900 mb-2">Tu cartera cae un 25% en 3 meses. ¿Qué haces?</h2>
-            <p class="text-sm text-gray-400 mb-6">La reacción ante las caídas es el factor que más determina si una inversión termina bien o mal. Vender cuando baja el mercado es el error más caro — y el más común. Tu respuesta aquí nos dice más que cualquier número.</p>
-            <div class="space-y-3">
-              <label class="risk-option"><input type="radio" name="q-r2" value="0" class="mr-3"><span class="text-sm text-gray-700">Vendo todo — no puedo con esa tensión</span></label>
-              <label class="risk-option"><input type="radio" name="q-r2" value="1" class="mr-3"><span class="text-sm text-gray-700">Espero a que se recupere sin tocar nada</span></label>
-              <label class="risk-option"><input type="radio" name="q-r2" value="2" class="mr-3"><span class="text-sm text-gray-700">Aprovecho para comprar más — es una oportunidad</span></label>
-            </div>
-            <p id="q-r2-err" class="hidden text-xs text-red-500 mt-3 text-center">Selecciona una opción.</p>
-          </div>
-
-          <!-- Q8: riesgo_3 — liquidez -->
-          <div class="q-screen hidden" data-q="8">
             <h2 class="text-2xl font-bold text-gray-900 mb-2">¿Cuándo necesitarías este dinero si surgiera una emergencia?</h2>
-            <p class="text-sm text-gray-400 mb-6">Una inversión en renta variable puede tardar 2-3 años en recuperarse de una caída fuerte. Necesitamos saber si puedes permitirte no tocar el dinero ese tiempo. Si no puedes, la cartera tiene que ser más conservadora, aunque eso implique menos rentabilidad.</p>
+            <details class="mb-6">
+              <summary class="cursor-pointer list-none text-xs text-gray-300 hover:text-gray-500 transition-colors select-none">¿Por qué te preguntamos esto? ▾</summary>
+              <p class="text-sm text-gray-400 mt-2">Una inversión en renta variable puede tardar 2-3 años en recuperarse de una caída fuerte. Necesitamos saber si puedes permitirte no tocar el dinero ese tiempo. Si no puedes, la cartera tiene que ser más conservadora, aunque eso implique menos rentabilidad.</p>
+            </details>
             <div class="space-y-3">
               <label class="risk-option"><input type="radio" name="q-r3" value="0" class="mr-3"><span class="text-sm text-gray-700">Podría necesitarlo en menos de 1 año</span></label>
               <label class="risk-option"><input type="radio" name="q-r3" value="1" class="mr-3"><span class="text-sm text-gray-700">Probablemente en 1–3 años</span></label>
@@ -193,16 +199,18 @@
             <p id="q-r3-err" class="hidden text-xs text-red-500 mt-3 text-center">Selecciona una opción.</p>
           </div>
 
-          <!-- Q9: riesgo_7 — impacto caída 40% -->
-          <div class="q-screen hidden" data-q="9">
-            <h2 class="text-2xl font-bold text-gray-900 mb-2">Si tu cartera cayera un 40% y tardara 3 años en recuperarse...</h2>
-            <p class="text-sm text-gray-400 mb-1">¿Afectaría a tu nivel de vida?</p>
-            <p class="text-sm text-gray-400 mb-6">Este escenario es real — ocurrió en 2008, en 2020 y en 2022. Te lo preguntamos para asegurarnos de que la cartera que te proponemos es una con la que podrías dormir bien aunque las cosas se pusieran difíciles durante un tiempo.</p>
+          <!-- Q8: riesgo_7 — tolerancia a caídas (merged) -->
+          <div class="q-screen hidden" data-q="8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Si tu cartera cayera un 30% el próximo año...</h2>
+            <details class="mb-6">
+              <summary class="cursor-pointer list-none text-xs text-gray-300 hover:text-gray-500 transition-colors select-none">¿Por qué te preguntamos esto? ▾</summary>
+              <p class="text-sm text-gray-400 mt-2">Este escenario ocurrió en 2008 y en 2022. Lo que harías — y si puedes permitirte no tocar ese dinero — es lo que más define tu perfil real. Vender cuando baja el mercado es el error más caro y el más común.</p>
+            </details>
             <div class="space-y-3">
-              <label class="risk-option"><input type="radio" name="q-r7" value="2" class="mr-3"><span class="text-sm text-gray-700">Podría prescindir de ese dinero fácilmente</span></label>
-              <label class="risk-option"><input type="radio" name="q-r7" value="1" class="mr-3"><span class="text-sm text-gray-700">Sería incómodo pero aguantaría sin problema</span></label>
-              <label class="risk-option"><input type="radio" name="q-r7" value="0" class="mr-3"><span class="text-sm text-gray-700">Necesitaría parte de ese dinero en ese plazo</span></label>
-              <label class="risk-option"><input type="radio" name="q-r7" value="-1" class="mr-3"><span class="text-sm text-gray-700">Me comprometería seriamente el nivel de vida</span></label>
+              <label class="risk-option"><input type="radio" name="q-r7" value="2" class="mr-3"><span class="text-sm text-gray-700">Aprovecharía para comprar más — es una oportunidad</span></label>
+              <label class="risk-option"><input type="radio" name="q-r7" value="1" class="mr-3"><span class="text-sm text-gray-700">Esperaría tranquilo sin tocar nada — ese dinero no lo necesito pronto</span></label>
+              <label class="risk-option"><input type="radio" name="q-r7" value="0" class="mr-3"><span class="text-sm text-gray-700">Lo aguantaría, aunque sería muy incómodo — podría necesitar parte</span></label>
+              <label class="risk-option"><input type="radio" name="q-r7" value="-1" class="mr-3"><span class="text-sm text-gray-700">Vendería — no puedo aguantar esa tensión ni permitirme perder ese dinero</span></label>
             </div>
             <p id="q-r7-err" class="hidden text-xs text-red-500 mt-3 text-center">Selecciona una opción.</p>
           </div>
@@ -873,6 +881,24 @@
 
   </main>
 
-  <script src="js/wizard.js?v=3"></script>
+  <!-- Mobile dashboard drawer (hidden on desktop) -->
+  <div id="mobile-drawer" class="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-[0_-4px_16px_rgba(0,0,0,0.08)]">
+    <button id="mobile-drawer-toggle" onclick="toggleMobileDrawer()"
+      class="w-full flex items-center justify-between px-5 py-3.5">
+      <span class="flex items-center gap-2 text-sm font-medium text-gray-700">
+        <span>📊</span>
+        <span>Tu análisis en tiempo real</span>
+        <span id="mobile-dash-count" class="hidden text-xs bg-blue-100 text-blue-700 font-semibold px-1.5 py-0.5 rounded-full"></span>
+      </span>
+      <span id="mobile-drawer-arrow" class="text-gray-400 text-xs transition-transform duration-300">▲</span>
+    </button>
+    <div id="mobile-drawer-panel" class="overflow-hidden transition-[max-height] duration-300 ease-in-out" style="max-height:0">
+      <div id="mobile-dash" class="grid grid-cols-2 gap-2.5 p-4 pb-5 overflow-y-auto max-h-[55vh]">
+        <p id="mobile-dash-empty" class="col-span-2 text-xs text-gray-400 text-center py-3">Responde las preguntas para ver tu análisis →</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/wizard.js?v=9"></script>
 </body>
 </html>

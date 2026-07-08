@@ -1626,7 +1626,129 @@ function renderDiyPortfolioSection(blueprint, riskProfile, inversiones) {
     </section>`;
 }
 
-function renderProductCards(riskProfile, objetivos, ccaa, inversiones, step1, step5) {
+function renderInvestmentRoadmap(blueprint, riskProfile, ahorro, showCrypto, hasTax, isEpsv) {
+  const primary = blueprint.products[0];
+  const isIndexa = primary.platform === 'Indexa Capital';
+
+  const phase2k = isIndexa ? 15000 : 10000;
+  const phase3k = isIndexa ? 40000 : 30000;
+
+  const goldMonthly = ahorro > 0 ? Math.max(15, Math.round(ahorro * 0.05)) : 0;
+  const cryptoMonthly = ahorro > 0 ? Math.max(15, Math.round(ahorro * 0.05)) : 0;
+  const profileLabel = riskProfile === 'agresivo' ? '9/10' : riskProfile === 'dinamico' ? '8/10' : '6/10';
+
+  const pensionMonthly = hasTax ? Math.min(125, Math.round((isEpsv ? 5000 : 1500) / 12)) : 0;
+  const pensionLabel = isEpsv ? 'EPSV' : 'plan de pensiones';
+  const pensionPlatform = isEpsv ? 'Finizens Euskadi' : (isIndexa ? 'Indexa Capital' : 'MyInvestor');
+
+  const comp = primary.composition || [];
+  const compChips = comp.map(c =>
+    `<span class="inline-block px-2 py-0.5 rounded-full text-xs bg-white border border-blue-100 text-blue-700 font-medium">${c.name.split(' ').slice(0, 3).join(' ')} <span class="text-blue-400 font-normal">${c.pct}%</span></span>`
+  ).join(' ');
+
+  const phase2Gold = `
+    <div class="flex items-start gap-3 py-2.5 border-b border-gray-100">
+      <span class="shrink-0">🥇</span>
+      <div>
+        <p class="text-sm font-medium text-gray-700">Oro físico${goldMonthly > 0 ? ` <span class="text-gray-400 font-normal text-xs">+${fmtEur(goldMonthly)}/mes (~5%)</span>` : ''}</p>
+        <p class="text-xs text-gray-400">iShares Physical Gold ETC · Trade Republic · TER 0.12%</p>
+      </div>
+    </div>`;
+
+  const phase2RE = `
+    <div class="flex items-start gap-3 py-2.5 ${showCrypto ? 'border-b border-gray-100' : ''}">
+      <span class="shrink-0">🏢</span>
+      <div>
+        <p class="text-sm font-medium text-gray-700">Inmobiliario — Urbanitae</p>
+        <p class="text-xs text-gray-400">Crowdfunding CNMV · desde 250 € por proyecto · 8–12% TAE proyectado · ilíquido 12–36 meses</p>
+      </div>
+    </div>`;
+
+  const phase2Crypto = showCrypto ? `
+    <div class="flex items-start gap-3 py-2.5">
+      <span class="shrink-0">₿</span>
+      <div>
+        <p class="text-sm font-medium text-gray-700">Bitcoin / Ethereum${cryptoMonthly > 0 ? ` <span class="text-gray-400 font-normal text-xs">+${fmtEur(cryptoMonthly)}/mes (~5%)</span>` : ''}</p>
+        <p class="text-xs text-gray-400">Bit2Me o Coinbase · máx. 5–10% de cartera total · alta volatilidad</p>
+      </div>
+    </div>` : '';
+
+  const phase3Upgrade = isIndexa
+    ? `<li class="flex gap-2 items-start"><span class="shrink-0">📉</span><span>Indexa baja comisión progresivamente — a partir de 100k reduces costes sin cambiar nada</span></li>`
+    : `<li class="flex gap-2 items-start"><span class="shrink-0">🔵</span><span><strong class="text-gray-600">Indexa Capital</strong> perfil ${profileLabel} — fondos Vanguard puros, mejor track record, referencia del sector en España</span></li>`;
+
+  const phase3Pension = hasTax && pensionMonthly > 0
+    ? `<li class="flex gap-2 items-start"><span class="shrink-0">🏦</span><span><strong class="text-gray-600">${pensionLabel} indexado</strong> en ${pensionPlatform} — hasta ${fmtEur(pensionMonthly)}/mes deducibles en IRPF</span></li>`
+    : '';
+
+  return `
+    <div class="space-y-0">
+
+      <!-- Phase 1 -->
+      <div class="flex gap-3">
+        <div class="flex flex-col items-center">
+          <div class="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold shrink-0">1</div>
+          <div class="w-0.5 flex-1 bg-gray-200 mt-1 min-h-6"></div>
+        </div>
+        <div class="flex-1 pb-4">
+          <p class="text-xs font-semibold text-blue-600 uppercase tracking-wide mt-1.5 mb-2">Empieza hoy</p>
+          <div class="p-4 bg-blue-50 border border-blue-200 rounded-xl">
+            <div class="flex items-start justify-between gap-2 mb-1">
+              <h4 class="font-semibold text-gray-900 text-sm">${primary.platform}</h4>
+              <span class="shrink-0 px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-medium rounded-full whitespace-nowrap">${primary.fees || ''}</span>
+            </div>
+            <p class="text-xs text-gray-500 mb-3">${primary.name}</p>
+            ${compChips ? `<div class="flex flex-wrap gap-1 mb-3">${compChips}</div>` : ''}
+            <div class="flex items-center justify-between p-2.5 bg-white border border-blue-100 rounded-lg mb-3">
+              <span class="font-bold text-blue-900 text-sm">${ahorro > 0 ? fmtEur(ahorro) + '/mes' : 'Tu ahorro mensual'}</span>
+              <span class="text-xs text-gray-400">${primary.min || 'Sin mínimo'}</span>
+            </div>
+            <a href="${primary.url || '#'}" target="_blank" rel="noopener noreferrer"
+               class="block text-center py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors">
+              Abrir cuenta en ${primary.platform} →
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="flex gap-3">
+        <div class="flex flex-col items-center">
+          <div class="w-7 h-7 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 text-xs font-bold shrink-0">2</div>
+          <div class="w-0.5 flex-1 bg-gray-200 mt-1 min-h-6"></div>
+        </div>
+        <div class="flex-1 pb-4">
+          <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mt-1.5 mb-2">Al llegar a ${fmtEur(phase2k)}</p>
+          <div class="p-4 bg-gray-50 border border-gray-200 rounded-xl">
+            <h4 class="text-sm font-semibold text-gray-700 mb-1">Diversifica con activos alternativos</h4>
+            <p class="text-xs text-gray-400 mb-3">Mantén ${primary.platform} como base y añade estos complementos:</p>
+            <div>${phase2Gold}${phase2RE}${phase2Crypto}</div>
+            <p class="text-xs text-gray-400 mt-2.5 italic">Aloca un máximo del 15–20% total de cartera entre estas categorías.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="flex gap-3">
+        <div class="flex flex-col items-center">
+          <div class="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-xs font-bold shrink-0">3</div>
+        </div>
+        <div class="flex-1">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mt-1.5 mb-2">A largo plazo (&gt;${fmtEur(phase3k)})</p>
+          <div class="p-4 bg-gray-50 border border-gray-100 rounded-xl">
+            <h4 class="text-sm font-semibold text-gray-500 mb-2">El siguiente nivel</h4>
+            <ul class="space-y-2 text-xs text-gray-500">
+              ${phase3Upgrade}
+              ${phase3Pension}
+              <li class="flex gap-2 items-start"><span class="shrink-0">🛠️</span><span>Considera gestión directa en MyInvestor con fondos indexados — mayor control, menor comisión</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderProductCards(riskProfile, objetivos, ccaa, inversiones, step1, step5, step2) {
   const complexity = getPortfolioComplexity(step1, step5);
   const blueprint = PORTFOLIO_BLUEPRINTS[riskProfile]?.[complexity];
   if (!blueprint) return '<p class="text-gray-400 text-sm">No hay cartera disponible para tu perfil.</p>';
@@ -1641,6 +1763,9 @@ function renderProductCards(riskProfile, objetivos, ccaa, inversiones, step1, st
   const showRealEstate = (allocation.alternatives || 0) > 0 && complexity >= 2;
   const showCrypto = riskProfile === 'dinamico' || riskProfile === 'agresivo';
   const isEpsv = ccaa === 'PVA';
+  const ahorro = Number(step2?.ahorro_mensual) || 0;
+  const laboral = step1?.laboral;
+  const hasTax = laboral === 'asalariado' || laboral === 'autonomo';
 
   // Context banner (high fee funds alert)
   let contextBanner = '';
@@ -1675,14 +1800,7 @@ function renderProductCards(riskProfile, objetivos, ccaa, inversiones, step1, st
       compact: true,
     });
   } else if (isManaged) {
-    const advisors = showCrypto ? PLATFORMS.roboadvisors : PLATFORMS.roboadvisors.filter(p => p.id !== 'inbestme');
-    html += renderPlatformSection({
-      title: '📊 Las mejores carteras gestionadas para tu perfil',
-      subtitle: `Elige una plataforma, configura tu perfil de riesgo, aporta mensualmente — ellos invierten y rebalancean por ti. Rentabilidad esperada ~${PLATFORMS.roboadvisors[0].est_returns[riskProfile]}/año.`,
-      platforms: advisors,
-      riskProfile,
-      disclaimer: true,
-    });
+    html += renderInvestmentRoadmap(blueprint, riskProfile, ahorro, showCrypto, hasTax, isEpsv);
   } else {
     // DIY mode: ETF portfolio + broker comparison
     html += renderDiyPortfolioSection(blueprint, riskProfile, inversiones);
@@ -2559,7 +2677,7 @@ window.generateResults = function () {
     portfolioAnalysisEl.innerHTML = renderCurrentPortfolioAnalysis(inversiones);
   }
 
-  document.getElementById('products-section').innerHTML = renderProductCards(riskProfile, objetivos, ccaa, inversiones, step1, step5);
+  document.getElementById('products-section').innerHTML = renderProductCards(riskProfile, objetivos, ccaa, inversiones, step1, step5, step2);
   document.getElementById('action-plan').innerHTML = renderActionPlan(health, riskProfile, data);
 
   const pensionEl = document.getElementById('pension-estimate');

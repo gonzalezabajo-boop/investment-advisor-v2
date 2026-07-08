@@ -1863,17 +1863,16 @@ function nextQuestion() {
     saveQAnswer({ id: 'riesgo_2', step: 5 }, v === 2 ? 2 : v >= 0 ? 1 : 0);
   }
   updateDashboard(q.id, val);
+  if (q.id === 'ya_inviertes' && val === 'si') {
+    currentQ++;  // advance to riesgo_1 (index 5)
+    ftShowPortfolioScreen();
+    return;
+  }
   if (currentQ < FAST_TRACK.length - 1) {
     currentQ++;
     showQuestion(currentQ);
   } else {
-    // Última pregunta — si ya invierte, mostrar pantalla de cartera antes del CTA
-    const profile = JSON.parse(localStorage.getItem('iw_profile') || '{}');
-    if (profile.step1?.ya_inviertes === 'si') {
-      ftShowPortfolioScreen();
-    } else {
-      completeFastTrack();
-    }
+    completeFastTrack();
   }
 }
 
@@ -2068,7 +2067,7 @@ function ftShowPortfolioScreen() {
   document.getElementById('q-next').classList.add('hidden');
   document.getElementById('q-prev').classList.add('hidden');
   document.getElementById('q-counter').textContent = '📂 Cartera actual';
-  document.getElementById('q-progress-bar').style.width = '95%';
+  document.getElementById('q-progress-bar').style.width = '55%';
   ftRenderList();
 }
 
@@ -2167,10 +2166,12 @@ function ftRenderList() {
 
 function ftExitPortfolio(goBack = false) {
   document.getElementById('q-next').classList.remove('hidden');
+  document.getElementById('q-prev').classList.remove('hidden');
   if (goBack) {
-    showQuestion(currentQ); // vuelve a la última pregunta de riesgo
+    currentQ = 4;  // back to ya_inviertes
+    showQuestion(currentQ);
   } else {
-    completeFastTrack();
+    showQuestion(currentQ);  // currentQ is already 5 (riesgo_1)
   }
 }
 

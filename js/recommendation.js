@@ -72,13 +72,13 @@ const PORTFOLIO_BLUEPRINTS = {
       label: 'MyInvestor — Cartera Conservadora', managed: true,
       description: 'Igual de sencillo que Indexa, sin mínimo de entrada y algo más barata. Cartera Conservadora: predominio de renta fija con crecimiento moderado.',
       products: [
-        { logo: '🏦', name: 'MyInvestor Cartera Conservadora', isin: null, asset_class: 'fixedIncome', pct: 100, platform: 'MyInvestor', url: 'https://myinvestor.es/carteras-indexadas/', fees: '~0.28%/año todo incluido', min: 'Sin mínimo', rationale: 'Cartera indexada gestionada ~30% RV / ~70% RF. Rebalanceo automático. Ahorra ~0.14%/año vs Indexa.',
+        { logo: '🏦', name: 'MyInvestor Cartera Conservadora', isin: null, asset_class: 'fixedIncome', pct: 100, platform: 'MyInvestor', url: 'https://myinvestor.es/carteras-indexadas/', fees: '~0.35%/año todo incluido', min: 'Sin mínimo', rationale: 'Cartera indexada gestionada ~30% RV / ~70% RF. Rebalanceo automático. Sin mínimo de entrada.',
           est_return: '~4% anual (histórico estimado)',
           composition: [
-            { name: 'Amundi MSCI World', pct: 20 },
-            { name: 'Amundi MSCI Emerging Markets', pct: 10 },
-            { name: 'Amundi JPM GBI Global Govies', pct: 50 },
-            { name: 'Amundi Global Corporate Bond', pct: 20 },
+            { name: 'Vanguard Global Stock Market Index', pct: 20 },
+            { name: 'Vanguard Emerging Markets Stock Index', pct: 10 },
+            { name: 'Vanguard Global Bond Index', pct: 50 },
+            { name: 'Vanguard Euro Government Bond Index', pct: 20 },
           ],
         },
       ],
@@ -87,7 +87,7 @@ const PORTFOLIO_BLUEPRINTS = {
       label: 'Cartera Simple',
       description: '4 productos: bonos globales como ancla, renta variable para crecer, bonos ligados a inflación y liquidez táctica.',
       products: [
-        { logo: '🟢', name: 'Amundi IS J.P.Morgan GBI Global Govies AHE-C', isin: 'LU0389812988', asset_class: 'fixedIncome', pct: 40, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.10%', min: 'Sin mínimo', rationale: 'Ancla conservadora: RF gubernamental global cubierta a EUR. Estabilidad ante caídas de bolsa.' },
+        { logo: '🟢', name: 'Vanguard Global Bond Index EUR Hdg Acc', isin: 'IE00B18GC888', asset_class: 'fixedIncome', pct: 40, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.10%', min: 'Sin mínimo', rationale: 'Ancla conservadora: RF gubernamental global cubierta a EUR. Estabilidad ante caídas de bolsa.' },
         { logo: '📈', name: 'Fidelity Index World P-ACC-EUR', isin: 'IE00BYX5NX33', asset_class: 'equities', pct: 30, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.12%', min: 'Sin mínimo', rationale: 'Motor de crecimiento: 1.600+ empresas de países desarrollados. Traspaso fiscal sin coste.' },
         { logo: '🔵', name: 'iShares € Inflation Linked Govt Bond ETF', isin: 'IE00B0M62X26', asset_class: 'fixedIncome', pct: 15, platform: 'Trade Republic', url: 'https://traderepublic.com/es-es', fees: 'TER 0.09%', min: '1 €', rationale: 'Bonos ligados a inflación zona euro. Protección real del capital cuando sube el IPC.' },
         { logo: '🟩', name: 'Trade Republic — Cuenta remunerada', isin: null, asset_class: 'cash', pct: 15, platform: 'Trade Republic', url: 'https://traderepublic.com/es-es', fees: '~3% TAE', min: '1 €', rationale: 'Liquidez inmediata al 3% TAE. Reserva táctica para rebalancear en caídas de mercado.' },
@@ -97,7 +97,7 @@ const PORTFOLIO_BLUEPRINTS = {
       label: 'Cartera Diversificada',
       description: '5 productos: bonos, renta variable, bonos ligados a inflación, REITs y oro.',
       products: [
-        { logo: '🟢', name: 'Amundi IS J.P.Morgan GBI Global Govies AHE-C', isin: 'LU0389812988', asset_class: 'fixedIncome', pct: 35, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.10%', min: 'Sin mínimo', rationale: 'Core conservador: RF gubernamental global EUR. Ancla principal de la cartera.' },
+        { logo: '🟢', name: 'Vanguard Global Bond Index EUR Hdg Acc', isin: 'IE00B18GC888', asset_class: 'fixedIncome', pct: 35, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.10%', min: 'Sin mínimo', rationale: 'Core conservador: RF gubernamental global EUR. Ancla principal de la cartera.' },
         { logo: '📈', name: 'Fidelity Index World P-ACC-EUR', isin: 'IE00BYX5NX33', asset_class: 'equities', pct: 25, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.12%', min: 'Sin mínimo', rationale: 'RV global países desarrollados. Motor de crecimiento con traspaso fiscal.' },
         { logo: '🔵', name: 'iShares € Inflation Linked Govt Bond ETF', isin: 'IE00B0M62X26', asset_class: 'fixedIncome', pct: 15, platform: 'Trade Republic', url: 'https://traderepublic.com/es-es', fees: 'TER 0.09%', min: '1 €', rationale: 'Bonos ligados a inflación EUR. Protección ante subidas del IPC.' },
         { logo: '🏢', name: 'Amundi Index FTSE EPRA NAREIT Global AE-C', isin: 'LU1737652832', asset_class: 'alternatives', pct: 15, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.24%', min: 'Sin mínimo', rationale: 'REITs globales cotizados. Inmobiliario financiero con liquidez diaria y rendimiento por rentas.' },
@@ -108,7 +108,7 @@ const PORTFOLIO_BLUEPRINTS = {
       label: 'Cartera Completa',
       description: '6 productos: cobertura completa para un conservador con patrimonio elevado. Incluye REITs, oro y reserva líquida.',
       products: [
-        { logo: '🟢', name: 'Amundi IS J.P.Morgan GBI Global Govies AHE-C', isin: 'LU0389812988', asset_class: 'fixedIncome', pct: 30, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.10%', min: 'Sin mínimo', rationale: 'Ancla principal. RF gubernamental global cubierta a EUR.' },
+        { logo: '🟢', name: 'Vanguard Global Bond Index EUR Hdg Acc', isin: 'IE00B18GC888', asset_class: 'fixedIncome', pct: 30, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.10%', min: 'Sin mínimo', rationale: 'Ancla principal. RF gubernamental global cubierta a EUR.' },
         { logo: '📈', name: 'Fidelity Index World P-ACC-EUR', isin: 'IE00BYX5NX33', asset_class: 'equities', pct: 25, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.12%', min: 'Sin mínimo', rationale: 'Motor de crecimiento: RV global países desarrollados. Traspaso fiscal.' },
         { logo: '🔵', name: 'iShares € Inflation Linked Govt Bond ETF', isin: 'IE00B0M62X26', asset_class: 'fixedIncome', pct: 15, platform: 'Trade Republic', url: 'https://traderepublic.com/es-es', fees: 'TER 0.09%', min: '1 €', rationale: 'Bonos ligados a inflación. Protección real a largo plazo.' },
         { logo: '🏢', name: 'Amundi Index FTSE EPRA NAREIT Global AE-C', isin: 'LU1737652832', asset_class: 'alternatives', pct: 12, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.24%', min: 'Sin mínimo', rationale: 'REITs globales. Inmobiliario líquido con dividendos.' },
@@ -144,13 +144,13 @@ const PORTFOLIO_BLUEPRINTS = {
       label: 'MyInvestor — Cartera Moderada', managed: true,
       description: 'Igual de sencillo que Indexa, sin mínimo y algo más barata. Cartera Moderada: equilibrio entre crecimiento y estabilidad.',
       products: [
-        { logo: '🏦', name: 'MyInvestor Cartera Moderada', isin: null, asset_class: 'equities', pct: 100, platform: 'MyInvestor', url: 'https://myinvestor.es/carteras-indexadas/', fees: '~0.28%/año todo incluido', min: 'Sin mínimo', rationale: 'Cartera indexada gestionada ~60% RV / ~40% RF. Rebalanceo automático. Ahorra ~0.14%/año vs Indexa.',
+        { logo: '🏦', name: 'MyInvestor Cartera Moderada', isin: null, asset_class: 'equities', pct: 100, platform: 'MyInvestor', url: 'https://myinvestor.es/carteras-indexadas/', fees: '~0.35%/año todo incluido', min: 'Sin mínimo', rationale: 'Cartera indexada gestionada ~60% RV / ~40% RF. Rebalanceo automático. Sin mínimo de entrada.',
           est_return: '~6% anual (histórico estimado)',
           composition: [
-            { name: 'Amundi MSCI World', pct: 42 },
-            { name: 'Amundi MSCI Emerging Markets', pct: 18 },
-            { name: 'Amundi JPM GBI Global Govies', pct: 25 },
-            { name: 'Amundi Global Corporate Bond', pct: 15 },
+            { name: 'Vanguard Global Stock Market Index', pct: 42 },
+            { name: 'Vanguard Emerging Markets Stock Index', pct: 18 },
+            { name: 'Vanguard Global Bond Index', pct: 25 },
+            { name: 'Vanguard Euro Government Bond Index', pct: 15 },
           ],
         },
       ],
@@ -160,8 +160,8 @@ const PORTFOLIO_BLUEPRINTS = {
       description: '4 productos: renta variable global como motor, emergentes, bonos y oro.',
       products: [
         { logo: '📈', name: 'Fidelity Index World P-ACC-EUR', isin: 'IE00BYX5NX33', asset_class: 'equities', pct: 45, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.12%', min: 'Sin mínimo', rationale: 'Core: RV global países desarrollados. Máxima diversificación con un solo fondo. Traspaso fiscal.' },
-        { logo: '🌏', name: 'Amundi Index MSCI Emerging Markets AE-C', isin: 'LU0996177134', asset_class: 'equities', pct: 20, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.20%', min: 'Sin mínimo', rationale: 'Emergentes: China, India, Brasil. Mayor potencial de crecimiento. Traspaso fiscal.' },
-        { logo: '🟢', name: 'Amundi IS J.P.Morgan GBI Global Govies AHE-C', isin: 'LU0389812988', asset_class: 'fixedIncome', pct: 20, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.10%', min: 'Sin mínimo', rationale: 'RF gubernamental global EUR. Amortiguador en caídas de renta variable.' },
+        { logo: '🌏', name: 'Vanguard Emerging Markets Stock EUR Acc', isin: 'IE0031786696', asset_class: 'equities', pct: 20, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.23%', min: 'Sin mínimo', rationale: 'Emergentes: China, India, Brasil. Mayor potencial de crecimiento. Traspaso fiscal.' },
+        { logo: '🟢', name: 'Vanguard Global Bond Index EUR Hdg Acc', isin: 'IE00B18GC888', asset_class: 'fixedIncome', pct: 20, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.10%', min: 'Sin mínimo', rationale: 'RF gubernamental global EUR. Amortiguador en caídas de renta variable.' },
         { logo: '🥇', name: 'iShares Physical Gold ETC', isin: 'IE00B4ND3602', asset_class: 'commodities', pct: 15, platform: 'Trade Republic', url: 'https://traderepublic.com/es-es', fees: 'TER 0.12%', min: '1 €', rationale: 'Oro físico. Cobertura frente a inflación y crisis. Descorrelación con acciones y bonos.' },
       ],
     },
@@ -170,8 +170,8 @@ const PORTFOLIO_BLUEPRINTS = {
       description: '6 productos: RV global + emergentes + small caps + bonos + REITs + oro.',
       products: [
         { logo: '📈', name: 'Fidelity Index World P-ACC-EUR', isin: 'IE00BYX5NX33', asset_class: 'equities', pct: 40, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.12%', min: 'Sin mínimo', rationale: 'Core principal: RV países desarrollados. Traspaso fiscal.' },
-        { logo: '🌏', name: 'Amundi Index MSCI Emerging Markets AE-C', isin: 'LU0996177134', asset_class: 'equities', pct: 15, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.20%', min: 'Sin mínimo', rationale: 'Emergentes: diversificación geográfica y mayor potencial. Traspaso fiscal.' },
-        { logo: '🟢', name: 'Amundi IS J.P.Morgan GBI Global Govies AHE-C', isin: 'LU0389812988', asset_class: 'fixedIncome', pct: 15, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.10%', min: 'Sin mínimo', rationale: 'RF gubernamental global. Estabilizador de la cartera.' },
+        { logo: '🌏', name: 'Vanguard Emerging Markets Stock EUR Acc', isin: 'IE0031786696', asset_class: 'equities', pct: 15, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.23%', min: 'Sin mínimo', rationale: 'Emergentes: diversificación geográfica y mayor potencial. Traspaso fiscal.' },
+        { logo: '🟢', name: 'Vanguard Global Bond Index EUR Hdg Acc', isin: 'IE00B18GC888', asset_class: 'fixedIncome', pct: 15, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.10%', min: 'Sin mínimo', rationale: 'RF gubernamental global. Estabilizador de la cartera.' },
         { logo: '🏢', name: 'Amundi Index FTSE EPRA NAREIT Global AE-C', isin: 'LU1737652832', asset_class: 'alternatives', pct: 15, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.24%', min: 'Sin mínimo', rationale: 'REITs globales cotizados. Inmobiliario líquido con dividendos y revalorización.' },
         { logo: '🔹', name: 'Vanguard Global Small-Cap Index Inst EUR', isin: 'IE00B42W4L06', asset_class: 'equities', pct: 5, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.29%', min: 'Sin mínimo', rationale: 'Small caps globales. Factor premium histórico. Traspaso fiscal.' },
         { logo: '🥇', name: 'iShares Physical Gold ETC', isin: 'IE00B4ND3602', asset_class: 'commodities', pct: 10, platform: 'Trade Republic', url: 'https://traderepublic.com/es-es', fees: 'TER 0.12%', min: '1 €', rationale: 'Oro físico. Cobertura frente a inflación y activo refugio.' },
@@ -182,8 +182,8 @@ const PORTFOLIO_BLUEPRINTS = {
       description: '7 productos: cartera multi-activo completa para un moderado con patrimonio elevado.',
       products: [
         { logo: '📈', name: 'Fidelity Index World P-ACC-EUR', isin: 'IE00BYX5NX33', asset_class: 'equities', pct: 38, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.12%', min: 'Sin mínimo', rationale: 'Core principal. RV países desarrollados. Traspaso fiscal.' },
-        { logo: '🌏', name: 'Amundi Index MSCI Emerging Markets AE-C', isin: 'LU0996177134', asset_class: 'equities', pct: 15, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.20%', min: 'Sin mínimo', rationale: 'Emergentes. Diversificación geográfica. Traspaso fiscal.' },
-        { logo: '🟢', name: 'Amundi IS J.P.Morgan GBI Global Govies AHE-C', isin: 'LU0389812988', asset_class: 'fixedIncome', pct: 13, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.10%', min: 'Sin mínimo', rationale: 'RF gubernamental global. Componente de estabilidad.' },
+        { logo: '🌏', name: 'Vanguard Emerging Markets Stock EUR Acc', isin: 'IE0031786696', asset_class: 'equities', pct: 15, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.23%', min: 'Sin mínimo', rationale: 'Emergentes. Diversificación geográfica. Traspaso fiscal.' },
+        { logo: '🟢', name: 'Vanguard Global Bond Index EUR Hdg Acc', isin: 'IE00B18GC888', asset_class: 'fixedIncome', pct: 13, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.10%', min: 'Sin mínimo', rationale: 'RF gubernamental global. Componente de estabilidad.' },
         { logo: '🏢', name: 'Amundi Index FTSE EPRA NAREIT Global AE-C', isin: 'LU1737652832', asset_class: 'alternatives', pct: 12, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.24%', min: 'Sin mínimo', rationale: 'REITs globales. Inmobiliario cotizado con dividendos.' },
         { logo: '🔹', name: 'Vanguard Global Small-Cap Index Inst EUR', isin: 'IE00B42W4L06', asset_class: 'equities', pct: 12, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.29%', min: 'Sin mínimo', rationale: 'Small caps globales. Factor premium histórico.' },
         { logo: '🥇', name: 'iShares Physical Gold ETC', isin: 'IE00B4ND3602', asset_class: 'commodities', pct: 7, platform: 'Trade Republic', url: 'https://traderepublic.com/es-es', fees: 'TER 0.12%', min: '1 €', rationale: 'Oro físico. Cobertura de inflación y activo refugio.' },
@@ -218,13 +218,13 @@ const PORTFOLIO_BLUEPRINTS = {
       label: 'MyInvestor — Cartera Dinámica', managed: true,
       description: 'Igual de sencillo que Indexa, sin mínimo y algo más barata. Cartera Dinámica: fuerte peso en renta variable global.',
       products: [
-        { logo: '🏦', name: 'MyInvestor Cartera Dinámica', isin: null, asset_class: 'equities', pct: 100, platform: 'MyInvestor', url: 'https://myinvestor.es/carteras-indexadas/', fees: '~0.28%/año todo incluido', min: 'Sin mínimo', rationale: 'Cartera indexada gestionada ~80% RV / ~20% RF. Rebalanceo automático. Más barata que Indexa.',
+        { logo: '🏦', name: 'MyInvestor Cartera Dinámica', isin: null, asset_class: 'equities', pct: 100, platform: 'MyInvestor', url: 'https://myinvestor.es/carteras-indexadas/', fees: '~0.35%/año todo incluido', min: 'Sin mínimo', rationale: 'Cartera indexada gestionada ~80% RV / ~20% RF. Rebalanceo automático. Sin mínimo de entrada.',
           est_return: '~7.5% anual (histórico estimado)',
           composition: [
-            { name: 'Amundi MSCI World', pct: 55 },
-            { name: 'Amundi MSCI Emerging Markets', pct: 25 },
-            { name: 'Amundi JPM GBI Global Govies', pct: 12 },
-            { name: 'Amundi Global Corporate Bond', pct: 8 },
+            { name: 'Vanguard Global Stock Market Index', pct: 55 },
+            { name: 'Vanguard Emerging Markets Stock Index', pct: 25 },
+            { name: 'Vanguard Global Bond Index', pct: 12 },
+            { name: 'Vanguard Euro Government Bond Index', pct: 8 },
           ],
         },
       ],
@@ -234,7 +234,7 @@ const PORTFOLIO_BLUEPRINTS = {
       description: '4 productos: RV global + emergentes + small caps ETF + oro. Sin renta fija.',
       products: [
         { logo: '📈', name: 'Fidelity Index World P-ACC-EUR', isin: 'IE00BYX5NX33', asset_class: 'equities', pct: 55, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.12%', min: 'Sin mínimo', rationale: 'Core: RV global países desarrollados. Máxima diversificación. Traspaso fiscal.' },
-        { logo: '🌏', name: 'Amundi Index MSCI Emerging Markets AE-C', isin: 'LU0996177134', asset_class: 'equities', pct: 20, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.20%', min: 'Sin mínimo', rationale: 'Emergentes: alto potencial de crecimiento. Traspaso fiscal.' },
+        { logo: '🌏', name: 'Vanguard Emerging Markets Stock EUR Acc', isin: 'IE0031786696', asset_class: 'equities', pct: 20, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.23%', min: 'Sin mínimo', rationale: 'Emergentes: alto potencial de crecimiento. Traspaso fiscal.' },
         { logo: '🔹', name: 'Vanguard Global Small-Cap Index Inst EUR', isin: 'IE00B42W4L06', asset_class: 'equities', pct: 15, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.29%', min: 'Sin mínimo', rationale: 'Small caps globales. Factor premium + diversificación por tamaño.' },
         { logo: '🥇', name: 'iShares Physical Gold ETC', isin: 'IE00B4ND3602', asset_class: 'commodities', pct: 10, platform: 'Trade Republic', url: 'https://traderepublic.com/es-es', fees: 'TER 0.12%', min: '1 €', rationale: 'Oro físico. Cobertura frente a inflación y activo refugio en crisis.' },
       ],
@@ -244,7 +244,7 @@ const PORTFOLIO_BLUEPRINTS = {
       description: '6 productos: bolsa global, emergentes, small caps, REITs, oro y cripto.',
       products: [
         { logo: '📈', name: 'Fidelity Index World P-ACC-EUR', isin: 'IE00BYX5NX33', asset_class: 'equities', pct: 45, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.12%', min: 'Sin mínimo', rationale: 'Core: RV global países desarrollados. Traspaso fiscal.' },
-        { logo: '🌏', name: 'Amundi Index MSCI Emerging Markets AE-C', isin: 'LU0996177134', asset_class: 'equities', pct: 20, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.20%', min: 'Sin mínimo', rationale: 'Emergentes: mayor potencial de crecimiento. Traspaso fiscal.' },
+        { logo: '🌏', name: 'Vanguard Emerging Markets Stock EUR Acc', isin: 'IE0031786696', asset_class: 'equities', pct: 20, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.23%', min: 'Sin mínimo', rationale: 'Emergentes: mayor potencial de crecimiento. Traspaso fiscal.' },
         { logo: '🔹', name: 'Vanguard Global Small-Cap Index Inst EUR', isin: 'IE00B42W4L06', asset_class: 'equities', pct: 12, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.29%', min: 'Sin mínimo', rationale: 'Small caps: factor premium histórico. Traspaso fiscal.' },
         { logo: '🏢', name: 'Amundi Index FTSE EPRA NAREIT Global AE-C', isin: 'LU1737652832', asset_class: 'alternatives', pct: 10, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.24%', min: 'Sin mínimo', rationale: 'REITs globales. Inmobiliario cotizado con dividendos.' },
         { logo: '🥇', name: 'iShares Physical Gold ETC', isin: 'IE00B4ND3602', asset_class: 'commodities', pct: 8, platform: 'Trade Republic', url: 'https://traderepublic.com/es-es', fees: 'TER 0.12%', min: '1 €', rationale: 'Oro físico. Cobertura ante inflación y descorrelación.' },
@@ -256,7 +256,7 @@ const PORTFOLIO_BLUEPRINTS = {
       description: '7 productos: cobertura total de clases de activo para un dinámico con patrimonio elevado.',
       products: [
         { logo: '📈', name: 'Fidelity Index World P-ACC-EUR', isin: 'IE00BYX5NX33', asset_class: 'equities', pct: 40, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.12%', min: 'Sin mínimo', rationale: 'Core principal: RV países desarrollados. Traspaso fiscal.' },
-        { logo: '🌏', name: 'Amundi Index MSCI Emerging Markets AE-C', isin: 'LU0996177134', asset_class: 'equities', pct: 18, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.20%', min: 'Sin mínimo', rationale: 'Emergentes. Mayor peso para patrimonio más elevado. Traspaso fiscal.' },
+        { logo: '🌏', name: 'Vanguard Emerging Markets Stock EUR Acc', isin: 'IE0031786696', asset_class: 'equities', pct: 18, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.23%', min: 'Sin mínimo', rationale: 'Emergentes. Mayor peso para patrimonio más elevado. Traspaso fiscal.' },
         { logo: '🔹', name: 'Vanguard Global Small-Cap Index Inst EUR', isin: 'IE00B42W4L06', asset_class: 'equities', pct: 12, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.29%', min: 'Sin mínimo', rationale: 'Small caps globales. Históricamente mayor rentabilidad que large caps.' },
         { logo: '🏢', name: 'Amundi Index FTSE EPRA NAREIT Global AE-C', isin: 'LU1737652832', asset_class: 'alternatives', pct: 10, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.24%', min: 'Sin mínimo', rationale: 'Inmobiliario cotizado global. Dividendos y revalorización.' },
         { logo: '🥇', name: 'iShares Physical Gold ETC', isin: 'IE00B4ND3602', asset_class: 'commodities', pct: 7, platform: 'Trade Republic', url: 'https://traderepublic.com/es-es', fees: 'TER 0.12%', min: '1 €', rationale: 'Oro físico. Cobertura de cola y activo refugio.' },
@@ -291,12 +291,12 @@ const PORTFOLIO_BLUEPRINTS = {
       label: 'MyInvestor — Cartera Metal', managed: true,
       description: 'La cartera más agresiva de MyInvestor. 100% RV global indexada. Sin mínimo de entrada.',
       products: [
-        { logo: '🏦', name: 'MyInvestor Cartera Metal', isin: null, asset_class: 'equities', pct: 100, platform: 'MyInvestor', url: 'https://myinvestor.es/carteras-indexadas/', fees: '~0.28%/año todo incluido', min: 'Sin mínimo', rationale: '100% RV global indexada. Rebalanceo automático. La opción más agresiva de MyInvestor, más barata que Indexa.',
+        { logo: '🏦', name: 'MyInvestor Cartera Metal', isin: null, asset_class: 'equities', pct: 100, platform: 'MyInvestor', url: 'https://myinvestor.es/carteras-indexadas/', fees: '~0.35%/año todo incluido', min: 'Sin mínimo', rationale: '100% RV global indexada. Rebalanceo automático. La opción más agresiva de MyInvestor. Sin mínimo de entrada.',
           est_return: '~8.5% anual (histórico estimado)',
           composition: [
-            { name: 'Amundi MSCI World', pct: 70 },
-            { name: 'Amundi MSCI Emerging Markets', pct: 20 },
-            { name: 'Amundi MSCI World Small Cap', pct: 10 },
+            { name: 'Vanguard Global Stock Market Index', pct: 70 },
+            { name: 'Vanguard Emerging Markets Stock Index', pct: 20 },
+            { name: 'Vanguard World Small Cap Index', pct: 10 },
           ],
         },
       ],
@@ -306,7 +306,7 @@ const PORTFOLIO_BLUEPRINTS = {
       description: '4 productos: RV global + emergentes con alto peso + small caps + pequeña posición en oro.',
       products: [
         { logo: '📈', name: 'Fidelity Index World P-ACC-EUR', isin: 'IE00BYX5NX33', asset_class: 'equities', pct: 60, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.12%', min: 'Sin mínimo', rationale: 'Base principal: 1.600+ empresas países desarrollados. Traspaso fiscal.' },
-        { logo: '🌏', name: 'Amundi Index MSCI Emerging Markets AE-C', isin: 'LU0996177134', asset_class: 'equities', pct: 25, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.20%', min: 'Sin mínimo', rationale: 'Alto peso en emergentes para un perfil agresivo. Traspaso fiscal.' },
+        { logo: '🌏', name: 'Vanguard Emerging Markets Stock EUR Acc', isin: 'IE0031786696', asset_class: 'equities', pct: 25, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.20%', min: 'Sin mínimo', rationale: 'Alto peso en emergentes para un perfil agresivo. Traspaso fiscal.' },
         { logo: '🔹', name: 'Vanguard Global Small-Cap Index Inst EUR', isin: 'IE00B42W4L06', asset_class: 'equities', pct: 10, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.29%', min: 'Sin mínimo', rationale: 'Small caps globales: factor premium histórico. Traspaso fiscal.' },
         { logo: '🥇', name: 'iShares Physical Gold ETC', isin: 'IE00B4ND3602', asset_class: 'commodities', pct: 5, platform: 'Trade Republic', url: 'https://traderepublic.com/es-es', fees: 'TER 0.12%', min: '1 €', rationale: 'Pequeña posición en oro como cobertura de cola.' },
       ],
@@ -316,7 +316,7 @@ const PORTFOLIO_BLUEPRINTS = {
       description: '6 productos: bolsa global completa + REITs + oro + Bitcoin. Máxima diversificación en perfil agresivo.',
       products: [
         { logo: '📈', name: 'Fidelity Index World P-ACC-EUR', isin: 'IE00BYX5NX33', asset_class: 'equities', pct: 42, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.12%', min: 'Sin mínimo', rationale: 'Core: RV global. Traspaso fiscal.' },
-        { logo: '🌏', name: 'Amundi Index MSCI Emerging Markets AE-C', isin: 'LU0996177134', asset_class: 'equities', pct: 20, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.20%', min: 'Sin mínimo', rationale: 'Emergentes con peso relevante. Traspaso fiscal.' },
+        { logo: '🌏', name: 'Vanguard Emerging Markets Stock EUR Acc', isin: 'IE0031786696', asset_class: 'equities', pct: 20, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.23%', min: 'Sin mínimo', rationale: 'Emergentes con peso relevante. Traspaso fiscal.' },
         { logo: '🔹', name: 'Vanguard Global Small-Cap Index Inst EUR', isin: 'IE00B42W4L06', asset_class: 'equities', pct: 13, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.29%', min: 'Sin mínimo', rationale: 'Small caps: factor premium + diversificación.' },
         { logo: '🏢', name: 'Amundi Index FTSE EPRA NAREIT Global AE-C', isin: 'LU1737652832', asset_class: 'alternatives', pct: 10, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.24%', min: 'Sin mínimo', rationale: 'REITs globales. Inmobiliario cotizado con dividendos.' },
         { logo: '🥇', name: 'iShares Physical Gold ETC', isin: 'IE00B4ND3602', asset_class: 'commodities', pct: 5, platform: 'Trade Republic', url: 'https://traderepublic.com/es-es', fees: 'TER 0.12%', min: '1 €', rationale: 'Pequeña posición de cobertura en oro.' },
@@ -329,7 +329,7 @@ const PORTFOLIO_BLUEPRINTS = {
       note: 'Equivalente a Indexa 10/10 con exposición adicional a cripto y small caps.',
       products: [
         { logo: '📈', name: 'Fidelity Index World P-ACC-EUR', isin: 'IE00BYX5NX33', asset_class: 'equities', pct: 37, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.12%', min: 'Sin mínimo', rationale: 'Core: RV países desarrollados. Traspaso fiscal.' },
-        { logo: '🌏', name: 'Amundi Index MSCI Emerging Markets AE-C', isin: 'LU0996177134', asset_class: 'equities', pct: 18, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.20%', min: 'Sin mínimo', rationale: 'Emergentes: alto peso para perfil agresivo. Traspaso fiscal.' },
+        { logo: '🌏', name: 'Vanguard Emerging Markets Stock EUR Acc', isin: 'IE0031786696', asset_class: 'equities', pct: 18, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.23%', min: 'Sin mínimo', rationale: 'Emergentes: alto peso para perfil agresivo. Traspaso fiscal.' },
         { logo: '🔹', name: 'Vanguard Global Small-Cap Index Inst EUR', isin: 'IE00B42W4L06', asset_class: 'equities', pct: 12, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.29%', min: 'Sin mínimo', rationale: 'Small caps globales: factor premium histórico.' },
         { logo: '🏢', name: 'Amundi Index FTSE EPRA NAREIT Global AE-C', isin: 'LU1737652832', asset_class: 'alternatives', pct: 8, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.24%', min: 'Sin mínimo', rationale: 'Inmobiliario cotizado global. Dividendos + revalorización.' },
         { logo: '🥇', name: 'iShares Physical Gold ETC', isin: 'IE00B4ND3602', asset_class: 'commodities', pct: 5, platform: 'Trade Republic', url: 'https://traderepublic.com/es-es', fees: 'TER 0.12%', min: '1 €', rationale: 'Pequeña cobertura en oro.' },
@@ -352,7 +352,7 @@ const ARCHETYPE_BLUEPRINTS = [
     min_complexity: 3,
     products: [
       { logo: '📈', name: 'Fidelity Index World P-ACC-EUR', isin: 'IE00BYX5NX33', asset_class: 'equities',    pct: 70, platform: 'MyInvestor', url: 'https://myinvestor.es',               fees: 'TER 0.12%', min: 'Sin mínimo', rationale: 'El núcleo: 1.600+ empresas desarrolladas en un solo fondo. Traspaso fiscal.' },
-      { logo: '🌍', name: 'Amundi Index MSCI Emerging Markets AE-C', isin: 'LU0996177134', asset_class: 'equities', pct: 15, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.20%', min: 'Sin mínimo', rationale: 'Emergentes: China, India, Brasil. Diversificación geográfica. Traspaso fiscal.' },
+      { logo: '🌍', name: 'Vanguard Emerging Markets Stock EUR Acc', isin: 'IE0031786696', asset_class: 'equities', pct: 15, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.23%', min: 'Sin mínimo', rationale: 'Emergentes: China, India, Brasil. Diversificación geográfica. Traspaso fiscal.' },
       { logo: '🟢', name: 'Vanguard Global Bond Index Hdg EUR', isin: 'IE00B18GC888', asset_class: 'fixedIncome', pct: 15, platform: 'MyInvestor', url: 'https://myinvestor.es',           fees: 'TER 0.15%', min: 'Sin mínimo', rationale: 'Bonos globales cubiertos a EUR. Estabilizador de cartera. Traspaso fiscal.' },
     ],
   },
@@ -364,7 +364,7 @@ const ARCHETYPE_BLUEPRINTS = [
     min_complexity: 4,
     products: [
       { logo: '📈', name: 'Fidelity Index World P-ACC-EUR', isin: 'IE00BYX5NX33', asset_class: 'equities',    pct: 25, platform: 'MyInvestor',      url: 'https://myinvestor.es',               fees: 'TER 0.12%', min: 'Sin mínimo', rationale: 'Acciones: se beneficia del crecimiento económico.' },
-      { logo: '🟢', name: 'Amundi IS J.P.Morgan GBI Global Govies AHE-C', isin: 'LU0389812988', asset_class: 'fixedIncome', pct: 25, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.10%', min: 'Sin mínimo', rationale: 'Bonos: se beneficia en deflación y crisis.' },
+      { logo: '🟢', name: 'Vanguard Global Bond Index EUR Hdg Acc', isin: 'IE00B18GC888', asset_class: 'fixedIncome', pct: 25, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.15%', min: 'Sin mínimo', rationale: 'Bonos: se beneficia en deflación y crisis.' },
       { logo: '🥇', name: 'iShares Physical Gold ETC', isin: 'IE00B4ND3602', asset_class: 'commodities',      pct: 25, platform: 'Trade Republic',  url: 'https://traderepublic.com/es-es',     fees: 'TER 0.12%', min: '1 €',        rationale: 'Oro: se beneficia en inflación alta y crisis sistémicas.' },
       { logo: '💵', name: 'Efectivo — Cuenta Trade Republic (~4%)', isin: null, asset_class: 'cash',          pct: 25, platform: 'Trade Republic',  url: 'https://traderepublic.com/es-es',     fees: '0%',         min: '1 €',        rationale: 'Liquidez total. Trade Republic paga ~4% en efectivo sin plazo ni comisiones.' },
     ],
@@ -377,7 +377,7 @@ const ARCHETYPE_BLUEPRINTS = [
     min_complexity: 4,
     products: [
       { logo: '📈', name: 'Fidelity Index World P-ACC-EUR', isin: 'IE00BYX5NX33', asset_class: 'equities',     pct: 30, platform: 'MyInvestor', url: 'https://myinvestor.es',               fees: 'TER 0.12%', min: 'Sin mínimo', rationale: 'Acciones globales: motor de crecimiento a largo plazo.' },
-      { logo: '🟢', name: 'Amundi IS J.P.Morgan GBI Global Govies AHE-C', isin: 'LU0389812988', asset_class: 'fixedIncome', pct: 40, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.10%', min: 'Sin mínimo', rationale: 'Bonos gubernamentales globales: estabilidad en contracción y deflación.' },
+      { logo: '🟢', name: 'Vanguard Global Bond Index EUR Hdg Acc', isin: 'IE00B18GC888', asset_class: 'fixedIncome', pct: 40, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.15%', min: 'Sin mínimo', rationale: 'Bonos gubernamentales globales: estabilidad en contracción y deflación.' },
       { logo: '🏦', name: 'iShares EUR Inflation Linked Govt Bond', isin: 'IE00B0M62X26', asset_class: 'fixedIncome', pct: 15, platform: 'Trade Republic', url: 'https://traderepublic.com/es-es', fees: 'TER 0.09%', min: '1 €',        rationale: 'Bonos ligados a inflación EUR: protección cuando suben los precios.' },
       { logo: '🥇', name: 'iShares Physical Gold ETC', isin: 'IE00B4ND3602', asset_class: 'commodities',       pct: 8,  platform: 'Trade Republic', url: 'https://traderepublic.com/es-es',     fees: 'TER 0.12%', min: '1 €',        rationale: 'Oro: cobertura ante inflación y crisis. Descorrelación con bonos y acciones.' },
       { logo: '🏢', name: 'Amundi Index FTSE EPRA NAREIT Global AE-C', isin: 'LU1737652832', asset_class: 'alternatives', pct: 7, platform: 'MyInvestor', url: 'https://myinvestor.es',       fees: 'TER 0.24%', min: 'Sin mínimo', rationale: 'REITs globales: inmobiliario cotizado, rentas y diversificación real.' },
@@ -391,9 +391,9 @@ const ARCHETYPE_BLUEPRINTS = [
     min_complexity: 5,
     products: [
       { logo: '📈', name: 'Fidelity Index World P-ACC-EUR', isin: 'IE00BYX5NX33', asset_class: 'equities',    pct: 40, platform: 'MyInvestor', url: 'https://myinvestor.es',               fees: 'TER 0.12%', min: 'Sin mínimo', rationale: 'Core principal: países desarrollados, 1.600+ empresas. Traspaso fiscal.' },
-      { logo: '🌍', name: 'Amundi Index MSCI Emerging Markets AE-C', isin: 'LU0996177134', asset_class: 'equities', pct: 20, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.20%', min: 'Sin mínimo', rationale: 'Core emergentes: diversificación global completa. Traspaso fiscal.' },
+      { logo: '🌍', name: 'Vanguard Emerging Markets Stock EUR Acc', isin: 'IE0031786696', asset_class: 'equities', pct: 20, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.23%', min: 'Sin mínimo', rationale: 'Core emergentes: diversificación global completa. Traspaso fiscal.' },
       { logo: '🔹', name: 'Vanguard Global Small-Cap Index Inst EUR', isin: 'IE00B42W4L06', asset_class: 'equities', pct: 10, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.29%', min: 'Sin mínimo', rationale: 'Core small caps: factor premium histórico. Traspaso fiscal.' },
-      { logo: '🟢', name: 'Amundi IS J.P.Morgan GBI Global Govies AHE-C', isin: 'LU0389812988', asset_class: 'fixedIncome', pct: 10, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.10%', min: 'Sin mínimo', rationale: 'Core bonos: ancla de estabilidad en el núcleo.' },
+      { logo: '🟢', name: 'Vanguard Global Bond Index EUR Hdg Acc', isin: 'IE00B18GC888', asset_class: 'fixedIncome', pct: 10, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.15%', min: 'Sin mínimo', rationale: 'Core bonos: ancla de estabilidad en el núcleo.' },
       { logo: '🥇', name: 'iShares Physical Gold ETC', isin: 'IE00B4ND3602', asset_class: 'commodities',      pct: 7,  platform: 'Trade Republic', url: 'https://traderepublic.com/es-es',     fees: 'TER 0.12%', min: '1 €',        rationale: 'Satélite: cobertura de cola y descorrelación.' },
       { logo: '💻', name: 'VanEck Semiconductor UCITS ETF', isin: 'IE00BMW3QX54', asset_class: 'equities',    pct: 7,  platform: 'Trade Republic', url: 'https://traderepublic.com/es-es',     fees: 'TER 0.35%', min: '1 €',        rationale: 'Satélite: semiconductores, el petróleo del siglo XXI.' },
       { logo: '🇮🇳', name: 'iShares MSCI India UCITS ETF', isin: 'IE00B0M63177', asset_class: 'equities',    pct: 6,  platform: 'Trade Republic', url: 'https://traderepublic.com/es-es',     fees: 'TER 0.65%', min: '1 €',        rationale: 'Satélite: India, la economía de mayor crecimiento del G20.' },
@@ -409,7 +409,7 @@ const ARCHETYPE_BLUEPRINTS = [
       { logo: '💰', name: 'Vanguard FTSE All-World High Div Yield ETF', isin: 'IE00B8GKDB10', asset_class: 'equities',   pct: 35, platform: 'Trade Republic', url: 'https://traderepublic.com/es-es', fees: 'TER 0.22%', min: '1 €',        rationale: 'Empresas con alto dividendo actual. Distribución trimestral.' },
       { logo: '📊', name: 'WisdomTree Global Quality Dividend Growth', isin: 'IE00BZ56SW52', asset_class: 'equities',    pct: 25, platform: 'Trade Republic', url: 'https://traderepublic.com/es-es', fees: 'TER 0.38%', min: '1 €',        rationale: 'Dividendo creciente + calidad. Mejor para inflación a largo plazo.' },
       { logo: '🏢', name: 'Amundi Index FTSE EPRA NAREIT Global AE-C', isin: 'LU1737652832', asset_class: 'alternatives', pct: 15, platform: 'MyInvestor', url: 'https://myinvestor.es',       fees: 'TER 0.24%', min: 'Sin mínimo', rationale: 'REITs: inmobiliario global + rentas. Traspaso fiscal.' },
-      { logo: '🟢', name: 'Amundi IS J.P.Morgan GBI Global Govies AHE-C', isin: 'LU0389812988', asset_class: 'fixedIncome', pct: 15, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.10%', min: 'Sin mínimo', rationale: 'Bonos: estabilidad y cobertura de volatilidad. Traspaso fiscal.' },
+      { logo: '🟢', name: 'Vanguard Global Bond Index EUR Hdg Acc', isin: 'IE00B18GC888', asset_class: 'fixedIncome', pct: 15, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.15%', min: 'Sin mínimo', rationale: 'Bonos: estabilidad y cobertura de volatilidad. Traspaso fiscal.' },
       { logo: '🥇', name: 'iShares Physical Gold ETC', isin: 'IE00B4ND3602', asset_class: 'commodities',       pct: 10, platform: 'Trade Republic', url: 'https://traderepublic.com/es-es',     fees: 'TER 0.12%', min: '1 €',        rationale: 'Oro: cobertura de inflación y diversificación de riesgo.' },
     ],
   },
@@ -421,7 +421,7 @@ const ARCHETYPE_BLUEPRINTS = [
     min_complexity: 4,
     products: [
       { logo: '📈', name: 'Fidelity Index World P-ACC-EUR', isin: 'IE00BYX5NX33', asset_class: 'equities',    pct: 40, platform: 'MyInvestor', url: 'https://myinvestor.es',               fees: 'TER 0.12%', min: 'Sin mínimo', rationale: 'Base: 1.600+ empresas países desarrollados. TER mínimo. Traspaso fiscal.' },
-      { logo: '🌍', name: 'Amundi Index MSCI Emerging Markets AE-C', isin: 'LU0996177134', asset_class: 'equities', pct: 20, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.20%', min: 'Sin mínimo', rationale: 'Emergentes: 2.000M de clase media creciendo. Traspaso fiscal.' },
+      { logo: '🌍', name: 'Vanguard Emerging Markets Stock EUR Acc', isin: 'IE0031786696', asset_class: 'equities', pct: 20, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.23%', min: 'Sin mínimo', rationale: 'Emergentes: 2.000M de clase media creciendo. Traspaso fiscal.' },
       { logo: '🔹', name: 'Vanguard Global Small-Cap Index Inst EUR', isin: 'IE00B42W4L06', asset_class: 'equities', pct: 15, platform: 'MyInvestor', url: 'https://myinvestor.es', fees: 'TER 0.29%', min: 'Sin mínimo', rationale: 'Small caps: factor premium + tamaño. Mayor rentabilidad esperada a largo plazo.' },
       { logo: '💻', name: 'Invesco EQQQ Nasdaq-100 UCITS ETF', isin: 'IE0032077012', asset_class: 'equities',   pct: 15, platform: 'Trade Republic', url: 'https://traderepublic.com/es-es',     fees: 'TER 0.30%', min: '1 €',        rationale: 'Las 100 mayores tecnológicas no financieras del mundo. Apple, NVIDIA, Microsoft.' },
       { logo: '🇮🇳', name: 'iShares MSCI India UCITS ETF', isin: 'IE00B0M63177', asset_class: 'equities',    pct: 10, platform: 'Trade Republic', url: 'https://traderepublic.com/es-es',     fees: 'TER 0.65%', min: '1 €',        rationale: 'India: 1.400M personas, pirámide poblacional joven, crecimiento del PIB >6%.' },
@@ -455,7 +455,7 @@ const PLATFORMS = {
       min: 'Sin mínimo',
       badge: null,
       est_returns: { conservador: '3–4%', moderado: '5–6%', dinamico: '7–8%', agresivo: '8–10%' },
-      pros: ['Sin mínimo de entrada', 'Comisión de gestión muy baja', 'Cuenta remunerada 2.5% integrada', 'Fondos Vanguard y Amundi'],
+      pros: ['Sin mínimo de entrada', 'Comisión de gestión muy baja', 'Cuenta remunerada 2.5% integrada', 'Fondos Vanguard indexados globales'],
       cons: ['Menos personalización de perfil', 'Plataforma más genérica'],
       highlight: [],
     },
@@ -497,7 +497,7 @@ const PLATFORMS = {
       min: '1 €',
       badge: '✅ Mejor para fondos',
       est_returns: null,
-      pros: ['Sin custodia en fondos de inversión', 'Vanguard, Amundi, iShares disponibles', 'Cuenta remunerada 2.5% incluida', 'Traspaso entre fondos sin tributar'],
+      pros: ['Sin custodia en fondos de inversión', 'Vanguard, Fidelity, iShares disponibles', 'Cuenta remunerada 2.5% incluida', 'Traspaso entre fondos sin tributar'],
       cons: ['ETFs con tarifa de custodia separada', 'App mejorable respecto a competidores'],
     },
     {
@@ -689,7 +689,7 @@ const PLATFORMS = {
       min: 'Sin mínimo',
       badge: null,
       est_returns: { conservador: '3–5%', moderado: '5–7%', dinamico: '7–9%', agresivo: '8–10%' },
-      pros: ['Comisiones muy bajas', 'Fondos Vanguard y Amundi', 'Integrado en MyInvestor si ya tienes cuenta', 'Sin mínimo de aportación'],
+      pros: ['Comisiones muy bajas', 'Fondos Vanguard e iShares', 'Integrado en MyInvestor si ya tienes cuenta', 'Sin mínimo de aportación'],
       cons: ['Ilíquido hasta jubilación', 'Límite 1.500€/año individual'],
     },
     {
@@ -2113,7 +2113,7 @@ function buildExistingInvestmentsSection(inversiones, riskProfile) {
     const pct = totalInvertido > 0 ? Math.round(inv.importe / totalInvertido * 100) : 0;
     if (inv.tipo === 'fondo_indexado') {
       if (!inv.ter || inv.ter <= 0.3) return { action: '✅ Mantener', color: 'green', text: 'Fondo indexado de bajo coste — exactamente lo que queremos. Continúa aportando regularmente.' };
-      return { action: '🔄 Optimizar', color: 'yellow', text: `TER del ${inv.ter}% — algo elevado para un indexado. Puedes traspasarlo sin tributar a uno con TER &lt; 0.20% en MyInvestor (Amundi MSCI World, TER 0.07%) y ahorrar ${fmtEur(Math.round(inv.importe * (inv.ter - 0.20) / 100))}/año.` };
+      return { action: '🔄 Optimizar', color: 'yellow', text: `TER del ${inv.ter}% — algo elevado para un indexado. Puedes traspasarlo sin tributar a uno con TER &lt; 0.20% en MyInvestor (ej. Vanguard Global Stock Market, TER 0.18%) y ahorrar ${fmtEur(Math.round(inv.importe * (inv.ter - 0.20) / 100))}/año.` };
     }
     if (inv.tipo === 'fondo_activo') {
       const ahorro = inv.ter > 0 ? Math.round(inv.importe * (inv.ter - 0.20) / 100) : 0;

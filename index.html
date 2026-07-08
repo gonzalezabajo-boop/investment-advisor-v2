@@ -128,36 +128,76 @@
           <!-- Portfolio input screen (conditional, shown when ya_inviertes=si) -->
           <div class="q-screen hidden" data-q="portfolio-input">
             <h2 class="text-2xl font-bold text-gray-900 mb-2">¿Qué tienes ahora?</h2>
-            <p class="text-sm text-gray-400 mb-5">Busca por nombre o ISIN. Si tienes Urbanitae, cripto u otros, usa los accesos rápidos.</p>
+            <p class="text-sm text-gray-400 mb-4">Registra tus inversiones actuales para que las analicemos junto a tu recomendación.</p>
 
-            <!-- Search + add row -->
-            <div class="relative mb-3">
-              <input type="text" id="ft-fund-name" placeholder="Amundi MSCI World, LU0996182563..."
-                class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-400"
-                oninput="ftFundSearch()" autocomplete="off">
-              <div id="ft-suggestions" class="hidden absolute left-0 right-0 top-full bg-white border border-gray-100 rounded-xl shadow-lg mt-1 z-10 max-h-52 overflow-y-auto text-sm"></div>
-            </div>
-            <div class="flex gap-2 mb-4">
-              <input type="number" id="ft-fund-amount" placeholder="Importe en €" min="1"
-                class="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-400">
-              <button onclick="ftAddFund()"
-                class="px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors whitespace-nowrap">+ Añadir</button>
+            <!-- Tab bar -->
+            <div class="flex gap-1 p-1 bg-gray-100 rounded-xl mb-4">
+              <button id="ft-tab-manual" onclick="ftSwitchTab('manual')"
+                class="flex-1 py-2 text-xs font-medium rounded-lg bg-white shadow-sm text-gray-800 transition-colors">
+                🔍 Buscar fondos
+              </button>
+              <button id="ft-tab-robot" onclick="ftSwitchTab('robot')"
+                class="flex-1 py-2 text-xs font-medium rounded-lg text-gray-500 transition-colors">
+                🤖 Roboadvisor
+              </button>
             </div>
 
-            <!-- Quick-add chips -->
-            <div class="flex flex-wrap gap-2 mb-5">
-              <button onclick="ftQuickAdd('crowdfunding', 'Urbanitae')" class="text-xs px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">🏠 Urbanitae</button>
-              <button onclick="ftQuickAdd('cripto', 'Bitcoin / ETH')" class="text-xs px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">₿ Cripto</button>
-              <button onclick="ftQuickAdd('plan_pensiones', 'Plan de pensiones')" class="text-xs px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">🏖️ Plan de pensiones</button>
-              <button onclick="ftQuickAdd('acciones', 'Acciones')" class="text-xs px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">📈 Acciones</button>
+            <!-- Roboadvisor panel -->
+            <div id="ft-panel-robot" class="hidden mb-3">
+              <p class="text-xs text-gray-500 mb-3">Selecciona tu plataforma y cartera. Se cargará la composición pública aproximada.</p>
+              <div class="grid grid-cols-3 gap-2 mb-3">
+                <button id="ft-plat-indexa" onclick="ftSelectPlatform('indexa')"
+                  class="py-2 px-3 text-xs font-medium rounded-xl border-2 border-gray-200 bg-white text-gray-600 hover:border-gray-300 transition-colors">Indexa Capital</button>
+                <button id="ft-plat-myinvestor" onclick="ftSelectPlatform('myinvestor')"
+                  class="py-2 px-3 text-xs font-medium rounded-xl border-2 border-gray-200 bg-white text-gray-600 hover:border-gray-300 transition-colors">MyInvestor</button>
+                <button id="ft-plat-finizens" onclick="ftSelectPlatform('finizens')"
+                  class="py-2 px-3 text-xs font-medium rounded-xl border-2 border-gray-200 bg-white text-gray-600 hover:border-gray-300 transition-colors">Finizens</button>
+              </div>
+              <p id="ft-platform-note" class="hidden text-xs text-gray-400 mb-3 leading-relaxed"></p>
+              <select id="ft-robot-portfolio"
+                class="hidden w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-700 mb-3 focus:outline-none focus:border-blue-400 bg-white">
+              </select>
+              <input id="ft-robot-amount" type="number" placeholder="Importe total invertido en €" min="1"
+                class="hidden w-full border border-gray-200 rounded-xl px-4 py-3 text-sm mb-3 focus:outline-none focus:border-blue-400">
+              <div id="ft-robot-load-row" class="hidden">
+                <button onclick="ftLoadManagedPortfolio()"
+                  class="w-full py-2.5 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors">
+                  Cargar composición →
+                </button>
+                <p id="ft-robot-success" class="hidden text-xs text-green-600 mt-2 text-center"></p>
+              </div>
             </div>
 
-            <!-- Added items list -->
+            <!-- Manual search panel -->
+            <div id="ft-panel-manual">
+              <!-- Search + add row -->
+              <div class="relative mb-3">
+                <input type="text" id="ft-fund-name" placeholder="Vanguard Global Stock, LU0552385295..."
+                  class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-400"
+                  oninput="ftFundSearch()" autocomplete="off">
+                <div id="ft-suggestions" class="hidden absolute left-0 right-0 top-full bg-white border border-gray-100 rounded-xl shadow-lg mt-1 z-10 max-h-52 overflow-y-auto text-sm"></div>
+              </div>
+              <div class="flex gap-2 mb-4">
+                <input type="number" id="ft-fund-amount" placeholder="Importe en €" min="1"
+                  class="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-400">
+                <button onclick="ftAddFund()"
+                  class="px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors whitespace-nowrap">+ Añadir</button>
+              </div>
+              <!-- Quick-add chips -->
+              <div class="flex flex-wrap gap-2 mb-4">
+                <button onclick="ftQuickAdd('crowdfunding', 'Urbanitae')" class="text-xs px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">🏠 Urbanitae</button>
+                <button onclick="ftQuickAdd('cripto', 'Bitcoin / ETH')" class="text-xs px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">₿ Cripto</button>
+                <button onclick="ftQuickAdd('plan_pensiones', 'Plan de pensiones')" class="text-xs px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">🏖️ Plan de pensiones</button>
+                <button onclick="ftQuickAdd('acciones', 'Acciones')" class="text-xs px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">📈 Acciones</button>
+              </div>
+            </div>
+
+            <!-- Added items list (always visible) -->
             <div id="ft-portfolio-list" class="space-y-2 mb-5 min-h-[36px]">
               <p id="ft-empty-msg" class="text-xs text-gray-400 text-center py-2">Aún no has añadido nada — puedes continuar sin añadir</p>
             </div>
 
-            <!-- Footer nav (own buttons, standard q-prev/q-next are hidden) -->
+            <!-- Footer nav -->
             <div class="flex gap-2 pt-4 border-t border-gray-100">
               <button onclick="ftExitPortfolio(true)"
                 class="px-4 py-2.5 text-sm text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">← Anterior</button>

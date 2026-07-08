@@ -133,6 +133,160 @@ const FUND_SEARCH_CATALOG = [
 const FUND_LOOKUP = {};
 FUND_SEARCH_CATALOG.forEach(f => { if (f.isin) FUND_LOOKUP[f.isin] = { name: f.name, ter: f.ter }; });
 
+const MANAGED_PORTFOLIOS = {
+  indexa: {
+    label: 'Indexa Capital',
+    note: 'Fondos Vanguard · Traspaso fiscal · Comisión ~0.42%/año',
+    portfolios: [
+      { key: '1',  label: 'Cartera Indexada 1/10',  funds: [
+        { nombre: 'Vanguard Global Stock Market Index EUR Acc', isin: 'LU0552385295', ter: 0.18, tipo: 'fondo_indexado', pct: 13 },
+        { nombre: 'Vanguard Emerging Markets Stock EUR Acc',    isin: 'IE0031786696', ter: 0.23, tipo: 'fondo_indexado', pct:  5 },
+        { nombre: 'Vanguard Global Bond Index EUR Hdg Acc',     isin: 'IE00B18GC888', ter: 0.15, tipo: 'fondo_indexado', pct: 55 },
+        { nombre: 'Vanguard Euro Government Bond Index EUR Acc',isin: 'IE00B04GQR24', ter: 0.07, tipo: 'fondo_indexado', pct: 27 },
+      ]},
+      { key: '2',  label: 'Cartera Indexada 2/10',  funds: [
+        { nombre: 'Vanguard Global Stock Market Index EUR Acc', isin: 'LU0552385295', ter: 0.18, tipo: 'fondo_indexado', pct: 18 },
+        { nombre: 'Vanguard Emerging Markets Stock EUR Acc',    isin: 'IE0031786696', ter: 0.23, tipo: 'fondo_indexado', pct:  6 },
+        { nombre: 'Vanguard Global Bond Index EUR Hdg Acc',     isin: 'IE00B18GC888', ter: 0.15, tipo: 'fondo_indexado', pct: 50 },
+        { nombre: 'Vanguard Euro Government Bond Index EUR Acc',isin: 'IE00B04GQR24', ter: 0.07, tipo: 'fondo_indexado', pct: 26 },
+      ]},
+      { key: '3',  label: 'Cartera Indexada 3/10',  funds: [
+        { nombre: 'Vanguard Global Stock Market Index EUR Acc', isin: 'LU0552385295', ter: 0.18, tipo: 'fondo_indexado', pct: 23 },
+        { nombre: 'Vanguard Emerging Markets Stock EUR Acc',    isin: 'IE0031786696', ter: 0.23, tipo: 'fondo_indexado', pct:  7 },
+        { nombre: 'Vanguard Global Bond Index EUR Hdg Acc',     isin: 'IE00B18GC888', ter: 0.15, tipo: 'fondo_indexado', pct: 46 },
+        { nombre: 'Vanguard Euro Government Bond Index EUR Acc',isin: 'IE00B04GQR24', ter: 0.07, tipo: 'fondo_indexado', pct: 24 },
+      ]},
+      { key: '4',  label: 'Cartera Indexada 4/10',  funds: [
+        { nombre: 'Vanguard Global Stock Market Index EUR Acc', isin: 'LU0552385295', ter: 0.18, tipo: 'fondo_indexado', pct: 28 },
+        { nombre: 'Vanguard Emerging Markets Stock EUR Acc',    isin: 'IE0031786696', ter: 0.23, tipo: 'fondo_indexado', pct:  9 },
+        { nombre: 'Vanguard Global Bond Index EUR Hdg Acc',     isin: 'IE00B18GC888', ter: 0.15, tipo: 'fondo_indexado', pct: 42 },
+        { nombre: 'Vanguard Euro Government Bond Index EUR Acc',isin: 'IE00B04GQR24', ter: 0.07, tipo: 'fondo_indexado', pct: 21 },
+      ]},
+      { key: '5',  label: 'Cartera Indexada 5/10',  funds: [
+        { nombre: 'Vanguard Global Stock Market Index EUR Acc', isin: 'LU0552385295', ter: 0.18, tipo: 'fondo_indexado', pct: 33 },
+        { nombre: 'Vanguard Emerging Markets Stock EUR Acc',    isin: 'IE0031786696', ter: 0.23, tipo: 'fondo_indexado', pct: 11 },
+        { nombre: 'Vanguard Global Bond Index EUR Hdg Acc',     isin: 'IE00B18GC888', ter: 0.15, tipo: 'fondo_indexado', pct: 37 },
+        { nombre: 'Vanguard Euro Government Bond Index EUR Acc',isin: 'IE00B04GQR24', ter: 0.07, tipo: 'fondo_indexado', pct: 19 },
+      ]},
+      { key: '6',  label: 'Cartera Indexada 6/10',  funds: [
+        { nombre: 'Vanguard Global Stock Market Index EUR Acc', isin: 'LU0552385295', ter: 0.18, tipo: 'fondo_indexado', pct: 39 },
+        { nombre: 'Vanguard Emerging Markets Stock EUR Acc',    isin: 'IE0031786696', ter: 0.23, tipo: 'fondo_indexado', pct: 12 },
+        { nombre: 'Vanguard Global Bond Index EUR Hdg Acc',     isin: 'IE00B18GC888', ter: 0.15, tipo: 'fondo_indexado', pct: 33 },
+        { nombre: 'Vanguard Euro Government Bond Index EUR Acc',isin: 'IE00B04GQR24', ter: 0.07, tipo: 'fondo_indexado', pct: 16 },
+      ]},
+      { key: '7',  label: 'Cartera Indexada 7/10',  funds: [
+        { nombre: 'Vanguard Global Stock Market Index EUR Acc', isin: 'LU0552385295', ter: 0.18, tipo: 'fondo_indexado', pct: 46 },
+        { nombre: 'Vanguard Emerging Markets Stock EUR Acc',    isin: 'IE0031786696', ter: 0.23, tipo: 'fondo_indexado', pct: 14 },
+        { nombre: 'Vanguard Global Bond Index EUR Hdg Acc',     isin: 'IE00B18GC888', ter: 0.15, tipo: 'fondo_indexado', pct: 27 },
+        { nombre: 'Vanguard Euro Government Bond Index EUR Acc',isin: 'IE00B04GQR24', ter: 0.07, tipo: 'fondo_indexado', pct: 13 },
+      ]},
+      { key: '8',  label: 'Cartera Indexada 8/10',  funds: [
+        { nombre: 'Vanguard Global Stock Market Index EUR Acc', isin: 'LU0552385295', ter: 0.18, tipo: 'fondo_indexado', pct: 54 },
+        { nombre: 'Vanguard Emerging Markets Stock EUR Acc',    isin: 'IE0031786696', ter: 0.23, tipo: 'fondo_indexado', pct: 16 },
+        { nombre: 'Vanguard Global Bond Index EUR Hdg Acc',     isin: 'IE00B18GC888', ter: 0.15, tipo: 'fondo_indexado', pct: 20 },
+        { nombre: 'Vanguard Euro Government Bond Index EUR Acc',isin: 'IE00B04GQR24', ter: 0.07, tipo: 'fondo_indexado', pct: 10 },
+      ]},
+      { key: '9',  label: 'Cartera Indexada 9/10',  funds: [
+        { nombre: 'Vanguard Global Stock Market Index EUR Acc', isin: 'LU0552385295', ter: 0.18, tipo: 'fondo_indexado', pct: 63 },
+        { nombre: 'Vanguard Emerging Markets Stock EUR Acc',    isin: 'IE0031786696', ter: 0.23, tipo: 'fondo_indexado', pct: 19 },
+        { nombre: 'Vanguard Global Bond Index EUR Hdg Acc',     isin: 'IE00B18GC888', ter: 0.15, tipo: 'fondo_indexado', pct: 12 },
+        { nombre: 'Vanguard Euro Government Bond Index EUR Acc',isin: 'IE00B04GQR24', ter: 0.07, tipo: 'fondo_indexado', pct:  6 },
+      ]},
+      { key: '10', label: 'Cartera Indexada 10/10', funds: [
+        { nombre: 'Vanguard Global Stock Market Index EUR Acc', isin: 'LU0552385295', ter: 0.18, tipo: 'fondo_indexado', pct: 73 },
+        { nombre: 'Vanguard Emerging Markets Stock EUR Acc',    isin: 'IE0031786696', ter: 0.23, tipo: 'fondo_indexado', pct: 21 },
+        { nombre: 'Vanguard Global Bond Index EUR Hdg Acc',     isin: 'IE00B18GC888', ter: 0.15, tipo: 'fondo_indexado', pct:  4 },
+        { nombre: 'Vanguard Euro Government Bond Index EUR Acc',isin: 'IE00B04GQR24', ter: 0.07, tipo: 'fondo_indexado', pct:  2 },
+      ]},
+    ],
+  },
+  myinvestor: {
+    label: 'MyInvestor',
+    note: 'Fondos Vanguard · Traspaso fiscal · Comisión ~0.35%/año',
+    portfolios: [
+      { key: 'conservadora', label: 'Cartera Conservadora', funds: [
+        { nombre: 'Vanguard Global Stock Market Index EUR Acc', isin: 'LU0552385295', ter: 0.18, tipo: 'fondo_indexado', pct: 20 },
+        { nombre: 'Vanguard Emerging Markets Stock EUR Acc',    isin: 'IE0031786696', ter: 0.23, tipo: 'fondo_indexado', pct: 10 },
+        { nombre: 'Vanguard Global Bond Index EUR Hdg Acc',     isin: 'IE00B18GC888', ter: 0.15, tipo: 'fondo_indexado', pct: 50 },
+        { nombre: 'Vanguard Euro Government Bond Index EUR Acc',isin: 'IE00B04GQR24', ter: 0.07, tipo: 'fondo_indexado', pct: 20 },
+      ]},
+      { key: 'moderada', label: 'Cartera Moderada', funds: [
+        { nombre: 'Vanguard Global Stock Market Index EUR Acc', isin: 'LU0552385295', ter: 0.18, tipo: 'fondo_indexado', pct: 42 },
+        { nombre: 'Vanguard Emerging Markets Stock EUR Acc',    isin: 'IE0031786696', ter: 0.23, tipo: 'fondo_indexado', pct: 18 },
+        { nombre: 'Vanguard Global Bond Index EUR Hdg Acc',     isin: 'IE00B18GC888', ter: 0.15, tipo: 'fondo_indexado', pct: 25 },
+        { nombre: 'Vanguard Euro Government Bond Index EUR Acc',isin: 'IE00B04GQR24', ter: 0.07, tipo: 'fondo_indexado', pct: 15 },
+      ]},
+      { key: 'decidida', label: 'Cartera Decidida', funds: [
+        { nombre: 'Vanguard Global Stock Market Index EUR Acc', isin: 'LU0552385295', ter: 0.18, tipo: 'fondo_indexado', pct: 55 },
+        { nombre: 'Vanguard Emerging Markets Stock EUR Acc',    isin: 'IE0031786696', ter: 0.23, tipo: 'fondo_indexado', pct: 25 },
+        { nombre: 'Vanguard Global Bond Index EUR Hdg Acc',     isin: 'IE00B18GC888', ter: 0.15, tipo: 'fondo_indexado', pct: 12 },
+        { nombre: 'Vanguard Euro Government Bond Index EUR Acc',isin: 'IE00B04GQR24', ter: 0.07, tipo: 'fondo_indexado', pct:  8 },
+      ]},
+      { key: 'agresiva', label: 'Cartera Agresiva', funds: [
+        { nombre: 'Vanguard Global Stock Market Index EUR Acc', isin: 'LU0552385295', ter: 0.18, tipo: 'fondo_indexado', pct: 65 },
+        { nombre: 'Vanguard Emerging Markets Stock EUR Acc',    isin: 'IE0031786696', ter: 0.23, tipo: 'fondo_indexado', pct: 27 },
+        { nombre: 'Vanguard World Small Cap Index EUR Acc',     isin: '',              ter: 0.29, tipo: 'fondo_indexado', pct:  5 },
+        { nombre: 'Vanguard Global Bond Index EUR Hdg Acc',     isin: 'IE00B18GC888', ter: 0.15, tipo: 'fondo_indexado', pct:  3 },
+      ]},
+      { key: 'metal', label: 'Cartera Metal', funds: [
+        { nombre: 'Vanguard Global Stock Market Index EUR Acc', isin: 'LU0552385295', ter: 0.18, tipo: 'fondo_indexado', pct: 70 },
+        { nombre: 'Vanguard Emerging Markets Stock EUR Acc',    isin: 'IE0031786696', ter: 0.23, tipo: 'fondo_indexado', pct: 20 },
+        { nombre: 'Vanguard World Small Cap Index EUR Acc',     isin: '',              ter: 0.29, tipo: 'fondo_indexado', pct: 10 },
+      ]},
+    ],
+  },
+  finizens: {
+    label: 'Finizens',
+    note: 'ETFs iShares · Sin traspaso fiscal · Comisión ~0.23–0.37%/año',
+    portfolios: [
+      { key: '1', label: 'Cartera 1 — Conservadora', funds: [
+        { nombre: 'iShares Core MSCI World ETF',            isin: 'IE00B4L5Y983', ter: 0.20, tipo: 'etf',            pct: 10 },
+        { nombre: 'iShares Core MSCI EM IMI ETF',           isin: 'IE00BKM4GZ66', ter: 0.18, tipo: 'etf',            pct:  4 },
+        { nombre: 'iShares Global Aggregate Bond EUR Hdg',  isin: 'IE00BDBRDM35', ter: 0.10, tipo: 'etf',            pct: 50 },
+        { nombre: 'iShares Euro Corporate Bond ETF',        isin: 'IE00B3F81R35', ter: 0.20, tipo: 'etf',            pct: 25 },
+        { nombre: 'Amundi FTSE EPRA NAREIT Global AE-C',    isin: 'LU1737652832', ter: 0.24, tipo: 'fondo_indexado', pct:  6 },
+        { nombre: 'iShares Physical Gold ETC',              isin: 'IE00B4ND3602', ter: 0.12, tipo: 'oro_plata',      pct:  5 },
+      ]},
+      { key: '2', label: 'Cartera 2', funds: [
+        { nombre: 'iShares Core MSCI World ETF',            isin: 'IE00B4L5Y983', ter: 0.20, tipo: 'etf',            pct: 20 },
+        { nombre: 'iShares Core MSCI EM IMI ETF',           isin: 'IE00BKM4GZ66', ter: 0.18, tipo: 'etf',            pct:  7 },
+        { nombre: 'iShares MSCI World Small Cap ETF',       isin: 'IE00BF4RFH31', ter: 0.35, tipo: 'etf',            pct:  2 },
+        { nombre: 'iShares Global Aggregate Bond EUR Hdg',  isin: 'IE00BDBRDM35', ter: 0.10, tipo: 'etf',            pct: 40 },
+        { nombre: 'iShares Euro Corporate Bond ETF',        isin: 'IE00B3F81R35', ter: 0.20, tipo: 'etf',            pct: 19 },
+        { nombre: 'Amundi FTSE EPRA NAREIT Global AE-C',    isin: 'LU1737652832', ter: 0.24, tipo: 'fondo_indexado', pct:  7 },
+        { nombre: 'iShares Physical Gold ETC',              isin: 'IE00B4ND3602', ter: 0.12, tipo: 'oro_plata',      pct:  5 },
+      ]},
+      { key: '3', label: 'Cartera 3 — Equilibrada', funds: [
+        { nombre: 'iShares Core MSCI World ETF',            isin: 'IE00B4L5Y983', ter: 0.20, tipo: 'etf',            pct: 32 },
+        { nombre: 'iShares Core MSCI EM IMI ETF',           isin: 'IE00BKM4GZ66', ter: 0.18, tipo: 'etf',            pct: 10 },
+        { nombre: 'iShares MSCI World Small Cap ETF',       isin: 'IE00BF4RFH31', ter: 0.35, tipo: 'etf',            pct:  3 },
+        { nombre: 'iShares Global Aggregate Bond EUR Hdg',  isin: 'IE00BDBRDM35', ter: 0.10, tipo: 'etf',            pct: 27 },
+        { nombre: 'iShares Euro Corporate Bond ETF',        isin: 'IE00B3F81R35', ter: 0.20, tipo: 'etf',            pct: 15 },
+        { nombre: 'Amundi FTSE EPRA NAREIT Global AE-C',    isin: 'LU1737652832', ter: 0.24, tipo: 'fondo_indexado', pct:  8 },
+        { nombre: 'iShares Physical Gold ETC',              isin: 'IE00B4ND3602', ter: 0.12, tipo: 'oro_plata',      pct:  5 },
+      ]},
+      { key: '4', label: 'Cartera 4', funds: [
+        { nombre: 'iShares Core MSCI World ETF',            isin: 'IE00B4L5Y983', ter: 0.20, tipo: 'etf',            pct: 42 },
+        { nombre: 'iShares Core MSCI EM IMI ETF',           isin: 'IE00BKM4GZ66', ter: 0.18, tipo: 'etf',            pct: 14 },
+        { nombre: 'iShares MSCI World Small Cap ETF',       isin: 'IE00BF4RFH31', ter: 0.35, tipo: 'etf',            pct:  4 },
+        { nombre: 'iShares Global Aggregate Bond EUR Hdg',  isin: 'IE00BDBRDM35', ter: 0.10, tipo: 'etf',            pct: 18 },
+        { nombre: 'iShares Euro Corporate Bond ETF',        isin: 'IE00B3F81R35', ter: 0.20, tipo: 'etf',            pct:  9 },
+        { nombre: 'Amundi FTSE EPRA NAREIT Global AE-C',    isin: 'LU1737652832', ter: 0.24, tipo: 'fondo_indexado', pct:  9 },
+        { nombre: 'iShares Physical Gold ETC',              isin: 'IE00B4ND3602', ter: 0.12, tipo: 'oro_plata',      pct:  4 },
+      ]},
+      { key: '5', label: 'Cartera 5 — Agresiva', funds: [
+        { nombre: 'iShares Core MSCI World ETF',            isin: 'IE00B4L5Y983', ter: 0.20, tipo: 'etf',            pct: 52 },
+        { nombre: 'iShares Core MSCI EM IMI ETF',           isin: 'IE00BKM4GZ66', ter: 0.18, tipo: 'etf',            pct: 17 },
+        { nombre: 'iShares MSCI World Small Cap ETF',       isin: 'IE00BF4RFH31', ter: 0.35, tipo: 'etf',            pct:  5 },
+        { nombre: 'iShares Global Aggregate Bond EUR Hdg',  isin: 'IE00BDBRDM35', ter: 0.10, tipo: 'etf',            pct: 10 },
+        { nombre: 'iShares Euro Corporate Bond ETF',        isin: 'IE00B3F81R35', ter: 0.20, tipo: 'etf',            pct:  5 },
+        { nombre: 'Amundi FTSE EPRA NAREIT Global AE-C',    isin: 'LU1737652832', ter: 0.24, tipo: 'fondo_indexado', pct:  9 },
+        { nombre: 'iShares Physical Gold ETC',              isin: 'IE00B4ND3602', ter: 0.12, tipo: 'oro_plata',      pct:  2 },
+      ]},
+    ],
+  },
+};
+
 const PLATFORMS = [
   { value: 'indexa', label: 'Indexa Capital' },
   { value: 'myinvestor', label: 'MyInvestor' },
@@ -2029,4 +2183,68 @@ function ftSavePortfolio() {
   const total = ftPortfolio.reduce((s, x) => s + x.importe, 0);
   addDashCard('cartera', '📂', 'Cartera actual', fmtEur(total), `${ftPortfolio.length} posición${ftPortfolio.length !== 1 ? 'es' : ''}`);
   ftExitPortfolio();
+}
+
+let ftActivePlatform = null;
+
+function ftSwitchTab(tab) {
+  const isRobot = tab === 'robot';
+  const tabManual = document.getElementById('ft-tab-manual');
+  const tabRobot  = document.getElementById('ft-tab-robot');
+  const panelManual = document.getElementById('ft-panel-manual');
+  const panelRobot  = document.getElementById('ft-panel-robot');
+  const activeClass   = 'flex-1 py-2 text-xs font-medium rounded-lg bg-white shadow-sm text-gray-800 transition-colors';
+  const inactiveClass = 'flex-1 py-2 text-xs font-medium rounded-lg text-gray-500 transition-colors';
+  if (tabManual) tabManual.className = isRobot ? inactiveClass : activeClass;
+  if (tabRobot)  tabRobot.className  = isRobot ? activeClass   : inactiveClass;
+  panelManual?.classList.toggle('hidden', isRobot);
+  panelRobot?.classList.toggle('hidden', !isRobot);
+}
+
+function ftSelectPlatform(platformId) {
+  ftActivePlatform = platformId;
+  const platform = MANAGED_PORTFOLIOS[platformId];
+  if (!platform) return;
+  ['indexa', 'myinvestor', 'finizens'].forEach(p => {
+    const btn = document.getElementById(`ft-plat-${p}`);
+    if (!btn) return;
+    btn.className = p === platformId
+      ? 'py-2 px-3 text-xs font-medium rounded-xl border-2 border-blue-500 bg-blue-50 text-blue-700 transition-colors'
+      : 'py-2 px-3 text-xs font-medium rounded-xl border-2 border-gray-200 bg-white text-gray-600 hover:border-gray-300 transition-colors';
+  });
+  const noteEl = document.getElementById('ft-platform-note');
+  if (noteEl) { noteEl.textContent = platform.note; noteEl.classList.remove('hidden'); }
+  const sel = document.getElementById('ft-robot-portfolio');
+  if (sel) {
+    sel.innerHTML = platform.portfolios.map(p => `<option value="${p.key}">${p.label}</option>`).join('');
+    sel.classList.remove('hidden');
+  }
+  document.getElementById('ft-robot-amount')?.classList.remove('hidden');
+  document.getElementById('ft-robot-load-row')?.classList.remove('hidden');
+}
+
+function ftLoadManagedPortfolio() {
+  if (!ftActivePlatform) return;
+  const platform = MANAGED_PORTFOLIOS[ftActivePlatform];
+  const portfolioKey = document.getElementById('ft-robot-portfolio')?.value;
+  const amtEl = document.getElementById('ft-robot-amount');
+  const totalAmount = parseFloat(amtEl?.value || '') || 0;
+  if (!portfolioKey) return;
+  if (totalAmount <= 0) { amtEl?.focus(); return; }
+  const portfolio = platform.portfolios.find(p => p.key === portfolioKey);
+  if (!portfolio) return;
+  ftPortfolio = portfolio.funds.map(f => ({
+    nombre: f.nombre, isin: f.isin || '', importe: Math.round(totalAmount * f.pct / 100),
+    ter: f.ter, tipo: f.tipo, plataforma: platform.label,
+  }));
+  const loaded = ftPortfolio.reduce((s, f) => s + f.importe, 0);
+  if (ftPortfolio.length && loaded !== totalAmount) ftPortfolio[0].importe += (totalAmount - loaded);
+  ftRenderList();
+  const successEl = document.getElementById('ft-robot-success');
+  if (successEl) {
+    successEl.textContent = `✅ ${portfolio.funds.length} posiciones cargadas · ${platform.label} ${portfolio.label}`;
+    successEl.classList.remove('hidden');
+    setTimeout(() => successEl.classList.add('hidden'), 3500);
+  }
+  ftSwitchTab('manual');
 }

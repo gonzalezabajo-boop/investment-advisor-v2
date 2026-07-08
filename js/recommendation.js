@@ -1626,7 +1626,7 @@ function renderDiyPortfolioSection(blueprint, riskProfile, inversiones) {
     </section>`;
 }
 
-function renderInvestmentRoadmap(blueprint, riskProfile, ahorro, showCrypto, hasTax, isEpsv) {
+function renderInvestmentRoadmap(blueprint, riskProfile, ahorro, showCrypto, hasTax, isEpsv, capital = 0) {
   const primary = blueprint.products[0];
   const isIndexa = primary.platform === 'Indexa Capital';
 
@@ -1707,6 +1707,15 @@ function renderInvestmentRoadmap(blueprint, riskProfile, ahorro, showCrypto, has
                class="block text-center py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors">
               Abrir cuenta en ${primary.platform} →
             </a>
+            <div class="mt-3 pt-3 border-t border-blue-100">
+              <p class="text-[11px] text-gray-400 mb-1.5 text-center">Proyección a 20 años${ahorro > 0 ? ` · ${fmtEur(ahorro)}/mes` : ''}</p>
+              <div style="height:90px"><canvas id="phase1-projection-chart"></canvas></div>
+              <div class="flex justify-center gap-4 mt-1.5">
+                <span class="text-[10px] text-blue-300">— 4% conservador</span>
+                <span class="text-[10px] text-blue-500">— 7% base</span>
+                <span class="text-[10px] text-blue-800">— 10% optimista</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1746,6 +1755,44 @@ function renderInvestmentRoadmap(blueprint, riskProfile, ahorro, showCrypto, has
         </div>
       </div>
     </div>`;
+}
+
+let phase1ProjChart = null;
+function renderProjectionMiniChart(monthly, capital) {
+  const canvas = document.getElementById('phase1-projection-chart');
+  if (!canvas) return;
+  const pts = [0, 5, 10, 15, 20];
+  function series(r) {
+    const m = r / 12;
+    return pts.map(y => {
+      const n = y * 12;
+      return Math.round(capital * Math.pow(1 + m, n) + monthly * (Math.pow(1 + m, n) - 1) / m);
+    });
+  }
+  if (phase1ProjChart) phase1ProjChart.destroy();
+  phase1ProjChart = new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels: pts.map(y => y === 0 ? 'Hoy' : y + 'a'),
+      datasets: [
+        { label: '4%', data: series(0.04), borderColor: '#93c5fd', borderWidth: 1.5, pointRadius: 2, pointBackgroundColor: '#93c5fd', tension: 0.3 },
+        { label: '7%', data: series(0.07), borderColor: '#3b82f6', borderWidth: 2, pointRadius: 2, pointBackgroundColor: '#3b82f6', fill: true, backgroundColor: 'rgba(59,130,246,0.07)', tension: 0.3 },
+        { label: '10%', data: series(0.10), borderColor: '#1d4ed8', borderWidth: 1.5, pointRadius: 2, pointBackgroundColor: '#1d4ed8', tension: 0.3 },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${fmtEur(ctx.raw)}` } },
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#9ca3af' } },
+        y: { grid: { color: '#f0f9ff' }, border: { display: false }, ticks: { font: { size: 9 }, color: '#9ca3af', maxTicksLimit: 4, callback: v => v >= 1000 ? (v / 1000).toFixed(0) + 'k€' : v + '€' } },
+      },
+    },
+  });
 }
 
 function renderProductCards(riskProfile, objetivos, ccaa, inversiones, step1, step5, step2) {
@@ -1800,7 +1847,7 @@ function renderProductCards(riskProfile, objetivos, ccaa, inversiones, step1, st
       compact: true,
     });
   } else if (isManaged) {
-    html += renderInvestmentRoadmap(blueprint, riskProfile, ahorro, showCrypto, hasTax, isEpsv);
+    html += renderInvestmentRoadmap(blueprint, riskProfile, ahorro, showCrypto, hasTax, isEpsv, Number(step1?.ahorros_liquidos) || 0);
   } else {
     // DIY mode: ETF portfolio + broker comparison
     html += renderDiyPortfolioSection(blueprint, riskProfile, inversiones);
@@ -2678,6 +2725,7 @@ window.generateResults = function () {
   }
 
   document.getElementById('products-section').innerHTML = renderProductCards(riskProfile, objetivos, ccaa, inversiones, step1, step5, step2);
+  renderProjectionMiniChart(Number(step2?.ahorro_mensual) || 0, Number(step1?.ahorros_liquidos) || 0);
   document.getElementById('action-plan').innerHTML = renderActionPlan(health, riskProfile, data);
 
   const pensionEl = document.getElementById('pension-estimate');

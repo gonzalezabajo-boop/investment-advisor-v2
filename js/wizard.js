@@ -2076,8 +2076,7 @@ showIntro();
 
 function showIntro() {
   document.getElementById('q-progress-row').style.display = 'none';
-  document.getElementById('q-prev').classList.add('hidden');
-  document.getElementById('q-next').classList.add('hidden');
+  document.getElementById('q-nav-row').style.display = 'none';
   document.querySelectorAll('.q-screen').forEach(el => el.classList.add('hidden'));
   document.getElementById('intro-screen').classList.remove('hidden');
 }
@@ -2085,6 +2084,7 @@ function showIntro() {
 function startWizard() {
   document.getElementById('intro-screen').classList.add('hidden');
   document.getElementById('q-progress-row').style.display = 'flex';
+  document.getElementById('q-nav-row').style.display = 'flex';
   document.getElementById('q-next').classList.remove('hidden');
   showQuestion(0);
 }

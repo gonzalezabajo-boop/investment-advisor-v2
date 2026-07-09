@@ -1886,7 +1886,16 @@ function nextQuestion() {
     const v = Number(val);
     saveQAnswer({ id: 'riesgo_2', step: 5 }, v === 2 ? 2 : v >= 0 ? 1 : 0);
   }
-  updateDashboard(q.id, val);
+  // When user picks "no short-term goal", derive horizon from age instead of defaulting to 5_plus
+  if (q.id === 'horizonte' && val === '5_plus') {
+    const _p = JSON.parse(localStorage.getItem('iw_profile') || '{}');
+    const _yrs = Math.max(1, 67 - (_p.step1?.edad || 35));
+    const _hz = _yrs >= 5 ? '5_plus' : _yrs >= 3 ? '3_5' : '0_2';
+    saveQAnswer(q, _hz);
+    updateDashboard(q.id, _hz);
+  } else {
+    updateDashboard(q.id, val);
+  }
   if (q.id === 'ya_inviertes' && val === 'si') {
     currentQ++;  // advance to riesgo_1 (index 5)
     ftShowPortfolioScreen();

@@ -2366,6 +2366,76 @@ const TIPO_TO_ASSET_CLASS = {
   otro:           'alternatives',
 };
 
+function _buildHorizonBanner(horizonRaw, horizonKey, riskProfile, edad) {
+  const profileMeta = PROFILE_META[riskProfile] || {};
+  const yearsToRetirement = Math.max(0, 67 - (edad || 35));
+  let icon, title, subtitle, bg, border, text;
+
+  if (horizonRaw === '0_2' || horizonRaw === 'no_invierto') {
+    icon = '⏱️'; bg = 'bg-sky-50'; border = 'border-sky-200'; text = 'text-sky-800';
+    title = 'Horizonte corto — protección del capital';
+    subtitle = 'Tienes un objetivo próximo en los próximos 2 años. La prioridad es preservar el capital, no maximizar rentabilidad. Te proponemos productos líquidos y seguros, sin exposición a caídas de bolsa.';
+  } else if (horizonRaw === '3_5') {
+    icon = '📅'; bg = 'bg-blue-50'; border = 'border-blue-200'; text = 'text-blue-800';
+    title = 'Horizonte medio — equilibrio riesgo/rentabilidad';
+    subtitle = `Con ${yearsToRetirement} años hasta la jubilación, tienes margen para asumir algo de volatilidad. Cartera mixta ajustada a perfil ${profileMeta.label || riskProfile}: más renta fija que variable, con capacidad de crecer sin asumir riesgo excesivo.`;
+  } else {
+    icon = '🚀'; bg = 'bg-green-50'; border = 'border-green-200'; text = 'text-green-800';
+    title = `Horizonte largo — ${yearsToRetirement} años hasta la jubilación`;
+    const msg = yearsToRetirement >= 25
+      ? 'El tiempo es tu mayor activo. El interés compuesto tiene décadas para actuar — cuanto antes empieces, más potente es el efecto.'
+      : yearsToRetirement >= 10
+        ? 'Suficiente horizonte para invertir en activos de más riesgo/rentabilidad y atravesar ciclos bajistas sin necesidad de vender en el momento equivocado.'
+        : 'Horizonte ajustado pero suficiente. Cartera de crecimiento con preservación progresiva del capital según te acerques a la meta.';
+    subtitle = `Perfil ${profileMeta.label || riskProfile}. ${msg}`;
+  }
+  return `
+  <div class="mb-4 p-4 ${bg} border ${border} rounded-xl">
+    <p class="text-sm font-semibold ${text} mb-1">${icon} ${title}</p>
+    <p class="text-sm ${text} opacity-80">${subtitle}</p>
+  </div>`;
+}
+
+function _buildAgeProjections(edad, ahorros, ahorro_mensual, riskProfile, horizonKey) {
+  if (ahorros <= 0 && ahorro_mensual <= 0) return '';
+  const alloc = ALLOCATIONS[riskProfile]?.[horizonKey] || {};
+  const rate = calcBlendedReturn(alloc);
+  const yearsToRet = Math.max(1, 67 - (edad || 35));
+
+  let milestones;
+  if (edad <= 35)      milestones = [10, 20, 30, yearsToRet].filter(y => y > 0);
+  else if (edad <= 45) milestones = [10, 20, yearsToRet].filter(y => y > 0);
+  else if (edad <= 55) milestones = [10, yearsToRet].filter(y => y > 0);
+  else if (edad <= 62) milestones = [5, yearsToRet].filter(y => y > 0);
+  else                 milestones = [yearsToRet].filter(y => y > 0);
+
+  // Deduplicate and sort
+  const unique = [...new Set(milestones)].sort((a, b) => a - b);
+
+  if (unique.length === 0) return '';
+
+  const cols = unique.map(y => {
+    const val = calcProjection(ahorros, ahorro_mensual, rate, y);
+    const isRetirement = y === yearsToRet;
+    return `
+    <div class="text-center p-3 ${isRetirement ? 'bg-blue-600 text-white rounded-xl' : 'bg-white border border-gray-100 rounded-xl'}">
+      <p class="text-xs ${isRetirement ? 'text-blue-100' : 'text-gray-400'} mb-0.5">${isRetirement ? '🎯 Jubilación' : `${y} años`}</p>
+      <p class="text-lg font-bold">${fmtEur(val)}</p>
+      ${isRetirement ? `<p class="text-xs text-blue-100">a los ${67} años</p>` : ''}
+    </div>`;
+  });
+
+  const ratePct = (rate * 100).toFixed(1);
+  return `
+  <div class="mb-4 p-4 bg-gray-50 border border-gray-200 rounded-xl">
+    <p class="text-sm font-semibold text-gray-800 mb-3">📈 Proyección a largo plazo</p>
+    <div class="grid grid-cols-${Math.min(unique.length, 4)} gap-2 mb-3">
+      ${cols.join('')}
+    </div>
+    <p class="text-xs text-gray-400 text-center">Con ${fmtEur(ahorros)} iniciales + ${fmtEur(ahorro_mensual)}/mes · ${ratePct}%/año estimado</p>
+  </div>`;
+}
+
 function buildRebalancingSection(inversiones, riskProfile, horizonKey, step1, step5) {
   const totalInvertido = inversiones.reduce((s, i) => s + i.importe, 0);
   if (totalInvertido === 0) return '';
@@ -2400,6 +2470,25 @@ function buildRebalancingSection(inversiones, riskProfile, horizonKey, step1, st
     else { action = '✓ Mantener'; actionColor = 'text-gray-600 bg-gray-50'; }
     return { k, currentPct, targetPct, diff, action, actionColor };
   });
+
+  const needsRebalancing = rows.some(r => Math.abs(r.diff) >= 5);
+
+  if (!needsRebalancing) {
+    return `
+    <div class="mb-4 p-4 bg-green-50 border border-green-200 rounded-xl">
+      <h4 class="font-semibold text-green-800 mb-1">✅ Tu cartera está bien distribuida</h4>
+      <p class="text-sm text-green-700 mb-3">Tu distribución actual encaja con el objetivo para tu perfil. No necesitas rebalancear — sigue aportando regularmente a los mismos activos.</p>
+      <div class="grid grid-cols-3 gap-2 mb-2">
+        ${rows.map(r => `
+          <div class="text-center p-2 bg-white rounded-lg border border-green-100">
+            <p class="text-xs text-gray-500 leading-tight">${ASSET_CLASS_LABELS[r.k] || r.k}</p>
+            <p class="text-sm font-bold text-gray-800">${r.currentPct}%</p>
+            <p class="text-xs text-gray-400">obj. ${r.targetPct}%</p>
+          </div>`).join('')}
+      </div>
+      <p class="text-xs text-gray-400">Cartera financiera actual: ${fmtEur(totalInvertido)}</p>
+    </div>`;
+  }
 
   return `
     <div class="mb-4 p-4 bg-blue-50 border border-blue-100 rounded-xl">
@@ -2437,17 +2526,48 @@ function buildInvestmentPlanSection(inversiones, riskProfile, horizonKey, ahorro
   const laboral = step1?.laboral;
   const isEpsv = ccaa === 'PVA';
   const totalInvertido = inversiones.reduce((s, i) => s + i.importe, 0);
+  const horizonRaw = step1?.horizonte || null;
+  const edad = step1?.edad || 35;
+  const ahorros = step1?.ahorros_liquidos || 0;
+
+  // Detect primary investment platform from existing managed holdings
+  const MANAGED_PLATFORMS = ['Indexa Capital', 'MyInvestor', 'inbestMe'];
+  const existingManagedPlatform = inversiones.find(i => MANAGED_PLATFORMS.includes(i.plataforma))?.plataforma || null;
 
   let html = '';
 
+  // 1. Horizon context banner
+  html += _buildHorizonBanner(horizonRaw, horizonKey, riskProfile, edad);
+
+  // 2. Rebalancing (smart: only shows if actually unbalanced)
   if (totalInvertido > 0) {
     html += buildRebalancingSection(inversiones, riskProfile, horizonKey, step1, step5);
   }
 
+  // 3. Platform coherence note: if user is already on a managed platform different from what we'd recommend
+  if (existingManagedPlatform) {
+    const complexity = getPortfolioComplexity(step1, step5);
+    const blueprint = PORTFOLIO_BLUEPRINTS[riskProfile]?.[complexity];
+    const recPlatform = blueprint?.products?.[0]?.platform;
+    if (recPlatform && recPlatform !== existingManagedPlatform && blueprint?.managed) {
+      html += `
+      <div class="mb-4 p-3 bg-amber-50 border border-amber-100 rounded-xl text-sm text-amber-800">
+        <p class="font-semibold mb-1">💡 Ya tienes cartera en ${existingManagedPlatform}</p>
+        <p>No tiene sentido mover lo que ya funciona. Sigue aportando mensualmente en ${existingManagedPlatform} — la recomendación de abajo es para quienes empiezan desde cero. Si quieres añadir capas (fiscalidad, alternativas), hazlo dentro de la misma plataforma.</p>
+      </div>`;
+    }
+  }
+
+  // 4. Monthly allocation
   if (ahorro > 0) {
     html += buildMonthlyAllocationSection(ahorro, allocation, riskProfile, isEpsv, laboral, step2?.tramo_irpf, inversiones, step1, step5, step2);
   } else {
     html += `<div class="p-4 bg-yellow-50 border border-yellow-100 rounded-xl"><p class="text-sm text-yellow-800"><strong>Sin ahorro mensual calculado.</strong> Vuelve al paso 2 e introduce tus ingresos y gastos para ver cuánto puedes invertir cada mes.</p></div>`;
+  }
+
+  // 5. Age-based projections (only for medium/long horizon with meaningful data)
+  if (horizonRaw !== '0_2' && horizonRaw !== 'no_invierto') {
+    html += _buildAgeProjections(edad, ahorros, ahorro || 0, riskProfile, horizonKey);
   }
 
   return html;
@@ -3121,11 +3241,14 @@ window.generateResults = function () {
   const allocation = ALLOCATIONS[riskProfile][horizonKey];
   const blended = calcBlendedReturn(allocation);
 
-  // Set initial capital from patrimonio neto if available
-  const patrimonioNeto = step1?.patrimonio_neto || 0;
-  if (patrimonioNeto > 0) {
-    document.getElementById('sim-capital').value = Math.min(patrimonioNeto, 200000);
+  // Pre-populate with user's liquid savings and real horizon
+  const ahorrosLiquidos = Number(step1?.ahorros_liquidos) || 0;
+  const edadSim = Number(step1?.edad) || 35;
+  const yearsToRetirementSim = Math.max(1, 67 - edadSim);
+  if (ahorrosLiquidos > 0) {
+    document.getElementById('sim-capital').value = Math.min(ahorrosLiquidos, 200000);
   }
+  document.getElementById('sim-years').value = Math.min(yearsToRetirementSim, 40);
 
   initSimulator(step2?.ahorro_mensual || 300, blended);
 };

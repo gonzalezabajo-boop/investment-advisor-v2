@@ -2072,7 +2072,51 @@ document.addEventListener('change', e => {
   setTimeout(nextQuestion, 250);
 });
 
-showQuestion(0);
+showIntro();
+
+function showIntro() {
+  document.getElementById('q-progress-row').style.display = 'none';
+  document.getElementById('q-prev').classList.add('hidden');
+  document.getElementById('q-next').classList.add('hidden');
+  document.querySelectorAll('.q-screen').forEach(el => el.classList.add('hidden'));
+  document.getElementById('intro-screen').classList.remove('hidden');
+}
+
+function startWizard() {
+  document.getElementById('intro-screen').classList.add('hidden');
+  document.getElementById('q-progress-row').style.display = 'flex';
+  document.getElementById('q-next').classList.remove('hidden');
+  showQuestion(0);
+}
+
+function showLeadForm() {
+  document.querySelectorAll('.q-screen').forEach(el => el.classList.add('hidden'));
+  document.querySelector('.q-screen[data-q="lead"]').classList.remove('hidden');
+  document.getElementById('q-next').classList.add('hidden');
+  document.getElementById('q-prev').classList.add('hidden');
+  document.getElementById('q-counter').textContent = '📋 Tus datos';
+  document.getElementById('q-progress-bar').style.width = '100%';
+}
+
+function submitLead() {
+  const nombre   = document.getElementById('lead-nombre').value.trim();
+  const apellido = document.getElementById('lead-apellido').value.trim();
+  const movil    = document.getElementById('lead-movil').value.trim();
+  const telefono = document.getElementById('lead-telefono').value.trim();
+  const terms    = document.getElementById('lead-terms').checked;
+
+  if (!nombre || !apellido || !movil || !terms) {
+    document.getElementById('lead-err').classList.remove('hidden');
+    return;
+  }
+  document.getElementById('lead-err').classList.add('hidden');
+
+  const profile = JSON.parse(localStorage.getItem('iw_profile') || '{}');
+  profile.lead = { nombre, apellido, movil, telefono };
+  localStorage.setItem('iw_profile', JSON.stringify(profile));
+
+  window.location.href = 'results.html';
+}
 
 // ── Fast-track portfolio screen ────────────────────────────────────────────
 let ftPortfolio = [];

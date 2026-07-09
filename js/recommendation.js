@@ -1801,9 +1801,12 @@ function renderProductCards(riskProfile, objetivos, ccaa, inversiones, step1, st
   if (!blueprint) return '<p class="text-gray-400 text-sm">No hay cartera disponible para tu perfil.</p>';
 
   const ctx = detectUserPlatformContext(inversiones);
-  const horizonKey = objetivos.length > 0
-    ? getHorizonKey(Math.max(...objetivos.filter(o => o.plazo > 0).map(o => o.plazo), 1))
-    : getHorizonKey(20);
+  const _ftHz = step1?.horizonte;
+  const horizonKey = _ftHz
+    ? (_ftHz === '5_plus' ? 'long' : _ftHz === '3_5' ? 'medium' : 'short')
+    : objetivos.length > 0
+      ? getHorizonKey(Math.max(...objetivos.filter(o => o.plazo > 0).map(o => o.plazo), 1))
+      : getHorizonKey(20);
   const allocation = ALLOCATIONS[riskProfile]?.[horizonKey] || {};
   const isManaged = !!blueprint.managed;
   const isSavingsMode = !!blueprint.savings_mode;
@@ -2685,6 +2688,342 @@ function initSimulator(defaultMonthly, defaultReturn) {
   });
 }
 
+// ─── Horizon context ──────────────────────────────────────────────────────────
+
+function _hzKey(raw) {
+  return raw === '5_plus' ? 'long' : raw === '3_5' ? 'medium' : 'short';
+}
+
+function renderHorizonContext(horizonRaw, riskProfile, origRiskProfile, data) {
+  const step1 = data.step1 || {};
+  const step2 = data.step2 || {};
+  const step5 = data.step5 || {};
+  const inversiones = data.step3?.inversiones || [];
+
+  const edad           = Number(step1.edad) || 35;
+  const ahorros        = Number(step1.ahorros_liquidos) || 0;
+  const ingresos       = Number(step2.ingresos) || 0;
+  const ahorro_mensual = Number(step2.ahorro_mensual) || 0;
+  const gastos         = ingresos > ahorro_mensual ? ingresos - ahorro_mensual : 0;
+  const riesgo_3       = Number(step5.riesgo_3) || 0;
+  const riesgo_1       = Number(step5.riesgo_1) || 0;
+
+  const targetMonths    = riesgo_3 === 0 ? 6 : riesgo_3 === 1 ? 4 : 3;
+  const emergencyTarget = gastos > 0 ? gastos * targetMonths : 0;
+  const capitalToInvest = Math.max(0, ahorros - emergencyTarget);
+  const emergencyCovered = emergencyTarget <= 0 || ahorros >= emergencyTarget;
+
+  let html = '';
+
+  // Emergency fund (all tranches)
+  if (gastos > 0 && emergencyTarget > 0) {
+    const meses = (ahorros / gastos).toFixed(1);
+    if (emergencyCovered) {
+      html += `
+      <div class="mb-4 p-4 bg-green-50 border border-green-200 rounded-xl">
+        <p class="text-sm font-semibold text-green-800 mb-1">✅ Fondo de emergencia cubierto</p>
+        <p class="text-xs text-green-700">Tienes <strong>${fmtEur(ahorros)}</strong> — ${meses} meses de gastos. Capital disponible para invertir: <strong>${fmtEur(capitalToInvest)}</strong>.</p>
+      </div>`;
+    } else {
+      const falta = emergencyTarget - ahorros;
+      html += `
+      <div class="mb-4 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+        <p class="text-sm font-semibold text-amber-800 mb-1">⚠️ Fondo de emergencia incompleto</p>
+        <p class="text-xs text-amber-700">Tienes ${fmtEur(ahorros)} — se recomiendan <strong>${targetMonths} meses de gastos (${fmtEur(emergencyTarget)})</strong>. Antes de invertir, cubre los <strong>${fmtEur(falta)} que faltan</strong> en una cuenta remunerada. Trade Republic ofrece 3% TAE sin mínimos.</p>
+      </div>`;
+    }
+  }
+
+  if (horizonRaw === 'no_invierto') {
+    html += _hzAgeMsg(edad);
+    html += _hzRoboadvisor(riskProfile, capitalToInvest, ahorro_mensual);
+  }
+
+  if (horizonRaw === '0_2') {
+    if (origRiskProfile && origRiskProfile !== 'conservador') {
+      html += `
+      <div class="mb-4 p-4 bg-blue-50 border border-blue-100 rounded-xl">
+        <p class="text-sm font-semibold text-blue-800 mb-1">ℹ️ Perfil ajustado al horizonte</p>
+        <p class="text-xs text-blue-700">Tu puntuación apunta a perfil <strong>${PROFILE_META[origRiskProfile]?.label || origRiskProfile}</strong>, pero con un horizonte inferior a 2 años la cartera se trata como <strong>Conservadora</strong>. Una caída del 30% puede no recuperarse a tiempo si necesitas el dinero pronto.</p>
+      </div>`;
+    }
+    html += _hzDIYShortPortfolio(capitalToInvest, riesgo_3);
+    if (inversiones.length > 0) html += _hzShortTermAlert(inversiones);
+    html += _hzEscalation(capitalToInvest, ahorro_mensual);
+  }
+
+  if (horizonRaw === '3_5' || horizonRaw === '5_plus') {
+    const hk = _hzKey(horizonRaw);
+    if (inversiones.length > 0) html += _hzRebalancing(inversiones, riskProfile, hk);
+    if (horizonRaw === '5_plus' && riesgo_1 >= 2) {
+      html += `
+      <div class="mb-4 p-4 bg-purple-50 border border-purple-100 rounded-xl">
+        <p class="text-sm font-semibold text-purple-800 mb-1">🔬 Factor investing (perfil avanzado)</p>
+        <p class="text-xs text-purple-700 mb-2">Con experiencia inversora y horizonte largo, añadir exposición al <strong>factor tamaño (small cap)</strong> puede mejorar la rentabilidad esperada a largo plazo.</p>
+        <p class="text-xs text-purple-600">→ <strong>Vanguard Global Small-Cap Index (IE00B42W4L06)</strong> · TER 0,29% · MyInvestor · 5–10% de la cartera</p>
+      </div>`;
+    }
+    if (horizonRaw === '5_plus' && (riskProfile === 'dinamico' || riskProfile === 'agresivo')) {
+      const hasCrypto = inversiones.some(i => i.tipo === 'cripto');
+      if (!hasCrypto) {
+        html += `
+        <div class="mb-4 p-4 bg-orange-50 border border-orange-100 rounded-xl">
+          <p class="text-sm font-semibold text-orange-800 mb-1">₿ Cripto — posición satélite</p>
+          <p class="text-xs text-orange-700 mb-1">Para perfiles ${riskProfile === 'agresivo' ? 'agresivos' : 'dinámicos'} con horizonte largo, una posición pequeña en Bitcoin (5–8%) ha mejorado históricamente el ratio riesgo/rentabilidad. Volatilidad muy alta — no más de lo que puedas perder.</p>
+          <p class="text-xs text-orange-600">Plataforma: <strong>Bit2Me</strong> (regulada en España) · ~1,49% por operación</p>
+        </div>`;
+      }
+    }
+    html += _hzProjection(ahorros, ahorro_mensual, riskProfile, hk, horizonRaw);
+  }
+
+  return html;
+}
+
+function _hzAgeMsg(edad) {
+  const left = Math.max(0, 67 - edad);
+  if (left > 30) return `<div class="mb-4 p-3 bg-green-50 border border-green-100 rounded-xl"><p class="text-xs text-green-700">🚀 Con <strong>${edad} años</strong> tienes <strong>${left} años</strong> por delante — el interés compuesto tiene décadas para trabajar. Empezar hoy vale más que empezar con más dinero mañana.</p></div>`;
+  if (left > 15) return `<div class="mb-4 p-3 bg-blue-50 border border-blue-100 rounded-xl"><p class="text-xs text-blue-700">⏳ Con <strong>${edad} años</strong> tienes un horizonte sólido de <strong>${left} años</strong> — suficiente para atravesar ciclos bajistas y beneficiarte del crecimiento a largo plazo.</p></div>`;
+  if (left > 5)  return `<div class="mb-4 p-3 bg-yellow-50 border border-yellow-100 rounded-xl"><p class="text-xs text-yellow-700">⏱️ Con <strong>${edad} años</strong> el horizonte es más ajustado (<strong>${left} años</strong> hasta la jubilación). Sigue invirtiendo pero ve equilibrando el riesgo progresivamente.</p></div>`;
+  return `<div class="mb-4 p-3 bg-orange-50 border border-orange-100 rounded-xl"><p class="text-xs text-orange-700">🎯 Con <strong>${edad} años</strong> la preservación de capital toma protagonismo. Invierte con más criterio y mantén alta la liquidez.</p></div>`;
+}
+
+function _hzRoboadvisor(riskProfile, capitalToInvest, ahorro_mensual) {
+  const ROBO = {
+    conservador: { indexa: '3/10',  mi: 'Conservadora', note: 'Capital preservado con crecimiento moderado' },
+    moderado:    { indexa: '6/10',  mi: 'Moderada',     note: 'Equilibrio entre crecimiento y estabilidad' },
+    dinamico:    { indexa: '8/10',  mi: 'Dinámica',     note: 'Mayor peso en renta variable' },
+    agresivo:    { indexa: '10/10', mi: 'Agresiva',     note: 'Máximo crecimiento, alta volatilidad' },
+  };
+  const r = ROBO[riskProfile] || ROBO.moderado;
+
+  let platform = '';
+  if (capitalToInvest < 3000) {
+    platform = `<div class="text-xs text-gray-600 space-y-1.5">
+      <p>→ <strong>Trade Republic cuenta remunerada</strong> · 3% TAE · sin mínimo · mientras llegas a 3.000€</p>
+      <p class="text-gray-400">Cuando alcances 3.000€, activa tu roboadvisor indexado.</p>
+    </div>`;
+  } else if (capitalToInvest < 50000) {
+    platform = `<div class="text-xs text-gray-600 space-y-1.5">
+      <p>→ <strong>Indexa Capital cartera ${r.indexa}</strong> · TER ~0,42%/año · mínimo 3.000€</p>
+      <p>→ <strong>MyInvestor Cartera ${r.mi}</strong> · TER ~0,35%/año · sin mínimo (alternativa)</p>
+      <p class="text-gray-400">${r.note}</p>
+    </div>`;
+  } else {
+    platform = `<div class="text-xs text-gray-600 space-y-1.5">
+      <p>→ <strong>MyInvestor Cartera ${r.mi}</strong> · TER ~0,35%/año · mejor coste por encima de 50k</p>
+      <p>→ <strong>Indexa Capital ${r.indexa}</strong> como complemento para diversificar plataforma</p>
+    </div>`;
+  }
+
+  let projection = '';
+  if (capitalToInvest > 0 || ahorro_mensual > 0) {
+    const alloc = ALLOCATIONS[riskProfile]?.long || {};
+    const rate  = calcBlendedReturn(alloc);
+    const p5    = calcProjection(capitalToInvest, ahorro_mensual, rate, 5);
+    const p10   = calcProjection(capitalToInvest, ahorro_mensual, rate, 10);
+    projection  = `
+    <div class="mt-3 pt-3 border-t border-gray-100 grid grid-cols-2 gap-3">
+      <div class="text-center"><p class="text-base font-bold text-gray-800">${fmtEur(p5)}</p><p class="text-xs text-gray-400">en 5 años</p></div>
+      <div class="text-center"><p class="text-base font-bold text-blue-700">${fmtEur(p10)}</p><p class="text-xs text-gray-400">en 10 años</p></div>
+    </div>
+    <p class="text-xs text-gray-400 mt-2 text-center">Con ${fmtEur(capitalToInvest)} + ${fmtEur(ahorro_mensual)}/mes · rentabilidad histórica estimada</p>`;
+  }
+
+  return `
+  <div class="mb-4 p-4 bg-white border border-gray-200 rounded-xl shadow-sm">
+    <p class="text-sm font-semibold text-gray-800 mb-3">🤖 Dónde empezar — roboadvisor indexado</p>
+    ${platform}
+    ${projection}
+  </div>`;
+}
+
+function _hzDIYShortPortfolio(capitalToInvest, riesgo_3) {
+  const TIERS = [
+    { max: 3000,     funds: [
+      { name: 'Trade Republic cuenta remunerada', plat: 'Trade Republic', pct: 100, ter: 0,    note: '3% TAE · liquidez inmediata' },
+    ]},
+    { max: 10000,    funds: [
+      { name: 'Vanguard Global Bond EUR Hdg Index', isin: 'IE00B18GC888', plat: 'MyInvestor',     pct: 65, ter: 0.10 },
+      { name: 'iShares € Infl Linked Govt Bond',   isin: 'IE00B0M62X26', plat: 'Trade Republic', pct: 20, ter: 0.09 },
+      { name: 'Trade Republic cuenta remunerada',                         plat: 'Trade Republic', pct: 15, ter: 0,    note: '3% TAE' },
+    ]},
+    { max: 25000,    funds: [
+      { name: 'Vanguard Global Bond EUR Hdg Index', isin: 'IE00B18GC888', plat: 'MyInvestor',     pct: 50, ter: 0.10 },
+      { name: 'iShares € Infl Linked Govt Bond',   isin: 'IE00B0M62X26', plat: 'Trade Republic', pct: 20, ter: 0.09 },
+      { name: 'Fidelity Index World P-EUR Acc',    isin: 'IE00BYX5NX33', plat: 'MyInvestor',     pct: 20, ter: 0.12 },
+      { name: 'Trade Republic cuenta remunerada',                         plat: 'Trade Republic', pct: 10, ter: 0,    note: '3% TAE' },
+    ]},
+    { max: Infinity, funds: [
+      { name: 'Vanguard Global Bond EUR Hdg Index', isin: 'IE00B18GC888', plat: 'MyInvestor',     pct: 45, ter: 0.10 },
+      { name: 'iShares € Infl Linked Govt Bond',   isin: 'IE00B0M62X26', plat: 'Trade Republic', pct: 20, ter: 0.09 },
+      { name: 'Fidelity Index World P-EUR Acc',    isin: 'IE00BYX5NX33', plat: 'MyInvestor',     pct: 20, ter: 0.12 },
+      { name: 'iShares Physical Gold ETC',         isin: 'IE00B4ND3602', plat: 'Trade Republic', pct:  5, ter: 0.12 },
+      { name: 'Trade Republic cuenta remunerada',                         plat: 'Trade Republic', pct: 10, ter: 0,    note: '3% TAE' },
+    ]},
+  ];
+
+  const tier   = TIERS.find(t => capitalToInvest < t.max);
+  const avgTer = (tier.funds.reduce((s, f) => s + (f.pct / 100) * (f.ter || 0), 0) * 100).toFixed(2);
+
+  const rows = tier.funds.map(f => `
+    <tr class="border-b border-gray-50 last:border-0">
+      <td class="py-2 pr-3">
+        <p class="text-xs font-medium text-gray-800">${f.name}</p>
+        ${f.isin ? `<p class="text-xs text-gray-400">${f.isin}</p>` : ''}
+        ${f.note ? `<p class="text-xs text-gray-400">${f.note}</p>` : ''}
+      </td>
+      <td class="py-2 text-right pr-3 text-xs font-semibold text-gray-700">${f.pct}%</td>
+      <td class="py-2 text-right pr-3 text-xs text-gray-400">${f.ter > 0 ? f.ter.toFixed(2) + '%' : '—'}</td>
+      <td class="py-2 text-right text-xs text-gray-500">${f.plat}</td>
+    </tr>`).join('');
+
+  return `
+  <div class="mb-4">
+    <p class="text-sm font-semibold text-gray-800 mb-1">🗂️ Cartera conservadora para menos de 2 años</p>
+    <p class="text-xs text-gray-400 mb-3">${fmtEur(capitalToInvest)} disponibles · TER medio estimado: ${avgTer}%/año</p>
+    <div class="bg-white border border-gray-100 rounded-xl overflow-hidden">
+      <table class="w-full">
+        <thead><tr class="bg-gray-50 text-xs text-gray-400 uppercase tracking-wide">
+          <th class="py-2 px-3 text-left font-medium">Fondo / Producto</th>
+          <th class="py-2 pr-3 text-right font-medium">%</th>
+          <th class="py-2 pr-3 text-right font-medium">TER</th>
+          <th class="py-2 pr-3 text-right font-medium">Plataforma</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    ${riesgo_3 === 0 ? '<p class="text-xs text-amber-600 mt-2">⚠️ Con liquidez por debajo de 1 año, pondera más la cuenta remunerada y menos los fondos.</p>' : ''}
+  </div>`;
+}
+
+function _hzShortTermAlert(inversiones) {
+  const total = inversiones.reduce((s, i) => s + (Number(i.importe) || 0), 0);
+  if (total === 0) return '';
+  const EQ = new Set(['fondo_indexado', 'fondo_activo', 'etf', 'acciones']);
+  const eqTotal = inversiones.filter(i => EQ.has(i.tipo)).reduce((s, i) => s + (Number(i.importe) || 0), 0);
+  const eqPct   = Math.round(eqTotal / total * 100);
+  if (eqPct <= 15) return '';
+  return `
+  <div class="mb-4 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+    <p class="text-sm font-semibold text-amber-800 mb-1">⚠️ Sobreexposición a renta variable</p>
+    <p class="text-xs text-amber-700">Con horizonte inferior a 2 años tienes <strong>${eqPct}%</strong> en renta variable (recomendado: máx. 15%). Una caída del 30% puede no recuperarse a tiempo. Traspasar a fondos de renta fija <strong>no tributa en España</strong>.</p>
+  </div>`;
+}
+
+function _hzEscalation(capitalToInvest, ahorro_mensual) {
+  const THRESHOLD = 15000;
+  if (capitalToInvest >= THRESHOLD || ahorro_mensual <= 0) return '';
+  const months = Math.ceil((THRESHOLD - capitalToInvest) / ahorro_mensual);
+  const y = Math.floor(months / 12);
+  const m = months % 12;
+  const label = y > 0
+    ? `${y} año${y > 1 ? 's' : ''}${m > 0 ? ` y ${m} mes${m !== 1 ? 'es' : ''}` : ''}`
+    : `${m} mes${m !== 1 ? 'es' : ''}`;
+  return `
+  <div class="mb-4 p-4 bg-green-50 border border-green-100 rounded-xl">
+    <p class="text-sm font-semibold text-green-800 mb-1">📈 Próximo nivel — ${fmtEur(THRESHOLD)}</p>
+    <p class="text-xs text-green-700">A tu ritmo de ahorro (${fmtEur(ahorro_mensual)}/mes), alcanzarás <strong>${fmtEur(THRESHOLD)}</strong> en <strong>~${label}</strong>. Ese es el momento ideal para ampliar a una cartera más diversificada con más renta variable.</p>
+  </div>`;
+}
+
+function _hzRebalancing(inversiones, riskProfile, horizonKey) {
+  const total = inversiones.reduce((s, i) => s + (Number(i.importe) || 0), 0);
+  if (total === 0) return '';
+  const target = ALLOCATIONS[riskProfile]?.[horizonKey] || {};
+  const TIPO_MAP = {
+    fondo_indexado: 'equities', fondo_activo: 'equities', etf: 'equities', acciones: 'equities',
+    cripto: 'crypto', deposito: 'cash', plan_pensiones: 'fixedIncome', crowdfunding: 'alternatives',
+  };
+  const CL = {
+    equities: 'Renta variable', fixedIncome: 'Renta fija',
+    alternatives: 'Alternativos', cash: 'Liquidez', crypto: 'Cripto', commodities: 'Materias primas',
+  };
+  const current = {};
+  for (const inv of inversiones) {
+    const cls = TIPO_MAP[inv.tipo] || 'equities';
+    current[cls] = (current[cls] || 0) + (Number(inv.importe) || 0);
+  }
+  const allCls = new Set([...Object.keys(target), ...Object.keys(current)]);
+  const deltas  = [...allCls].map(cls => {
+    const cur   = current[cls] ? current[cls] / total * 100 : 0;
+    const tgt   = target[cls] || 0;
+    return { cls, cur, tgt, delta: cur - tgt, deltaEur: (cur - tgt) / 100 * total };
+  }).filter(d => Math.abs(d.delta) > 4);
+
+  if (deltas.length === 0) return `
+  <div class="mb-4 p-4 bg-green-50 border border-green-100 rounded-xl">
+    <p class="text-sm font-semibold text-green-800">✅ Cartera bien balanceada</p>
+    <p class="text-xs text-green-700 mt-1">Tu cartera está razonablemente alineada con el target para perfil ${PROFILE_META[riskProfile]?.label || riskProfile} a ${horizonKey === 'medium' ? '3–5 años' : 'largo plazo'}.</p>
+  </div>`;
+
+  const rows = deltas.map(d => {
+    const exc    = d.delta > 0;
+    const color  = exc ? 'red' : 'blue';
+    const action = exc
+      ? `Reducir ~${fmtEur(Math.abs(d.deltaEur))} (${d.delta.toFixed(0)}pp sobre target)`
+      : `Añadir ~${fmtEur(Math.abs(d.deltaEur))} (${Math.abs(d.delta).toFixed(0)}pp bajo target)`;
+    return `<tr class="border-b border-gray-50 last:border-0">
+      <td class="py-2.5 pr-3 text-xs font-medium text-gray-700">${CL[d.cls] || d.cls}</td>
+      <td class="py-2.5 text-right pr-3 text-xs text-gray-600">${d.cur.toFixed(0)}%</td>
+      <td class="py-2.5 text-right pr-3 text-xs text-gray-400">${d.tgt.toFixed(0)}%</td>
+      <td class="py-2.5 text-xs text-${color}-600">${action}</td>
+    </tr>`;
+  }).join('');
+
+  const highFee = inversiones.filter(i => (Number(i.ter) || 0) > 0.75);
+  let feeAlert  = '';
+  if (highFee.length > 0) {
+    const savings = highFee.reduce((s, f) => s + ((Number(f.ter) - 0.15) / 100) * (Number(f.importe) || 0), 0);
+    feeAlert = `
+    <div class="mt-3 p-3 bg-amber-50 border border-amber-100 rounded-xl text-xs text-amber-700">
+      <p class="font-semibold mb-1">💸 Comisiones altas detectadas</p>
+      ${highFee.map(f => `<p>· ${f.nombre || f.tipo}: TER ${f.ter}%/año</p>`).join('')}
+      <p class="mt-1">Traspasando a equivalentes indexados ahorrarías ~<strong>${fmtEur(savings)}/año</strong>. El traspaso entre fondos no tributa.</p>
+    </div>`;
+  }
+
+  const hLabel = horizonKey === 'medium' ? '3–5 años' : 'largo plazo (+5 años)';
+  return `
+  <div class="mb-4">
+    <p class="text-sm font-semibold text-gray-800 mb-1">⚖️ Rebalanceo sugerido</p>
+    <p class="text-xs text-gray-400 mb-3">Perfil ${PROFILE_META[riskProfile]?.label || riskProfile} · horizonte ${hLabel} · cartera total: ${fmtEur(total)}</p>
+    <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-2">
+      <table class="w-full">
+        <thead><tr class="bg-gray-50 text-xs text-gray-400 uppercase tracking-wide">
+          <th class="py-2 px-3 text-left font-medium">Clase</th>
+          <th class="py-2 pr-3 text-right font-medium">Actual</th>
+          <th class="py-2 pr-3 text-right font-medium">Target</th>
+          <th class="py-2 px-3 text-left font-medium">Acción</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    <p class="text-xs text-gray-400">Los traspasos entre fondos de inversión no generan plusvalías fiscales en España.</p>
+    ${feeAlert}
+  </div>`;
+}
+
+function _hzProjection(ahorros, ahorro_mensual, riskProfile, horizonKey, horizonRaw) {
+  if (ahorros <= 0 && ahorro_mensual <= 0) return '';
+  const alloc  = ALLOCATIONS[riskProfile]?.[horizonKey] || {};
+  const rate   = calcBlendedReturn(alloc);
+  const y1     = horizonRaw === '3_5' ? 3 : 10;
+  const y2     = horizonRaw === '3_5' ? 5 : 20;
+  const p1     = calcProjection(ahorros, ahorro_mensual, rate, y1);
+  const p2     = calcProjection(ahorros, ahorro_mensual, rate, y2);
+  const ratePct = (rate * 100).toFixed(1);
+  return `
+  <div class="mb-4 p-4 bg-white border border-gray-100 rounded-xl shadow-sm">
+    <p class="text-sm font-semibold text-gray-800 mb-3">📊 Proyección de cartera</p>
+    <div class="grid grid-cols-2 gap-4 mb-3">
+      <div class="text-center"><p class="text-2xl font-bold text-gray-900">${fmtEur(p1)}</p><p class="text-xs text-gray-400 mt-1">en ${y1} años</p></div>
+      <div class="text-center"><p class="text-2xl font-bold text-blue-600">${fmtEur(p2)}</p><p class="text-xs text-gray-400 mt-1">en ${y2} años</p></div>
+    </div>
+    <p class="text-xs text-gray-400 text-center">Con ${fmtEur(ahorros)} iniciales + ${fmtEur(ahorro_mensual)}/mes · rentabilidad histórica estimada ${ratePct}%/año</p>
+  </div>`;
+}
+
 // ─── Main entry point ─────────────────────────────────────────────────────────
 
 window.generateResults = function () {
@@ -2724,6 +3063,14 @@ window.generateResults = function () {
     portfolioAnalysisEl.innerHTML = renderCurrentPortfolioAnalysis(inversiones);
   }
 
+  const horizonContextEl = document.getElementById('horizon-context');
+  if (horizonContextEl) {
+    const hzRaw = data.horizonte_raw || step1?.horizonte;
+    if (hzRaw) {
+      horizonContextEl.innerHTML = renderHorizonContext(hzRaw, riskProfile, data.origRiskProfile || riskProfile, data);
+    }
+  }
+
   document.getElementById('products-section').innerHTML = renderProductCards(riskProfile, objetivos, ccaa, inversiones, step1, step5, step2);
   renderProjectionMiniChart(Number(step2?.ahorro_mensual) || 0, Number(step1?.ahorros_liquidos) || 0);
   document.getElementById('action-plan').innerHTML = renderActionPlan(health, riskProfile, data);
@@ -2754,7 +3101,10 @@ window.generateResults = function () {
   }
 
   // Portfolio distribution charts
-  const horizonKey = getHorizonKey(objetivos.length > 0 ? Math.max(...objetivos.filter(o => o.plazo > 0).map(o => o.plazo), 1) : 20);
+  const _genHz = step1?.horizonte;
+  const horizonKey = _genHz
+    ? (_genHz === '5_plus' ? 'long' : _genHz === '3_5' ? 'medium' : 'short')
+    : getHorizonKey(objetivos.length > 0 ? Math.max(...objetivos.filter(o => o.plazo > 0).map(o => o.plazo), 1) : 20);
   renderPortfolioCharts(inversiones, riskProfile, horizonKey, step3?.inmuebles || []);
 
   // Portfolio rationale ("¿Por qué eres este perfil?")

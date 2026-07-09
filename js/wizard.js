@@ -1806,6 +1806,7 @@ const FAST_TRACK = [
   { id: 'ingresos',         type: 'number', inputId: 'q-ingresos',   step: 2, required: true  },
   { id: 'ahorro_mensual',   type: 'number', inputId: 'q-ahorro',     step: 2, required: true  },
   { id: 'ya_inviertes',     type: 'radio',  name:    'q-ya-inviertes', step: 1, required: true },
+  { id: 'horizonte',        type: 'radio',  name:    'q-horizonte',  step: 1, required: true  },
   { id: 'riesgo_1',         type: 'radio',  name:    'q-r1',         step: 5, required: true  },
   { id: 'riesgo_3',         type: 'radio',  name:    'q-r3',         step: 5, required: true  },
   { id: 'riesgo_7',         type: 'radio',  name:    'q-r7',         step: 5, required: true  },
@@ -1824,8 +1825,8 @@ function showQuestion(n) {
   const input = screen.querySelector('input[inputmode="numeric"], input[type="number"]');
   if (input) setTimeout(() => input.focus(), 80);
 
-  // Q6 (riesgo_1): filtrar opciones según si ya invierte o no
-  if (n + 1 === 6) {
+  // Q7 (riesgo_1): filtrar opciones según si ya invierte o no
+  if (n + 1 === 7) {
     const profile = JSON.parse(localStorage.getItem('iw_profile') || '{}');
     const yaInviertes = profile.step1?.ya_inviertes;
     document.querySelectorAll('[name="q-r1"]').forEach(radio => {
@@ -1910,11 +1911,25 @@ function completeFastTrack() {
   const profile = JSON.parse(localStorage.getItem('iw_profile') || '{}');
   const s5 = profile.step5 || {};
   const total = calcRiskScore(s5);
-  const rp = total <= 3 ? 'conservador' : total <= 7 ? 'moderado' : total <= 10 ? 'dinamico' : 'agresivo';
+  let rp = total <= 3 ? 'conservador' : total <= 7 ? 'moderado' : total <= 10 ? 'dinamico' : 'agresivo';
+
+  // Store uncapped profile, then apply horizon-based capping
+  const origRiskProfile = rp;
+  const horizonRaw = profile.step1?.horizonte || null;
+  if (horizonRaw === 'no_invierto' || horizonRaw === '0_2') {
+    rp = 'conservador';
+  } else if (horizonRaw === '3_5' && (rp === 'dinamico' || rp === 'agresivo')) {
+    rp = 'moderado';
+  }
+  const horizonFast = horizonRaw === '5_plus' ? 'long' : (horizonRaw === '3_5' ? 'medium' : 'short');
+
   profile.step5 = profile.step5 || {};
   profile.step5.total = total;
   profile.riskProfile = rp;
   profile.riskScore = total;
+  profile.origRiskProfile = origRiskProfile;
+  profile.horizonte_raw = horizonRaw;
+  profile.horizonte_fast = horizonFast;
   localStorage.setItem('iw_profile', JSON.stringify(profile));
   showRiskProfileInDash(rp, total);
   document.querySelectorAll('.q-screen').forEach(el => el.classList.add('hidden'));
@@ -2005,6 +2020,16 @@ const DASHBOARD_UPDATES = {
     } else {
       addDashCard('inversion', '🌱', 'Inversiones', 'Empezando', 'Te recomendaremos desde cero');
     }
+  },
+  horizonte: (val) => {
+    const labels = {
+      no_invierto: { icon: '🔍', value: 'Explorando',  sub: 'Sin objetivo temporal definido' },
+      '0_2':       { icon: '⏱️', value: 'Corto plazo', sub: 'Menos de 2 años' },
+      '3_5':       { icon: '📅', value: 'Medio plazo', sub: '3–5 años' },
+      '5_plus':    { icon: '🚀', value: 'Largo plazo', sub: 'Más de 5 años' },
+    };
+    const l = labels[val] || labels['5_plus'];
+    addDashCard('horizonte', l.icon, 'Horizonte', l.value, l.sub);
   },
   riesgo_7: () => {
     const profile = JSON.parse(localStorage.getItem('iw_profile') || '{}');

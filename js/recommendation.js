@@ -2873,8 +2873,6 @@ function renderHorizonContext(horizonRaw, riskProfile, origRiskProfile, data) {
   }
 
   if (horizonRaw === '3_5' || horizonRaw === '5_plus') {
-    const hk = _hzKey(horizonRaw);
-    if (inversiones.length > 0) html += _hzRebalancing(inversiones, riskProfile, hk);
     if (horizonRaw === '5_plus' && riesgo_1 >= 2) {
       html += `
       <div class="mb-4 p-4 bg-purple-50 border border-purple-100 rounded-xl">
@@ -2894,7 +2892,6 @@ function renderHorizonContext(horizonRaw, riskProfile, origRiskProfile, data) {
         </div>`;
       }
     }
-    html += _hzProjection(ahorros, ahorro_mensual, riskProfile, hk, horizonRaw);
   }
 
   return html;

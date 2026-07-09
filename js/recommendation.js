@@ -1675,7 +1675,10 @@ function renderInvestmentRoadmap(blueprint, riskProfile, ahorro, showCrypto, has
 
   const phase3Upgrade = isIndexa
     ? `<li class="flex gap-2 items-start"><span class="shrink-0">📉</span><span>Indexa baja comisión progresivamente — a partir de 100k reduces costes sin cambiar nada</span></li>`
-    : `<li class="flex gap-2 items-start"><span class="shrink-0">🔵</span><span><strong class="text-gray-600">Indexa Capital</strong> perfil ${profileLabel} — fondos Vanguard puros, mejor track record, referencia del sector en España</span></li>`;
+    : `<li class="flex gap-2 items-start"><span class="shrink-0">📉</span><span>Fondos indexados directos en <strong class="text-gray-600">MyInvestor</strong> — misma plataforma, sin capa de gestión, ~0.10–0.20%/año vs 0.35% actual</span></li>`;
+  const phase3Alt = isIndexa
+    ? `<li class="flex gap-2 items-start"><span class="shrink-0">🛠️</span><span>Para mayor control y autonomía, gestión directa en <strong class="text-gray-600">MyInvestor</strong> con fondos Vanguard — misma filosofía, más flexibilidad</span></li>`
+    : `<li class="flex gap-2 items-start"><span class="shrink-0">🔵</span><span>Si prefieres automatización total, <strong class="text-gray-600">Indexa Capital</strong> perfil ${profileLabel} es una alternativa comparable — Vanguard puro, comisión ~0.42%/año</span></li>`;
 
   const phase3Pension = hasTax && pensionMonthly > 0
     ? `<li class="flex gap-2 items-start"><span class="shrink-0">🏦</span><span><strong class="text-gray-600">${pensionLabel} indexado</strong> en ${pensionPlatform} — hasta ${fmtEur(pensionMonthly)}/mes deducibles en IRPF</span></li>`
@@ -1749,7 +1752,7 @@ function renderInvestmentRoadmap(blueprint, riskProfile, ahorro, showCrypto, has
             <ul class="space-y-2 text-xs text-gray-500">
               ${phase3Upgrade}
               ${phase3Pension}
-              <li class="flex gap-2 items-start"><span class="shrink-0">🛠️</span><span>Considera gestión directa en MyInvestor con fondos indexados — mayor control, menor comisión</span></li>
+              ${phase3Alt}
             </ul>
           </div>
         </div>
@@ -1988,37 +1991,91 @@ function buildMonthlyAllocationSection(ahorro, allocation, riskProfile, isEpsv, 
   const complexity = getPortfolioComplexity(step1, step5);
   const blueprint = PORTFOLIO_BLUEPRINTS[riskProfile]?.[complexity];
 
-  // Managed levels (1–3): no allocation table, just a simple action card
+  // Managed levels (1–3): visual card with big number, platform badge, fund chips
   if (blueprint?.managed) {
     const primary = blueprint.products[0];
     const tramoRates = { t1: 19, t2: 24, t3: 30, t4: 37, t5: 45, t6: 47 };
     const taxRate = tramoRates[tramo] || 0;
     const pensionMonthly = hasTax ? Math.min(Math.round((isEpsv ? 5000 : 1500) / 12), Math.round(ahorro * 0.15)) : 0;
     const pensionSaving = hasTax && pensionMonthly > 0 && taxRate > 0 ? Math.round(pensionMonthly * 12 * taxRate / 100) : 0;
-
     const isSavingsMode = !!blueprint.savings_mode;
-    const bodyText = isSavingsMode
-      ? `Aún no es momento de invertir en mercados — primero necesitas alcanzar los <strong>3.000 €</strong> que pide Indexa Capital como mínimo. Mientras tanto, guarda tu ahorro en <strong>Trade Republic</strong>: ~3% TAE, sin riesgo, disponible en cualquier momento.`
-      : `Transfiere tu ahorro mensual directamente a <strong>${primary?.platform || 'la gestora'}</strong>. Ellos invierten, rebalancean y optimizan fiscalmente por ti — sin que tengas que tomar ninguna decisión.`;
-    const actionLabel = isSavingsMode
-      ? `${ahorro.toLocaleString('es-ES')} €/mes → Trade Republic (cuenta remunerada)`
-      : `${ahorro.toLocaleString('es-ES')} €/mes → ${primary?.platform || 'la gestora'}`;
-    const actionSub = isSavingsMode
-      ? `~3% TAE · sin riesgo · retirada inmediata · objetivo: 3.000 €`
-      : `${primary?.fees || ''} · configuración única, aportaciones automáticas recomendadas`;
+
+    const platformAbbr = isSavingsMode ? 'TR' : (primary?.platform === 'Indexa Capital' ? 'IX' : 'MI');
+    const platformColor = isSavingsMode ? 'bg-emerald-500' : (primary?.platform === 'Indexa Capital' ? 'bg-blue-600' : 'bg-sky-500');
+    const displayName = isSavingsMode ? 'Trade Republic — Cuenta remunerada' : (primary?.name || primary?.platform || 'Gestora indexada');
+    const displayFees = primary?.fees || '';
+    const displayReturn = primary?.est_return || (isSavingsMode ? '~3% TAE' : '~6-8% largo plazo');
+    const subText = isSavingsMode
+      ? 'Acumulando hasta 3.000 € antes de invertir en mercados'
+      : `Transferencia a <strong class="text-gray-700">${primary?.platform}</strong> — sin decisiones, sin errores emocionales`;
+    const ctaSub = isSavingsMode
+      ? 'Sin riesgo · retirada inmediata · objetivo: 3.000 €'
+      : `${displayFees} · configuración única · aportaciones automáticas`;
+
+    const compositionChips = primary?.composition?.length > 0
+      ? `<div class="flex flex-wrap gap-1.5 mt-3">
+          ${primary.composition.map(c => {
+            const shortName = c.name.length > 32 ? c.name.substring(0, 32) + '…' : c.name;
+            return `<span class="inline-flex items-center gap-1 px-2 py-0.5 bg-white border border-gray-200 rounded-full text-xs text-gray-600"><span class="font-semibold text-gray-800">${c.pct}%</span> ${shortName}</span>`;
+          }).join('')}
+        </div>`
+      : '';
+
+    const pensionBonus = !isSavingsMode && hasTax && pensionMonthly > 0
+      ? `<div class="mx-5 mb-5 p-3 bg-amber-50 border border-amber-100 rounded-xl">
+           <div class="flex items-start gap-2">
+             <span class="text-lg leading-none mt-0.5">⭐</span>
+             <div>
+               <p class="text-xs font-bold text-amber-900">Bonus fiscal: ahórrate ~${pensionSaving.toLocaleString('es-ES')} €/año</p>
+               <p class="text-xs text-amber-700 mt-0.5">Aporta <strong>${pensionMonthly.toLocaleString('es-ES')} €/mes</strong> al ${isEpsv ? 'EPSV' : 'plan de pensiones indexado'} de ${primary?.platform || 'la plataforma'} — deducible al ${taxRate}% en la declaración.</p>
+             </div>
+           </div>
+         </div>`
+      : '';
 
     return `
-      <div class="mb-6 p-4 bg-white border border-gray-200 rounded-xl">
-        <h3 class="font-semibold text-gray-800 mb-2">📊 Qué hacer con tus <strong>${ahorro.toLocaleString('es-ES')} €/mes</strong></h3>
-        <p class="text-sm text-gray-600 mb-4">${bodyText}</p>
-        <div class="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
-          <span class="text-2xl">→</span>
+      <div class="mb-6 bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+        <div class="px-5 pt-5 pb-4 border-b border-gray-100">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">Tu ahorro mensual</p>
+          <div class="flex items-baseline gap-2">
+            <span class="text-4xl font-bold text-gray-900">${ahorro.toLocaleString('es-ES')}</span>
+            <span class="text-xl font-medium text-gray-500">€/mes</span>
+          </div>
+          <p class="text-sm text-gray-500 mt-1.5">${subText}</p>
+        </div>
+        <div class="px-5 py-4">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl ${platformColor} flex items-center justify-center text-white text-xs font-bold shrink-0">${platformAbbr}</div>
+              <div>
+                <p class="text-sm font-bold text-gray-800 leading-tight">${displayName}</p>
+                <p class="text-xs text-gray-500 mt-0.5">${displayFees}</p>
+              </div>
+            </div>
+            <div class="text-right shrink-0 ml-2">
+              <p class="text-xs text-gray-400">Rent. estimada</p>
+              <p class="text-xs font-semibold text-emerald-600">${displayReturn}</p>
+            </div>
+          </div>
           <div>
-            <p class="text-sm font-bold text-blue-900">${actionLabel}</p>
-            <p class="text-xs text-blue-600">${actionSub}</p>
+            <div class="flex justify-between text-xs text-gray-400 mb-1">
+              <span>Asignación</span>
+              <span class="font-medium text-gray-600">100% gestionado</span>
+            </div>
+            <div class="h-2 rounded-full overflow-hidden bg-gray-100">
+              <div class="h-full rounded-full bg-blue-500" style="width:100%"></div>
+            </div>
+          </div>
+          ${compositionChips}
+        </div>
+        <div class="mx-5 mb-5 flex items-center gap-3 p-3.5 bg-blue-600 rounded-xl">
+          <span class="text-white text-xl font-bold shrink-0">→</span>
+          <div>
+            <p class="text-sm font-bold text-white">${ahorro.toLocaleString('es-ES')} €/mes → ${isSavingsMode ? 'Trade Republic' : primary?.platform}</p>
+            <p class="text-xs text-blue-200 mt-0.5">${ctaSub}</p>
           </div>
         </div>
-        ${!isSavingsMode && hasTax && pensionMonthly > 0 ? `<div class="mt-3 p-3 bg-amber-50 border border-amber-100 rounded-lg text-xs text-amber-800">⭐ <strong>Bonus fiscal:</strong> Aporta también ${pensionMonthly.toLocaleString('es-ES')} €/mes al ${isEpsv ? 'EPSV' : 'plan de pensiones'} indexado de ${primary?.platform || 'la plataforma'} y ahórrate ~${pensionSaving.toLocaleString('es-ES')} €/año en el IRPF.</div>` : ''}
+        ${pensionBonus}
       </div>`;
   }
 

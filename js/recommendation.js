@@ -44,6 +44,9 @@ function getPortfolioComplexity(step1, step5) {
   return 1;
 }
 
+// Minimum investable amount (net of emergency fund) to reach each complexity level
+const COMPLEXITY_THRESHOLDS = [0, 3000, 15000, 50000, 125000, 250000];
+
 const PORTFOLIO_BLUEPRINTS = {
   conservador: {
     1: {
@@ -3251,6 +3254,464 @@ function _hzProjection(ahorros, ahorro_mensual, riskProfile, horizonKey, horizon
   </div>`;
 }
 
+// ─── Roadmap: non-investor path ───────────────────────────────────────────────
+
+function renderNonInvestorPlan(riskProfile, step1, step2, step5) {
+  const ahorros        = Number(step1?.ahorros_liquidos) || 0;
+  const ahorro_mensual = Number(step2?.ahorro_mensual)   || 0;
+  const gastosMes      = Math.max(0, (Number(step2?.ingresos) || 0) - ahorro_mensual);
+  const mesesTarget    = riskProfile === 'conservador' ? 6 : riskProfile === 'moderado' ? 4 : 3;
+  const fondoEmergencia = Math.min(ahorros, gastosMes * mesesTarget);
+  const invertible     = Math.max(0, ahorros - fondoEmergencia);
+
+  const complexity = getPortfolioComplexity(step1, step5);
+  const bp1        = PORTFOLIO_BLUEPRINTS[riskProfile]?.[complexity];
+  if (!bp1) return '';
+
+  const nextLevel = Math.min(complexity + 1, 6);
+  const bp2       = PORTFOLIO_BLUEPRINTS[riskProfile]?.[nextLevel];
+  const bp3Level  = Math.min(complexity + 2, 6);
+  const bp3       = PORTFOLIO_BLUEPRINTS[riskProfile]?.[bp3Level];
+
+  // ── Phase 1 ──
+  let phase1Content = '';
+  if (bp1.savings_mode) {
+    const mesesMeta = ahorro_mensual > 0 ? Math.ceil(Math.max(0, 3000 - ahorros) / ahorro_mensual) : null;
+    phase1Content = `
+      <p class="text-sm text-gray-700 mb-3">Con <strong>${fmtEur(ahorros)}</strong> ahorrados el objetivo ahora es llegar a <strong>3.000 €</strong> — el mínimo para los mejores roboadvisores.</p>
+      <div class="p-3 bg-white rounded-xl border border-blue-100 mb-2">
+        <p class="text-xs font-semibold text-gray-700 mb-1">🟩 Trade Republic — Cuenta remunerada · ~3% TAE</p>
+        <p class="text-xs text-gray-600">Pon aquí todos tus ahorros mientras acumulas. Disponible en cualquier momento.</p>
+        ${mesesMeta !== null ? `<p class="text-xs text-blue-700 mt-2 font-medium">Con ${fmtEur(ahorro_mensual)}/mes llegarás a 3.000 € en aprox. <strong>${mesesMeta} meses</strong>.</p>` : ''}
+      </div>`;
+  } else if (bp1.managed) {
+    const platform = bp1.products[0]?.platform || 'roboadvisor';
+    phase1Content = `
+      ${ahorros > 0 ? `<div class="grid grid-cols-3 gap-2 mb-3">
+        <div class="text-center p-2 bg-white rounded-lg border border-gray-100">
+          <p class="text-xs text-gray-400">Ahorros disponibles</p>
+          <p class="text-sm font-bold text-gray-900">${fmtEur(ahorros)}</p>
+        </div>
+        <div class="text-center p-2 bg-amber-50 rounded-lg border border-amber-100">
+          <p class="text-xs text-gray-400">Fondo emergencia</p>
+          <p class="text-sm font-bold text-amber-700">${fmtEur(fondoEmergencia)}</p>
+          <p class="text-xs text-gray-400">${mesesTarget} meses</p>
+        </div>
+        <div class="text-center p-2 bg-blue-50 rounded-lg border border-blue-100">
+          <p class="text-xs text-gray-400">Para invertir ahora</p>
+          <p class="text-sm font-bold text-blue-700">${fmtEur(invertible)}</p>
+        </div>
+      </div>` : ''}
+      <div class="p-3 bg-white rounded-xl border border-blue-100">
+        <p class="text-sm font-semibold text-blue-800 mb-1">📊 ${bp1.label}</p>
+        <p class="text-xs text-blue-700 mb-2">${bp1.description}</p>
+        ${invertible > 0 ? `<p class="text-xs text-blue-600">→ Ingresa los <strong>${fmtEur(invertible)}</strong> al abrir — ${platform} los distribuirá automáticamente.</p>` : ''}
+        ${ahorro_mensual > 0 ? `<p class="text-xs text-blue-600 mt-1">→ Automatiza <strong>${fmtEur(ahorro_mensual)}/mes</strong> el día que cobras. Sin excepciones.</p>` : ''}
+      </div>`;
+  } else {
+    // DIY
+    const products = bp1.products || [];
+    phase1Content = `
+      ${ahorros > 0 ? `<div class="grid grid-cols-3 gap-2 mb-3">
+        <div class="text-center p-2 bg-white rounded-lg border border-gray-100">
+          <p class="text-xs text-gray-400">Ahorros disponibles</p>
+          <p class="text-sm font-bold text-gray-900">${fmtEur(ahorros)}</p>
+        </div>
+        <div class="text-center p-2 bg-amber-50 rounded-lg border border-amber-100">
+          <p class="text-xs text-gray-400">Fondo emergencia</p>
+          <p class="text-sm font-bold text-amber-700">${fmtEur(fondoEmergencia)}</p>
+        </div>
+        <div class="text-center p-2 bg-blue-50 rounded-lg border border-blue-100">
+          <p class="text-xs text-gray-400">Para invertir ahora</p>
+          <p class="text-sm font-bold text-blue-700">${fmtEur(invertible)}</p>
+        </div>
+      </div>` : ''}
+      ${invertible > 0 || ahorro_mensual > 0 ? `
+      <p class="text-xs font-semibold text-gray-700 mb-2">Cómo distribuir${invertible > 0 ? ` los ${fmtEur(invertible)} iniciales` : ''}${ahorro_mensual > 0 ? ` + ${fmtEur(ahorro_mensual)}/mes` : ''}:</p>
+      <div class="space-y-1.5">
+        ${products.map(p => {
+          const amt     = invertible > 0  ? Math.round(invertible     * p.pct / 100) : 0;
+          const monthly = ahorro_mensual > 0 ? Math.round(ahorro_mensual * p.pct / 100) : 0;
+          const nm = p.name.length > 40 ? p.name.slice(0, 40) + '…' : p.name;
+          const right = [amt > 0 ? fmtEur(amt) : null, monthly > 0 ? `${fmtEur(monthly)}/mes` : null].filter(Boolean).join(' · ');
+          return `<div class="flex items-center justify-between text-xs py-1.5 px-2 bg-white rounded-lg border border-gray-100">
+            <span class="text-gray-700">${p.logo || '•'} ${nm}</span>
+            ${right ? `<span class="text-right font-semibold text-gray-900 ml-2 shrink-0">${right}</span>` : ''}
+          </div>`;
+        }).join('')}
+      </div>` : `<p class="text-xs text-gray-500">Cuando tengas ahorros para invertir, distribuye entre los fondos de abajo siguiendo los porcentajes indicados.</p>`}`;
+  }
+
+  // ── Phase 2 ──
+  let phase2Content = '';
+  if (complexity >= 6) {
+    phase2Content = `<div class="p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+      <p class="text-sm font-semibold text-emerald-800">✅ Cartera madura alcanzada</p>
+      <p class="text-xs text-emerald-700 mt-1">Ya estás en el nivel más alto de diversificación. La siguiente etapa es optimización: revisión anual de asignaciones, eficiencia fiscal y rebalanceo cuando alguna clase se desvíe más del 5%.</p>
+    </div>`;
+  } else {
+    const threshold = COMPLEXITY_THRESHOLDS[nextLevel];
+    const mesesAlHito = ahorro_mensual > 0 ? Math.ceil(Math.max(0, threshold - invertible) / ahorro_mensual) : null;
+    const changedToDiy = bp1.managed && bp2 && !bp2.managed;
+    const newProducts = bp2 ? (bp2.products || []).filter(p2 =>
+      !(bp1.products || []).some(p1 => p1.name === p2.name)
+    ) : [];
+
+    phase2Content = `
+      <p class="text-sm text-gray-700 mb-3">
+        ${mesesAlHito ? `Con <strong>${fmtEur(ahorro_mensual)}/mes</strong>, llegarás a <strong>${fmtEur(threshold)}</strong> en aprox. <strong>${mesesAlHito} meses</strong>.` : `Cuando tu cartera llegue a <strong>${fmtEur(threshold)}</strong>:`}
+      </p>
+      <div class="p-3 bg-white rounded-xl border border-emerald-100 mb-2">
+        <p class="text-sm font-semibold text-emerald-800">→ ${bp2?.label || ''}</p>
+        <p class="text-xs text-emerald-700 mt-1">${bp2?.description || ''}</p>
+        ${changedToDiy ? `<p class="text-xs text-emerald-600 mt-2 font-medium">Es el momento de gestionar tu propia cartera de ETFs: mayor control y menores comisiones que los roboadvisores.</p>` : ''}
+      </div>
+      ${newProducts.length > 0 ? `
+        <p class="text-xs font-semibold text-gray-600 mb-1.5">Productos que se incorporan:</p>
+        ${newProducts.map(p => `<div class="flex items-center gap-2 text-xs py-1 px-2 bg-white rounded-lg border border-gray-100 mb-1">
+          <span>${p.logo || '+'}</span>
+          <span class="text-gray-700 flex-1">${p.name}</span>
+          <span class="text-emerald-700 font-medium shrink-0">${p.pct}%</span>
+        </div>`).join('')}` : ''}
+      ${ahorro_mensual > 0 && bp2 && !bp2.managed && !bp2.savings_mode ? `
+        <p class="text-xs font-semibold text-gray-600 mt-2 mb-1.5">Nueva distribución mensual (${fmtEur(ahorro_mensual)}/mes):</p>
+        ${(bp2.products || []).map(p => {
+          const monthly = Math.round(ahorro_mensual * p.pct / 100);
+          const nm = p.name.length > 36 ? p.name.slice(0, 36) + '…' : p.name;
+          return `<div class="flex justify-between text-xs py-1 border-b border-gray-100 last:border-0">
+            <span class="text-gray-600">${nm}</span>
+            <span class="font-semibold text-gray-800">${fmtEur(monthly)}/mes</span>
+          </div>`;
+        }).join('')}` : ''}`;
+  }
+
+  // ── Phase 3 ──
+  const bp3Actual   = bp3 || PORTFOLIO_BLUEPRINTS[riskProfile]?.[6];
+  const p3Threshold = COMPLEXITY_THRESHOLDS[Math.min(bp3Level, 6)];
+
+  let phase3Content = '';
+  if (bp3Actual && !bp3Actual.managed && !bp3Actual.savings_mode) {
+    const assetClassMap = {};
+    (bp3Actual.products || []).forEach(p => {
+      assetClassMap[p.asset_class] = (assetClassMap[p.asset_class] || 0) + p.pct;
+    });
+    const assetRows = Object.entries(assetClassMap).map(([cls, pct]) =>
+      `<div class="flex justify-between text-xs py-1 border-b border-gray-100 last:border-0">
+        <span class="text-gray-600">${ASSET_CLASS_LABELS[cls] || cls}</span>
+        <span class="font-semibold text-gray-800">${pct}%</span>
+      </div>`
+    ).join('');
+    phase3Content = `
+      <p class="text-sm text-gray-700 mb-2">Al superar <strong>${fmtEur(p3Threshold)}</strong>: <strong>${bp3Actual.label}</strong></p>
+      <div class="bg-white rounded-xl border border-gray-100 p-3 mb-2">${assetRows}</div>
+      <p class="text-xs text-gray-500">Revisión anual · Rebalanceo si alguna clase supera ±5% del objetivo · Traspasos entre fondos sin coste fiscal.</p>`;
+  } else {
+    phase3Content = `
+      <p class="text-sm text-gray-700 mb-2">Al superar <strong>${fmtEur(p3Threshold)}</strong>: <strong>${bp3Actual?.label || 'Cartera diversificada'}</strong></p>
+      <p class="text-xs text-gray-500">Con más patrimonio se abren nuevas opciones de diversificación. La clave es la disciplina: aportaciones automáticas, revisión anual y no reaccionar a la volatilidad.</p>`;
+  }
+
+  // ── Render cards ──
+  const phases = [
+    { num: '1', title: 'Ahora mismo',            icon: '🚀', bg: 'bg-blue-50',    border: 'border-blue-200',    text: 'text-blue-800',    dot: '#2563EB', content: phase1Content, open: true  },
+    { num: '2', title: `Próximo hito — ${fmtEur(COMPLEXITY_THRESHOLDS[Math.min(nextLevel, 6)])}`, icon: '📈', bg: 'bg-emerald-50', border: 'border-emerald-200', text: 'text-emerald-800', dot: '#059669', content: phase2Content, open: false },
+    { num: '3', title: 'Objetivo largo plazo',   icon: '🎯', bg: 'bg-purple-50',  border: 'border-purple-200',  text: 'text-purple-800',  dot: '#7C3AED', content: phase3Content, open: false },
+  ];
+
+  const cardsHtml = phases.map(ph => {
+    const header = `
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-white text-sm shrink-0" style="background:${ph.dot}">${ph.num}</div>
+        <span class="text-lg">${ph.icon}</span>
+        <span class="font-semibold ${ph.text}">${ph.title}</span>
+      </div>`;
+    if (ph.open) {
+      return `<div class="p-4 rounded-2xl border ${ph.bg} ${ph.border}">${header}${ph.content}</div>`;
+    }
+    return `<details class="rounded-2xl border ${ph.border} overflow-hidden">
+      <summary class="flex items-center gap-3 px-4 py-3 cursor-pointer select-none list-none ${ph.bg}">
+        <div class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-white text-sm shrink-0" style="background:${ph.dot}">${ph.num}</div>
+        <span class="text-lg">${ph.icon}</span>
+        <span class="font-semibold ${ph.text} flex-1">${ph.title}</span>
+        <span class="text-gray-400 text-xs">▼ ver detalle</span>
+      </summary>
+      <div class="px-4 pb-4 pt-3 ${ph.bg}">${ph.content}</div>
+    </details>`;
+  }).join('');
+
+  return `
+    <div class="mb-6">
+      <h3 class="text-base font-semibold text-gray-900 mb-3">🗺️ Tu hoja de ruta inversora</h3>
+      <div class="space-y-3">${cardsHtml}</div>
+    </div>`;
+}
+
+// ─── Roadmap: existing investor path ──────────────────────────────────────────
+
+function renderInvestorPlan(inversiones, riskProfile, step1, step2, step5, horizonKey) {
+  const ahorro_mensual = Number(step2?.ahorro_mensual) || 0;
+  const totalInvertido = inversiones.reduce((s, i) => s + (i.importe || 0), 0);
+  const analysis       = analyzePortfolioFunds(inversiones);
+  const complexity     = getPortfolioComplexity(step1, step5);
+  const blueprint      = PORTFOLIO_BLUEPRINTS[riskProfile]?.[complexity];
+
+  // ── Block 1: Portfolio health summary ──
+  const badCount       = analysis.fundAnalyses.filter(f => f.rating === 'bad').length;
+  const improvableCount = analysis.fundAnalyses.filter(f => f.rating === 'improvable').length;
+  const avgTER         = analysis.weightedTER || 0;
+
+  let healthStatus, healthBg, healthText, healthIcon;
+  if (badCount > 0) {
+    healthStatus = `${badCount} fondo${badCount > 1 ? 's' : ''} con coste elevado — acción recomendada`;
+    healthBg = 'bg-red-50 border-red-200'; healthText = 'text-red-800'; healthIcon = '🔴';
+  } else if (improvableCount > 0) {
+    healthStatus = `${improvableCount} posición${improvableCount > 1 ? 'es' : ''} con margen de mejora`;
+    healthBg = 'bg-amber-50 border-amber-200'; healthText = 'text-amber-800'; healthIcon = '🟡';
+  } else {
+    healthStatus = 'Cartera bien construida';
+    healthBg = 'bg-green-50 border-green-200'; healthText = 'text-green-800'; healthIcon = '🟢';
+  }
+
+  const healthCard = `
+    <div class="p-4 rounded-2xl border ${healthBg} mb-4">
+      <div class="flex items-center gap-2 mb-3">
+        <span>${healthIcon}</span>
+        <span class="font-semibold ${healthText}">${healthStatus}</span>
+      </div>
+      <div class="grid grid-cols-3 gap-2">
+        <div class="text-center p-2 bg-white bg-opacity-70 rounded-lg">
+          <p class="text-xs text-gray-500">Total invertido</p>
+          <p class="text-sm font-bold text-gray-900">${fmtEur(totalInvertido)}</p>
+        </div>
+        <div class="text-center p-2 bg-white bg-opacity-70 rounded-lg">
+          <p class="text-xs text-gray-500">Posiciones</p>
+          <p class="text-sm font-bold text-gray-900">${inversiones.length}</p>
+        </div>
+        <div class="text-center p-2 bg-white bg-opacity-70 rounded-lg">
+          <p class="text-xs text-gray-500">TER medio</p>
+          <p class="text-sm font-bold ${avgTER > 1 ? 'text-red-700' : avgTER > 0.5 ? 'text-amber-700' : 'text-green-700'}">${avgTER > 0 ? avgTER.toFixed(2) + '%' : '—'}</p>
+        </div>
+      </div>
+      <p class="text-xs ${healthText} opacity-70 mt-2">Análisis fondo a fondo más abajo ↓</p>
+    </div>`;
+
+  // ── Block 2: Rebalancing ──
+  const targetAlloc = {};
+  if (blueprint && !blueprint.managed) {
+    blueprint.products.forEach(p => {
+      targetAlloc[p.asset_class] = (targetAlloc[p.asset_class] || 0) + p.pct;
+    });
+  } else {
+    Object.assign(targetAlloc, ALLOCATIONS[riskProfile]?.[horizonKey] || {});
+  }
+
+  const currentByClass = {};
+  inversiones.forEach(i => {
+    const cls = TIPO_TO_ASSET_CLASS[i.tipo] || 'alternatives';
+    currentByClass[cls] = (currentByClass[cls] || 0) + (i.importe || 0);
+  });
+
+  const rebalRows = Object.keys(targetAlloc).filter(k => targetAlloc[k] > 0).map(k => {
+    const currentPct = totalInvertido > 0 ? Math.round((currentByClass[k] || 0) / totalInvertido * 100) : 0;
+    const targetPct  = targetAlloc[k];
+    const diff       = targetPct - currentPct;
+    const diffAmt    = Math.round(totalInvertido * diff / 100);
+    let action, actionColor;
+    if      (diff >=  5) { action = '↑ Aumentar'; actionColor = 'text-green-700 bg-green-50'; }
+    else if (diff <= -5) { action = '↓ Reducir';  actionColor = 'text-red-700 bg-red-50';     }
+    else                 { action = '✓ OK';        actionColor = 'text-gray-600 bg-gray-50';   }
+    return { k, currentPct, targetPct, diff, diffAmt, action, actionColor };
+  });
+
+  const needsRebalancing = rebalRows.some(r => Math.abs(r.diff) >= 5);
+
+  // Build actionable rebalancing suggestions
+  const rebalActions = [];
+  rebalRows.forEach(r => {
+    if (r.diff <= -5) {
+      const fundsInClass = analysis.fundAnalyses.filter(f =>
+        (TIPO_TO_ASSET_CLASS[f.inv.tipo] || 'alternatives') === r.k &&
+        (f.rating === 'bad' || f.rating === 'improvable')
+      );
+      if (fundsInClass.length > 0) {
+        const fn = fundsInClass[0].inv.nombre || fundsInClass[0].inv.isin || 'fondo caro';
+        const nm = fn.length > 35 ? fn.slice(0, 35) + '…' : fn;
+        rebalActions.push(`Traspasa parte de <strong>${nm}</strong> a productos del objetivo (sin tributar entre fondos)`);
+      } else {
+        rebalActions.push(`Reduce ${ASSET_CLASS_LABELS[r.k] || r.k} no aportando aquí hasta equilibrar`);
+      }
+    }
+    if (r.diff >= 5 && blueprint) {
+      const bpProd = (blueprint.products || []).find(p => p.asset_class === r.k);
+      if (bpProd) {
+        const nm = bpProd.name.length > 35 ? bpProd.name.slice(0, 35) + '…' : bpProd.name;
+        rebalActions.push(`Añade ~${fmtEur(Math.abs(r.diffAmt))} a <strong>${nm}</strong> para cubrir el déficit en ${ASSET_CLASS_LABELS[r.k] || r.k}`);
+      }
+    }
+  });
+
+  let rebalCard = '';
+  if (!needsRebalancing) {
+    rebalCard = `
+      <div class="p-4 rounded-2xl border bg-green-50 border-green-200 mb-4">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-lg">✅</span>
+          <span class="font-semibold text-green-800">Cartera bien equilibrada para tu perfil</span>
+        </div>
+        <div class="grid grid-cols-${Math.min(rebalRows.length, 4)} gap-2">
+          ${rebalRows.map(r => `
+            <div class="text-center p-2 bg-white rounded-lg border border-green-100">
+              <p class="text-xs text-gray-500 leading-tight">${ASSET_CLASS_LABELS[r.k] || r.k}</p>
+              <p class="text-sm font-bold text-gray-800">${r.currentPct}%</p>
+              <p class="text-xs text-gray-400">obj. ${r.targetPct}%</p>
+            </div>`).join('')}
+        </div>
+      </div>`;
+  } else {
+    const tableRows = rebalRows.map(r => `
+      <tr>
+        <td class="py-2 pr-2 text-sm text-gray-700">${ASSET_CLASS_LABELS[r.k] || r.k}</td>
+        <td class="py-2 text-center text-sm text-gray-600">${r.currentPct}%</td>
+        <td class="py-2 text-center text-sm font-medium text-gray-800">${r.targetPct}%</td>
+        <td class="py-2 text-center text-sm font-medium ${r.diff >= 5 ? 'text-green-700' : r.diff <= -5 ? 'text-red-700' : 'text-gray-500'}">${r.diff > 0 ? '+' : ''}${r.diff}%</td>
+        <td class="py-2 text-center"><span class="inline-block px-2 py-0.5 rounded-md text-xs font-medium ${r.actionColor}">${r.action}</span></td>
+      </tr>`).join('');
+    rebalCard = `
+      <div class="p-4 rounded-2xl border bg-amber-50 border-amber-200 mb-4">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-lg">🔄</span>
+          <span class="font-semibold text-amber-800">Rebalanceo sugerido</span>
+        </div>
+        <div class="overflow-x-auto mb-3">
+          <table class="w-full text-sm">
+            <thead><tr class="text-xs text-gray-400 border-b border-amber-200">
+              <th class="pb-1 text-left font-medium">Clase de activo</th>
+              <th class="pb-1 text-center font-medium">Actual</th>
+              <th class="pb-1 text-center font-medium">Objetivo</th>
+              <th class="pb-1 text-center font-medium">Dif.</th>
+              <th class="pb-1 text-center font-medium">Acción</th>
+            </tr></thead>
+            <tbody class="divide-y divide-amber-100">${tableRows}</tbody>
+          </table>
+        </div>
+        ${rebalActions.length > 0 ? `
+          <div class="bg-white bg-opacity-70 rounded-xl p-3">
+            <p class="text-xs font-semibold text-gray-700 mb-1.5">Acciones concretas:</p>
+            <ul class="space-y-1.5">
+              ${rebalActions.map(a => `<li class="flex gap-2 text-xs text-gray-700"><span class="text-amber-600 shrink-0 font-bold">→</span><span>${a}</span></li>`).join('')}
+            </ul>
+          </div>` : ''}
+        <p class="text-xs text-gray-500 mt-2">Los traspasos entre fondos de inversión no generan plusvalías en España.</p>
+      </div>`;
+  }
+
+  // ── Block 3: Monthly contributions ──
+  let monthlyCard = '';
+  if (ahorro_mensual > 0 && blueprint && !blueprint.managed && !blueprint.savings_mode) {
+    const mostUnderweight = rebalRows.filter(r => r.diff >= 5).sort((a, b) => b.diff - a.diff)[0];
+    const monthsToBalance = mostUnderweight
+      ? Math.ceil(Math.abs(mostUnderweight.diffAmt) / ahorro_mensual) : null;
+    const targetProd = mostUnderweight
+      ? (blueprint.products || []).find(p => p.asset_class === mostUnderweight.k) : null;
+
+    const propRows = (blueprint.products || []).map(p => {
+      const monthly = Math.round(ahorro_mensual * p.pct / 100);
+      const nm = p.name.length > 38 ? p.name.slice(0, 38) + '…' : p.name;
+      // If user already holds something in this asset class, prefer their fund name
+      const userFund = inversiones.find(inv =>
+        (TIPO_TO_ASSET_CLASS[inv.tipo] || 'alternatives') === p.asset_class
+      );
+      const destName = userFund ? (userFund.nombre || userFund.name || p.name) : p.name;
+      const destNm   = destName.length > 38 ? destName.slice(0, 38) + '…' : destName;
+      return `<div class="flex items-center justify-between text-xs py-1 border-b border-gray-100 last:border-0">
+        <span class="text-gray-700">${p.logo || '•'} ${destNm}</span>
+        <span class="font-semibold text-blue-700 ml-2 shrink-0">${p.pct}% · ${fmtEur(monthly)}/mes</span>
+      </div>`;
+    }).join('');
+
+    monthlyCard = `
+      <div class="p-4 rounded-2xl border bg-blue-50 border-blue-200 mb-4">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-lg">💶</span>
+          <span class="font-semibold text-blue-800">Aportaciones mensuales: ${fmtEur(ahorro_mensual)}/mes</span>
+        </div>
+        ${needsRebalancing && mostUnderweight ? `
+          <div class="bg-white bg-opacity-70 rounded-xl p-3 mb-3">
+            <p class="text-xs font-semibold text-gray-700 mb-1">⏳ Durante el rebalanceo${monthsToBalance ? ` (aprox. ${monthsToBalance} meses)` : ''}:</p>
+            <p class="text-sm text-gray-700">Destina los <strong>${fmtEur(ahorro_mensual)}/mes</strong> íntegros a ${ASSET_CLASS_LABELS[mostUnderweight.k] || mostUnderweight.k}${targetProd ? ` → <strong>${targetProd.name}</strong>` : ''} — es la clase más infraponderada.</p>
+          </div>` : ''}
+        <div class="bg-white bg-opacity-70 rounded-xl p-3">
+          <p class="text-xs font-semibold text-gray-700 mb-2">${needsRebalancing ? '✅ Una vez equilibrado — distribución regular:' : 'Distribución proporcional:'}</p>
+          ${propRows}
+        </div>
+      </div>`;
+  } else if (ahorro_mensual > 0 && blueprint?.managed) {
+    monthlyCard = `
+      <div class="p-4 rounded-2xl border bg-blue-50 border-blue-200 mb-4">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-lg">💶</span>
+          <span class="font-semibold text-blue-800">Aportaciones mensuales: ${fmtEur(ahorro_mensual)}/mes</span>
+        </div>
+        <p class="text-sm text-blue-700">Añade los <strong>${fmtEur(ahorro_mensual)}</strong> directamente al roboadvisor — redistribuirá automáticamente según las ponderaciones objetivo.</p>
+      </div>`;
+  }
+
+  // ── Block 4: Timeline ──
+  const nextLevel     = Math.min(complexity + 1, 6);
+  const nextThreshold = COMPLEXITY_THRESHOLDS[nextLevel];
+  const bp2           = complexity < 6 ? PORTFOLIO_BLUEPRINTS[riskProfile]?.[nextLevel] : null;
+  const mthsToNext    = ahorro_mensual > 0 && complexity < 6
+    ? Math.ceil(Math.max(0, nextThreshold - totalInvertido) / ahorro_mensual) : null;
+
+  const cortoItems = ['Automatiza la aportación mensual si aún no lo has hecho'];
+  if (needsRebalancing) cortoItems.unshift('Rebalancea vía nuevas aportaciones (evita vender salvo urgencia)');
+  if (badCount > 0 || improvableCount > 0) cortoItems.push('Traspasa los fondos señalados arriba a indexados equivalentes — sin tributar');
+
+  const medioItems = [];
+  if (mthsToNext && complexity < 6) medioItems.push(`En aprox. ${mthsToNext} meses llegarás a ${fmtEur(nextThreshold)} → pasas a <em>${bp2?.label || 'siguiente nivel'}</em>`);
+  medioItems.push('Revisión semestral: comprueba que sigues dentro de ±5% del objetivo por clase');
+  medioItems.push('Mantén el fondo de emergencia separado del portfolio inversor');
+
+  const largoItems = [
+    'Revisión anual completa de asignación y perfil de riesgo',
+    'Optimización fiscal: aprovecha traspasos sin coste tributario',
+    'A 3–5 años de tu objetivo principal, reduce renta variable gradualmente',
+  ];
+
+  const timelineCards = [
+    { title: 'Corto plazo (0–6 meses)',  dot: '#2563EB', items: cortoItems },
+    { title: 'Medio plazo (6m–3 años)',  dot: '#059669', items: medioItems },
+    { title: 'Largo plazo (3+ años)',    dot: '#7C3AED', items: largoItems },
+  ];
+
+  const timelineHtml = `
+    <div class="p-4 rounded-2xl border bg-white border-gray-200">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="text-lg">📅</span>
+        <span class="font-semibold text-gray-800">Plan a corto, medio y largo plazo</span>
+      </div>
+      <div class="space-y-3">
+        ${timelineCards.map(tc => `
+          <div class="rounded-xl overflow-hidden border border-gray-100">
+            <div class="px-4 py-2" style="background:${tc.dot}">
+              <p class="text-xs font-semibold text-white">${tc.title}</p>
+            </div>
+            <div class="px-4 py-3 bg-gray-50">
+              <ul class="space-y-1.5">
+                ${tc.items.map(item => `<li class="flex gap-2 text-xs text-gray-700"><span class="shrink-0 text-gray-400 font-bold">→</span><span>${item}</span></li>`).join('')}
+              </ul>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+
+  return `
+    <div class="mb-6">
+      <h3 class="text-base font-semibold text-gray-900 mb-3">🗺️ Tu plan de inversión</h3>
+      ${healthCard}${rebalCard}${monthlyCard}${timelineHtml}
+    </div>`;
+}
+
 // ─── Main entry point ─────────────────────────────────────────────────────────
 
 window.generateResults = function () {
@@ -3333,6 +3794,17 @@ window.generateResults = function () {
     ? (_genHz === '5_plus' ? 'long' : _genHz === '3_5' ? 'medium' : 'short')
     : getHorizonKey(objetivos.length > 0 ? Math.max(...objetivos.filter(o => o.plazo > 0).map(o => o.plazo), 1) : 20);
   renderPortfolioCharts(inversiones, riskProfile, horizonKey, step3?.inmuebles || []);
+
+  // Investment roadmap (non-investor phases or investor plan)
+  const yaInvierteConDatos = Array.isArray(step3?.inversiones) && step3.inversiones.length > 0;
+  const roadmapEl = document.getElementById('investment-roadmap');
+  if (roadmapEl) {
+    if (yaInvierteConDatos) {
+      roadmapEl.innerHTML = renderInvestorPlan(step3.inversiones, riskProfile, step1, step2, step5, horizonKey);
+    } else {
+      roadmapEl.innerHTML = renderNonInvestorPlan(riskProfile, step1, step2, step5);
+    }
+  }
 
   // Portfolio rationale ("¿Por qué eres este perfil?")
   const rationaleEl = document.getElementById('portfolio-rationale');

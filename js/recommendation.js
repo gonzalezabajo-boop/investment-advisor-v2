@@ -34,8 +34,8 @@ const PROFILE_META = {
   agresivo:    { label: 'Agresivo',    bg: 'bg-red-50',    border: 'border-red-200',    text: 'text-red-700',    emoji: '🚀' },
 };
 
-function getPortfolioComplexity(step1, step5) {
-  const patrimony = step1?.patrimonio_neto || step1?.ahorros_liquidos || 0;
+function getPortfolioComplexity(step1, step5, totalInvertido = 0) {
+  const patrimony = (step1?.patrimonio_neto || step1?.ahorros_liquidos || 0) + totalInvertido;
   if (patrimony >= 250000) return 6;
   if (patrimony >= 125000) return 5;
   if (patrimony >= 50000)  return 4;
@@ -1635,6 +1635,8 @@ function renderInvestmentRoadmap(blueprint, riskProfile, ahorro, showCrypto, has
 
   const phase2k = isIndexa ? 15000 : 10000;
   const phase3k = isIndexa ? 40000 : 30000;
+  const reachedPhase2 = capital >= phase2k;
+  const reachedPhase3 = capital >= phase3k;
 
   const goldMonthly = ahorro > 0 ? Math.max(15, Math.round(ahorro * 0.05)) : 0;
   const cryptoMonthly = ahorro > 0 ? Math.max(15, Math.round(ahorro * 0.05)) : 0;
@@ -1687,17 +1689,38 @@ function renderInvestmentRoadmap(blueprint, riskProfile, ahorro, showCrypto, has
     ? `<li class="flex gap-2 items-start"><span class="shrink-0">🏦</span><span><strong class="text-gray-600">${pensionLabel} indexado</strong> en ${pensionPlatform} — hasta ${fmtEur(pensionMonthly)}/mes deducibles en IRPF</span></li>`
     : '';
 
+  const phase1Circle = reachedPhase2 ? 'bg-green-500' : 'bg-blue-600';
+  const phase1Icon = reachedPhase2 ? '✓' : '1';
+  const phase1LabelColor = reachedPhase2 ? 'text-green-600' : 'text-blue-600';
+  const phase1Label = reachedPhase2 ? 'Hecho' : 'Empieza hoy';
+
+  const phase2Circle = reachedPhase3 ? 'bg-green-500' : reachedPhase2 ? 'bg-blue-600' : 'bg-gray-300';
+  const phase2Icon = reachedPhase3 ? '✓' : '2';
+  const phase2LabelColor = reachedPhase3 ? 'text-green-600' : reachedPhase2 ? 'text-blue-600' : 'text-gray-500';
+  const phase2Box = reachedPhase2 && !reachedPhase3 ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-200';
+  const phase2Label = reachedPhase3
+    ? `Ya diversificado — superaste ${fmtEur(phase2k)}`
+    : reachedPhase2
+      ? `Ya puedes hacerlo — superaste ${fmtEur(phase2k)}`
+      : `Al llegar a ${fmtEur(phase2k)}`;
+
+  const phase3Circle = reachedPhase3 ? 'bg-blue-600' : 'bg-gray-200';
+  const phase3TextColor = reachedPhase3 ? 'text-blue-600' : 'text-gray-400';
+  const phase3Label = reachedPhase3
+    ? `Disponible ahora — superaste ${fmtEur(phase3k)}`
+    : `A largo plazo (&gt;${fmtEur(phase3k)})`;
+
   return `
     <div class="space-y-0">
 
       <!-- Phase 1 -->
       <div class="flex gap-3">
         <div class="flex flex-col items-center">
-          <div class="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold shrink-0">1</div>
+          <div class="w-7 h-7 rounded-full ${phase1Circle} flex items-center justify-center text-white text-xs font-bold shrink-0">${phase1Icon}</div>
           <div class="w-0.5 flex-1 bg-gray-200 mt-1 min-h-6"></div>
         </div>
         <div class="flex-1 pb-4">
-          <p class="text-xs font-semibold text-blue-600 uppercase tracking-wide mt-1.5 mb-2">Empieza hoy</p>
+          <p class="text-xs font-semibold ${phase1LabelColor} uppercase tracking-wide mt-1.5 mb-2">${phase1Label}</p>
           <div class="p-4 bg-blue-50 border border-blue-200 rounded-xl">
             <div class="flex items-start justify-between gap-2 mb-1">
               <h4 class="font-semibold text-gray-900 text-sm">${primary.platform}</h4>
@@ -1729,12 +1752,12 @@ function renderInvestmentRoadmap(blueprint, riskProfile, ahorro, showCrypto, has
       <!-- Phase 2 -->
       <div class="flex gap-3">
         <div class="flex flex-col items-center">
-          <div class="w-7 h-7 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 text-xs font-bold shrink-0">2</div>
+          <div class="w-7 h-7 rounded-full ${phase2Circle} flex items-center justify-center text-white text-xs font-bold shrink-0">${phase2Icon}</div>
           <div class="w-0.5 flex-1 bg-gray-200 mt-1 min-h-6"></div>
         </div>
         <div class="flex-1 pb-4">
-          <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mt-1.5 mb-2">Al llegar a ${fmtEur(phase2k)}</p>
-          <div class="p-4 bg-gray-50 border border-gray-200 rounded-xl">
+          <p class="text-xs font-semibold ${phase2LabelColor} uppercase tracking-wide mt-1.5 mb-2">${phase2Label}</p>
+          <div class="p-4 ${phase2Box} border rounded-xl">
             <h4 class="text-sm font-semibold text-gray-700 mb-1">Diversifica con activos alternativos</h4>
             <p class="text-xs text-gray-400 mb-3">Mantén ${primary.platform} como base y añade estos complementos:</p>
             <div>${phase2Gold}${phase2RE}${phase2Crypto}</div>
@@ -1746,10 +1769,10 @@ function renderInvestmentRoadmap(blueprint, riskProfile, ahorro, showCrypto, has
       <!-- Phase 3 -->
       <div class="flex gap-3">
         <div class="flex flex-col items-center">
-          <div class="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-xs font-bold shrink-0">3</div>
+          <div class="w-7 h-7 rounded-full ${phase3Circle} flex items-center justify-center text-white text-xs font-bold shrink-0">3</div>
         </div>
         <div class="flex-1">
-          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mt-1.5 mb-2">A largo plazo (&gt;${fmtEur(phase3k)})</p>
+          <p class="text-xs font-semibold ${phase3TextColor} uppercase tracking-wide mt-1.5 mb-2">${phase3Label}</p>
           <div class="p-4 bg-gray-50 border border-gray-100 rounded-xl">
             <h4 class="text-sm font-semibold text-gray-500 mb-2">El siguiente nivel</h4>
             <ul class="space-y-2 text-xs text-gray-500">
@@ -1802,7 +1825,8 @@ function renderProjectionMiniChart(monthly, capital) {
 }
 
 function renderProductCards(riskProfile, objetivos, ccaa, inversiones, step1, step5, step2) {
-  const complexity = getPortfolioComplexity(step1, step5);
+  const totalInvertido = (inversiones || []).reduce((s, i) => s + i.importe, 0);
+  const complexity = getPortfolioComplexity(step1, step5, totalInvertido);
   const blueprint = PORTFOLIO_BLUEPRINTS[riskProfile]?.[complexity];
   if (!blueprint) return '<p class="text-gray-400 text-sm">No hay cartera disponible para tu perfil.</p>';
 
@@ -1909,7 +1933,7 @@ function renderProductCards(riskProfile, objetivos, ccaa, inversiones, step1, st
       compact: true,
     });
   } else if (isManaged) {
-    html += renderInvestmentRoadmap(blueprint, riskProfile, ahorro, showCrypto, hasTax, isEpsv, Number(step1?.ahorros_liquidos) || 0);
+    html += renderInvestmentRoadmap(blueprint, riskProfile, ahorro, showCrypto, hasTax, isEpsv, (Number(step1?.ahorros_liquidos) || 0) + totalInvertido);
   } else {
     // DIY mode: ETF portfolio + broker comparison
     html += renderDiyPortfolioSection(blueprint, riskProfile, inversiones);
@@ -2044,7 +2068,8 @@ function renderActionPlan(health, riskProfile, data) {
 function buildMonthlyAllocationSection(ahorro, allocation, riskProfile, isEpsv, laboral, tramo, inversiones, step1, step5, step2) {
   inversiones = inversiones || [];
   const hasTax = laboral === 'asalariado' || laboral === 'autonomo';
-  const complexity = getPortfolioComplexity(step1, step5);
+  const totalInvertidoMA = inversiones.reduce((s, i) => s + i.importe, 0);
+  const complexity = getPortfolioComplexity(step1, step5, totalInvertidoMA);
   const blueprint = PORTFOLIO_BLUEPRINTS[riskProfile]?.[complexity];
 
   // Managed levels (1–3): visual card with big number, platform badge, fund chips
@@ -2555,7 +2580,7 @@ function buildRebalancingSection(inversiones, riskProfile, horizonKey, step1, st
 
   // Use blueprint targets so this table matches what's shown in Products.
   // Fall back to theoretical ALLOCATIONS if no blueprint (Level 1 / managed).
-  const complexity = getPortfolioComplexity(step1, step5);
+  const complexity = getPortfolioComplexity(step1, step5, totalInvertido);
   const blueprint = PORTFOLIO_BLUEPRINTS[riskProfile]?.[complexity];
   let allocation;
   if (blueprint && !blueprint.managed) {
@@ -2659,7 +2684,7 @@ function buildInvestmentPlanSection(inversiones, riskProfile, horizonKey, ahorro
 
   // 3. Platform coherence note: if user is already on a managed platform different from what we'd recommend
   if (existingManagedPlatform) {
-    const complexity = getPortfolioComplexity(step1, step5);
+    const complexity = getPortfolioComplexity(step1, step5, totalInvertido);
     const blueprint = PORTFOLIO_BLUEPRINTS[riskProfile]?.[complexity];
     const recPlatform = blueprint?.products?.[0]?.platform;
     if (recPlatform && recPlatform !== existingManagedPlatform && blueprint?.managed) {
@@ -2940,10 +2965,12 @@ function renderHorizonContext(horizonRaw, riskProfile, origRiskProfile, data) {
   const gastos         = ingresos > ahorro_mensual ? ingresos - ahorro_mensual : 0;
   const riesgo_3       = Number(step5.riesgo_3) || 0;
   const riesgo_1       = Number(step5.riesgo_1) || 0;
+  const totalInvertido = inversiones.reduce((s, i) => s + (i.importe || 0), 0);
 
   const targetMonths    = riesgo_3 === 0 ? 6 : riesgo_3 === 1 ? 4 : 3;
   const emergencyTarget = gastos > 0 ? gastos * targetMonths : 0;
   const capitalToInvest = Math.max(0, ahorros - emergencyTarget);
+  const capitalConInvertido = capitalToInvest + totalInvertido;
   const emergencyCovered = emergencyTarget <= 0 || ahorros >= emergencyTarget;
 
   let html = '';
@@ -2982,7 +3009,7 @@ function renderHorizonContext(horizonRaw, riskProfile, origRiskProfile, data) {
     }
     html += _hzDIYShortPortfolio(capitalToInvest, riesgo_3);
     if (inversiones.length > 0) html += _hzShortTermAlert(inversiones);
-    html += _hzEscalation(capitalToInvest, ahorro_mensual);
+    html += _hzEscalation(capitalConInvertido, ahorro_mensual);
   }
 
   if (horizonRaw === '3_5' || horizonRaw === '5_plus') {

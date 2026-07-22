@@ -2011,7 +2011,7 @@ function completeFastTrack() {
   const profile = JSON.parse(localStorage.getItem('iw_profile') || '{}');
   const s5 = profile.step5 || {};
   const total = calcRiskScore(s5);
-  let rp = total <= 3 ? 'conservador' : total <= 7 ? 'moderado' : total <= 10 ? 'dinamico' : 'agresivo';
+  let rp = total <= 2 ? 'conservador' : total <= 5 ? 'moderado' : total <= 7 ? 'dinamico' : 'agresivo';
 
   // Store uncapped profile, then apply horizon-based capping
   const origRiskProfile = rp;

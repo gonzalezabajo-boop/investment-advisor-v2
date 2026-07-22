@@ -1832,6 +1832,59 @@ function renderProductCards(riskProfile, objetivos, ccaa, inversiones, step1, st
 
   let html = contextBanner;
 
+  // ── Distribución inicial de ahorros ──────────────────────────────────────
+  const ahorros = Number(step1?.ahorros_liquidos) || 0;
+  const gastosMes = Math.max(0, (Number(step2?.ingresos) || 0) - ahorro);
+  if (ahorros > 0) {
+    const mesesTarget = riskProfile === 'conservador' ? 6 : riskProfile === 'moderado' ? 4 : 3;
+    const fondoTarget = gastosMes * mesesTarget;
+    const fondoReservar = Math.min(ahorros, fondoTarget);
+    const invertible = Math.max(0, ahorros - fondoReservar);
+    const fondoOk = ahorros >= fondoTarget;
+    const mesesActuales = gastosMes > 0 ? (ahorros / gastosMes).toFixed(1) : null;
+
+    let alloc = '';
+    if (invertible > 0 && !isSavingsMode) {
+      if (isManaged) {
+        alloc = `<p class="text-xs text-gray-600 mt-3">Ingresa los <strong>${fmtEur(invertible)}</strong> directamente al roboadvisor — distribuirá automáticamente según tu perfil.</p>`;
+      } else if (blueprint?.products?.length) {
+        alloc = `<div class="mt-3 space-y-1.5">
+          <p class="text-xs font-semibold text-gray-700 mb-2">Cómo distribuir los ${fmtEur(invertible)}:</p>` +
+          blueprint.products.map(p => {
+            const amt = Math.round(invertible * p.pct / 100);
+            const nm = p.name.length > 38 ? p.name.slice(0, 38) + '…' : p.name;
+            return `<div class="flex items-center justify-between text-xs py-1 border-b border-gray-100 last:border-0">
+              <span class="text-gray-700">${p.logo || '•'} ${nm}</span>
+              <span class="font-semibold text-gray-900 ml-3 shrink-0">${p.pct}% · ${fmtEur(amt)}</span>
+            </div>`;
+          }).join('') +
+          `</div>`;
+      }
+    }
+
+    html += `<div class="mb-6 p-4 bg-gradient-to-br from-slate-50 to-blue-50 border border-blue-100 rounded-2xl">
+      <p class="text-sm font-bold text-gray-900 mb-3">💡 Cómo distribuir tus ${fmtEur(ahorros)} de ahorros</p>
+      <div class="grid grid-cols-3 gap-2 mb-3">
+        <div class="text-center p-2.5 bg-white rounded-xl border border-gray-100">
+          <p class="text-xs text-gray-400 mb-1">Total disponible</p>
+          <p class="text-sm font-bold text-gray-900">${fmtEur(ahorros)}</p>
+        </div>
+        <div class="text-center p-2.5 bg-white rounded-xl border border-${fondoOk ? 'green' : 'amber'}-100">
+          <p class="text-xs text-gray-400 mb-1">Fondo emergencia</p>
+          <p class="text-sm font-bold text-${fondoOk ? 'green' : 'amber'}-700">${fmtEur(fondoReservar)}</p>
+          <p class="text-xs text-gray-400">${mesesTarget} meses</p>
+        </div>
+        <div class="text-center p-2.5 bg-white rounded-xl border border-blue-100">
+          <p class="text-xs text-gray-400 mb-1">Para invertir</p>
+          <p class="text-sm font-bold text-blue-700">${fmtEur(invertible)}</p>
+        </div>
+      </div>
+      ${!fondoOk && gastosMes > 0 ? `<p class="text-xs text-amber-700 bg-amber-50 rounded-lg px-3 py-2 mb-2">⚠️ Tu fondo de emergencia ideal es ${fmtEur(fondoTarget)} (${mesesTarget} meses de gastos). Te faltan ${fmtEur(fondoTarget - ahorros)} — destina parte del ahorro mensual hasta completarlo.</p>` : ''}
+      ${fondoOk && mesesActuales ? `<p class="text-xs text-green-700 bg-green-50 rounded-lg px-3 py-2 mb-2">✅ Tienes ${mesesActuales} meses de gastos cubiertos. Fondo de emergencia correcto.</p>` : ''}
+      ${invertible === 0 && !isSavingsMode ? `<p class="text-xs text-gray-500">Ahora mismo todo tu ahorro debería ir al fondo de emergencia. Cuando lo completes, el excedente va a inversión.</p>` : alloc}
+    </div>`;
+  }
+
   // ── Section 1: Main investment ────────────────────────────────────────────
   if (isSavingsMode) {
     html += renderPlatformSection({

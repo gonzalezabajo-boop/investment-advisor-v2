@@ -1913,8 +1913,31 @@ function showQuestion(n) {
   document.getElementById('q-counter').textContent = `${n + 1} de ${FAST_TRACK.length}`;
   document.getElementById('q-progress-bar').style.width = `${((n + 1) / FAST_TRACK.length) * 100}%`;
   document.getElementById('q-prev').classList.toggle('hidden', n === 0);
+
+  // Restaurar valor guardado para esta pregunta
+  const q = FAST_TRACK[n];
+  let hasPrefilledValue = false;
+  if (q) {
+    const profile = JSON.parse(localStorage.getItem('iw_profile') || '{}');
+    const savedVal = profile[`step${q.step}`]?.[q.id];
+    if (savedVal !== undefined && savedVal !== null && savedVal !== '') {
+      if (q.type === 'number') {
+        const el = document.getElementById(q.inputId);
+        if (el) {
+          // type="number" acepta raw; type="text" muestra formateado
+          el.value = el.type === 'number' ? String(savedVal) : Number(savedVal).toLocaleString('es-ES');
+          hasPrefilledValue = true;
+        }
+      } else if (q.type === 'radio') {
+        const radio = document.querySelector(`input[name="${q.name}"][value="${savedVal}"]`);
+        if (radio) radio.checked = true;
+      }
+    }
+  }
+
+  // Solo hacer auto-focus en campos vacíos para no deformar el valor pre-rellenado
   const input = screen.querySelector('input[inputmode="numeric"], input[type="number"]');
-  if (input) setTimeout(() => input.focus(), 80);
+  if (input && !hasPrefilledValue) setTimeout(() => input.focus(), 80);
 
   // Q7 (riesgo_1): filtrar opciones según si ya invierte o no
   if (n + 1 === 7) {
@@ -2197,7 +2220,16 @@ document.addEventListener('change', e => {
   setTimeout(nextQuestion, 250);
 });
 
-showIntro();
+// Si hay datos guardados, volver al wizard pre-rellenado en lugar de mostrar la intro
+(function init() {
+  const saved = JSON.parse(localStorage.getItem('iw_profile') || '{}');
+  const hasData = saved.step1?.edad || saved.step1?.ahorros_liquidos;
+  if (hasData) {
+    startWizard();
+  } else {
+    showIntro();
+  }
+})();
 
 function showIntro() {
   document.getElementById('q-progress-row').style.display = 'none';

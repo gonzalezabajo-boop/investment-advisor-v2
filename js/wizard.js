@@ -2227,7 +2227,7 @@ function submitLead() {
   const nombre   = document.getElementById('lead-nombre').value.trim();
   const apellido = document.getElementById('lead-apellido').value.trim();
   const movil    = document.getElementById('lead-movil').value.trim();
-  const telefono = document.getElementById('lead-telefono').value.trim();
+  const email    = document.getElementById('lead-email').value.trim();
   const terms    = document.getElementById('lead-terms').checked;
 
   if (!nombre || !apellido || !movil || !terms) {
@@ -2237,7 +2237,7 @@ function submitLead() {
   document.getElementById('lead-err').classList.add('hidden');
 
   const profile = JSON.parse(localStorage.getItem('iw_profile') || '{}');
-  profile.lead = { nombre, apellido, movil, telefono };
+  profile.lead = { nombre, apellido, movil, email };
   localStorage.setItem('iw_profile', JSON.stringify(profile));
 
   window.location.href = 'results.html';

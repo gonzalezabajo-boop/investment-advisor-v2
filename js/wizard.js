@@ -1898,7 +1898,6 @@ const FAST_TRACK = [
   { id: 'ahorro_mensual',   type: 'number', inputId: 'q-ahorro',     step: 2, required: true  },
   { id: 'ya_inviertes',     type: 'radio',  name:    'q-ya-inviertes', step: 1, required: true },
   { id: 'horizonte',        type: 'radio',  name:    'q-horizonte',  step: 1, required: true  },
-  { id: 'riesgo_1',         type: 'radio',  name:    'q-r1',         step: 5, required: true  },
   { id: 'riesgo_3',         type: 'radio',  name:    'q-r3',         step: 5, required: true  },
   { id: 'riesgo_7',         type: 'radio',  name:    'q-r7',         step: 5, required: true  },
 ];
@@ -1939,18 +1938,6 @@ function showQuestion(n) {
   const input = screen.querySelector('input[inputmode="numeric"], input[type="number"]');
   if (input && !hasPrefilledValue) setTimeout(() => input.focus(), 80);
 
-  // Q7 (riesgo_1): filtrar opciones según si ya invierte o no
-  if (n + 1 === 7) {
-    const profile = JSON.parse(localStorage.getItem('iw_profile') || '{}');
-    const yaInviertes = profile.step1?.ya_inviertes;
-    document.querySelectorAll('[name="q-r1"]').forEach(radio => {
-      const label = radio.closest('label');
-      const v = Number(radio.value);
-      if (label) label.classList.toggle('hidden',
-        (yaInviertes === 'no' && v > 1) || (yaInviertes === 'si' && v < 2)
-      );
-    });
-  }
 }
 
 function ftFormatNum(el) {
@@ -2028,13 +2015,13 @@ function prevQuestion() {
 }
 
 const calcRiskScore = s5 =>
-  ['riesgo_1', 'riesgo_2', 'riesgo_3', 'riesgo_7'].reduce((t, k) => t + (Number(s5[k]) || 0), 0);
+  ['riesgo_2', 'riesgo_3', 'riesgo_7'].reduce((t, k) => t + (Number(s5[k]) || 0), 0);
 
 function completeFastTrack() {
   const profile = JSON.parse(localStorage.getItem('iw_profile') || '{}');
   const s5 = profile.step5 || {};
   const total = calcRiskScore(s5);
-  let rp = total <= 2 ? 'conservador' : total <= 5 ? 'moderado' : total <= 7 ? 'dinamico' : 'agresivo';
+  let rp = total <= 1 ? 'conservador' : total <= 3 ? 'moderado' : total <= 5 ? 'dinamico' : 'agresivo';
 
   // Store uncapped profile, then apply horizon-based capping
   const origRiskProfile = rp;
@@ -2056,7 +2043,7 @@ function completeFastTrack() {
   localStorage.setItem('iw_profile', JSON.stringify(profile));
   showRiskProfileInDash(rp, total);
   document.querySelectorAll('.q-screen').forEach(el => el.classList.add('hidden'));
-  const ctaScreen = document.querySelector('.q-screen[data-q="10"]');
+  const ctaScreen = document.querySelector('.q-screen[data-q="9"]');
   if (ctaScreen) ctaScreen.classList.remove('hidden');
   document.getElementById('q-next').classList.add('hidden');
   document.getElementById('q-prev').classList.add('hidden');
@@ -2158,7 +2145,7 @@ const DASHBOARD_UPDATES = {
     const profile = JSON.parse(localStorage.getItem('iw_profile') || '{}');
     const s5 = profile.step5 || {};
     const total = calcRiskScore(s5);
-    const rp = total <= 3 ? 'conservador' : total <= 7 ? 'moderado' : total <= 10 ? 'dinamico' : 'agresivo';
+    const rp = total <= 1 ? 'conservador' : total <= 3 ? 'moderado' : total <= 5 ? 'dinamico' : 'agresivo';
     showRiskProfileInDash(rp, total);
   },
 };

@@ -62,7 +62,7 @@
               <span class="text-xl">⏱</span>
               <div>
                 <p class="text-sm font-semibold text-gray-800">Cómo funciona</p>
-                <p class="text-sm text-gray-500">9 preguntas sobre tu situación y tolerancia al riesgo. En menos de 1 minuto tienes una comparativa.</p>
+                <p class="text-sm text-gray-500">8 preguntas sobre tu situación y tolerancia al riesgo. En menos de 1 minuto tienes una comparativa.</p>
               </div>
             </div>
           </div>
@@ -74,7 +74,7 @@
 
         <!-- "X de 10" progress -->
         <div id="q-progress-row" style="display:none" class="flex items-center gap-3 mb-8">
-          <span id="q-counter" class="text-sm text-gray-400 tabular-nums w-16">1 de 10</span>
+          <span id="q-counter" class="text-sm text-gray-400 tabular-nums w-16">1 de 8</span>
           <div class="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden">
             <div id="q-progress-bar" class="h-1 bg-blue-500 rounded-full transition-all duration-400" style="width:10%"></div>
           </div>
@@ -148,15 +148,15 @@
                 <div class="option-content py-7">
                   <span class="text-3xl mb-2">🌱</span>
                   <span class="text-sm font-semibold text-gray-800">Estoy empezando</span>
-                  <span class="text-xs text-gray-400 mt-1">No tengo nada todavía</span>
+                  <span class="text-xs text-gray-400 mt-1">No tengo nada invertido todavía</span>
                 </div>
               </label>
               <label class="option-card">
                 <input type="radio" name="q-ya-inviertes" value="si" class="hidden">
                 <div class="option-content py-7">
                   <span class="text-3xl mb-2">📊</span>
-                  <span class="text-sm font-semibold text-gray-800">Sí, ya invierto</span>
-                  <span class="text-xs text-gray-400 mt-1">Tengo alguna inversión</span>
+                  <span class="text-sm font-semibold text-gray-800">Tengo algo invertido</span>
+                  <span class="text-xs text-gray-400 mt-1">Aunque sea poco</span>
                 </div>
               </label>
             </div>
@@ -165,8 +165,8 @@
 
           <!-- Portfolio input screen (conditional, shown when ya_inviertes=si) -->
           <div class="q-screen hidden" data-q="portfolio-input">
-            <h2 class="text-2xl font-bold text-gray-900 mb-2">¿Qué tienes ahora?</h2>
-            <p class="text-sm text-gray-400 mb-4">Registra tus inversiones actuales para que las analicemos junto a tu recomendación.</p>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Cuéntanos lo poco que tienes invertido</h2>
+            <p class="text-sm text-gray-400 mb-4">Así lo tenemos en cuenta al recomendarte dónde poner el resto de tu dinero.</p>
 
             <!-- Tab bar -->
             <div class="flex gap-1 p-1 bg-gray-100 rounded-xl mb-4">
@@ -271,24 +271,8 @@
             <p id="q-horizonte-err" class="hidden text-xs text-red-500 mt-3 text-center">Selecciona una opción.</p>
           </div>
 
-          <!-- Q7: riesgo_1 — experiencia -->
+          <!-- Q7: riesgo_3 — liquidez -->
           <div class="q-screen hidden" data-q="7">
-            <h2 class="text-2xl font-bold text-gray-900 mb-2">¿Cuánta experiencia tienes invirtiendo?</h2>
-            <details class="mb-6">
-              <summary class="cursor-pointer list-none text-xs text-gray-300 hover:text-gray-500 transition-colors select-none">¿Por qué te preguntamos esto? ▾</summary>
-              <p class="text-sm text-gray-400 mt-2">No hay respuesta correcta. Si llevas tiempo invirtiendo y sabes que las caídas son temporales, puedes asumir más volatilidad sin ansiedad. Si estás empezando, te proponemos algo más sencillo para que entiendas bien lo que tienes.</p>
-            </details>
-            <div class="space-y-3">
-              <label class="risk-option"><input type="radio" name="q-r1" value="0" class="mr-3"><span class="text-sm text-gray-700">Ninguna — soy nuevo en esto</span></label>
-              <label class="risk-option"><input type="radio" name="q-r1" value="1" class="mr-3"><span class="text-sm text-gray-700">Algo de experiencia (menos de 2 años)</span></label>
-              <label class="risk-option"><input type="radio" name="q-r1" value="2" class="mr-3"><span class="text-sm text-gray-700">Experiencia moderada (2–5 años)</span></label>
-              <label class="risk-option"><input type="radio" name="q-r1" value="3" class="mr-3"><span class="text-sm text-gray-700">Inversor experimentado (+5 años)</span></label>
-            </div>
-            <p id="q-r1-err" class="hidden text-xs text-red-500 mt-3 text-center">Selecciona una opción.</p>
-          </div>
-
-          <!-- Q8: riesgo_3 — liquidez -->
-          <div class="q-screen hidden" data-q="8">
             <h2 class="text-2xl font-bold text-gray-900 mb-2">¿Cuándo necesitarías este dinero si surgiera una emergencia?</h2>
             <details class="mb-6">
               <summary class="cursor-pointer list-none text-xs text-gray-300 hover:text-gray-500 transition-colors select-none">¿Por qué te preguntamos esto? ▾</summary>
@@ -302,8 +286,8 @@
             <p id="q-r3-err" class="hidden text-xs text-red-500 mt-3 text-center">Selecciona una opción.</p>
           </div>
 
-          <!-- Q9: riesgo_7 — tolerancia a caídas (merged) -->
-          <div class="q-screen hidden" data-q="9">
+          <!-- Q8: riesgo_7 — tolerancia a caídas (merged) -->
+          <div class="q-screen hidden" data-q="8">
             <h2 class="text-2xl font-bold text-gray-900 mb-2">Si tu cartera cayera un 30% el próximo año...</h2>
             <details class="mb-6">
               <summary class="cursor-pointer list-none text-xs text-gray-300 hover:text-gray-500 transition-colors select-none">¿Por qué te preguntamos esto? ▾</summary>
@@ -319,7 +303,7 @@
           </div>
 
           <!-- Q10: CTA -->
-          <div class="q-screen hidden" data-q="10">
+          <div class="q-screen hidden" data-q="9">
             <h2 class="text-2xl font-bold text-gray-900 mb-2">Listo para tu análisis 🎉</h2>
             <p class="text-sm text-gray-400 mb-8">Con estas respuestas tenemos suficiente para orientarte sobre qué cartera podría encajar con tu perfil.</p>
             <button onclick="showLeadForm()"

@@ -1824,6 +1824,118 @@ function renderProjectionMiniChart(monthly, capital) {
   });
 }
 
+const ASSET_CLASS_EXPLAIN = {
+  equities:    { icon: '📈', label: 'Renta variable (acciones)', explain: 'Eres dueño de una pequeña parte de miles de empresas de todo el mundo. Es lo que hace crecer tu dinero a largo plazo, aunque sube y baja más en el corto plazo.' },
+  fixedIncome: { icon: '🏛️', label: 'Renta fija (bonos)', explain: 'Le prestas dinero a gobiernos o grandes empresas a cambio de un interés fijo. Amortigua las caídas de la parte de acciones.' },
+  cash:        { icon: '💶', label: 'Liquidez / ahorro', explain: 'Dinero disponible en cualquier momento, remunerado a un interés fijo. Sin riesgo, para tu fondo de emergencia o lo que aún no inviertes.' },
+  alternatives:{ icon: '🏢', label: 'Inmobiliario (REITs)', explain: 'Empresas que poseen y alquilan edificios cotizadas en bolsa. Te da exposición al ladrillo sin comprar un piso.' },
+  commodities: { icon: '🥇', label: 'Oro', explain: 'Cobertura frente a inflación y crisis — no se mueve igual que las acciones ni los bonos.' },
+};
+
+function classifyAssetClass(item) {
+  if (item.asset_class && ASSET_CLASS_EXPLAIN[item.asset_class]) return item.asset_class;
+  const n = (item.name || '').toLowerCase();
+  if (n.includes('bond')) return 'fixedIncome';
+  if (n.includes('gold')) return 'commodities';
+  if (n.includes('reit') || n.includes('nareit') || n.includes('real estate')) return 'alternatives';
+  if (n.includes('cuenta remunerada') || n.includes('remunerad')) return 'cash';
+  return 'equities';
+}
+
+function renderWhatYouInvestIn(blueprint) {
+  const primary = blueprint?.products?.[0];
+  if (!primary || blueprint.savings_mode) return '';
+  const items = (primary.composition?.length ? primary.composition : blueprint.products) || [];
+  if (!items.length) return '';
+  const grouped = {};
+  items.forEach(it => {
+    const cls = classifyAssetClass(it);
+    grouped[cls] = (grouped[cls] || 0) + (Number(it.pct) || 0);
+  });
+  const order = ['equities', 'fixedIncome', 'alternatives', 'commodities', 'cash'];
+  const rows = order.filter(k => grouped[k] > 0).map(k => {
+    const meta = ASSET_CLASS_EXPLAIN[k];
+    return `<div class="flex items-start gap-3 py-2.5 border-b border-gray-100 last:border-0">
+      <span class="text-xl shrink-0">${meta.icon}</span>
+      <div class="flex-1">
+        <div class="flex items-center justify-between mb-0.5">
+          <span class="text-sm font-semibold text-gray-800">${meta.label}</span>
+          <span class="text-sm font-bold text-gray-900">${Math.round(grouped[k])}%</span>
+        </div>
+        <p class="text-xs text-gray-500">${meta.explain}</p>
+      </div>
+    </div>`;
+  }).join('');
+  if (!rows) return '';
+  return `
+    <div class="mb-6 p-4 bg-white border border-gray-100 rounded-2xl">
+      <p class="text-sm font-bold text-gray-900 mb-1">🔍 ¿En qué estás invirtiendo exactamente?</p>
+      <p class="text-xs text-gray-400 mb-3">Así se reparte tu dinero dentro de "${primary.name}":</p>
+      ${rows}
+    </div>`;
+}
+
+function renderStartChecklist(riskProfile, step1, step2, step5, inversiones) {
+  const totalInvertido = (inversiones || []).reduce((s, i) => s + (i.importe || 0), 0);
+  const complexity = getPortfolioComplexity(step1, step5, totalInvertido);
+  const blueprint = PORTFOLIO_BLUEPRINTS[riskProfile]?.[complexity];
+  const primary = blueprint?.products?.[0];
+  if (!primary) return '';
+
+  const ahorros = Number(step1?.ahorros_liquidos) || 0;
+  const ingresos = Number(step2?.ingresos) || 0;
+  const ahorroMensual = Number(step2?.ahorro_mensual) || 0;
+  const gastosMes = Math.max(0, ingresos - ahorroMensual);
+  const mesesTarget = riskProfile === 'conservador' ? 6 : riskProfile === 'moderado' ? 4 : 3;
+  const fondoTarget = gastosMes > 0 ? gastosMes * mesesTarget : 0;
+  const fondoOk = ahorros >= fondoTarget;
+  const invertible = Math.max(0, ahorros - Math.min(ahorros, fondoTarget));
+
+  const step1Html = `
+    <div class="flex gap-3">
+      <div class="w-7 h-7 rounded-full ${fondoOk ? 'bg-green-500' : 'bg-blue-600'} flex items-center justify-center text-white text-xs font-bold shrink-0">${fondoOk ? '✓' : '1'}</div>
+      <div class="flex-1 pb-4">
+        <p class="text-sm font-bold text-gray-900 mb-0.5">🛡️ Fondo de emergencia</p>
+        ${fondoTarget > 0
+          ? (fondoOk
+              ? `<p class="text-xs text-green-700">Cubierto: tienes ${fmtEur(ahorros)}, y necesitas ${fmtEur(fondoTarget)} (${mesesTarget} meses de gastos). Puedes invertir el resto.</p>`
+              : `<p class="text-xs text-amber-700">Necesitas ${fmtEur(fondoTarget)} (${mesesTarget} meses de gastos) en una cuenta remunerada antes de invertir. Ahora mismo tienes ${fmtEur(ahorros)} — te faltan ${fmtEur(fondoTarget - ahorros)}.</p>`)
+          : `<p class="text-xs text-gray-500">Reserva unos meses de gastos en una cuenta remunerada antes de invertir, para no tener que vender en un mal momento.</p>`}
+      </div>
+    </div>`;
+
+  const step2Html = `
+    <div class="flex gap-3">
+      <div class="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold shrink-0">2</div>
+      <div class="flex-1 pb-4">
+        <p class="text-sm font-bold text-gray-900 mb-0.5">🏦 Abre cuenta en ${primary.platform}</p>
+        <p class="text-xs text-gray-500 mb-2">${primary.name}${primary.fees ? ` · ${primary.fees}` : ''}</p>
+        <a href="${primary.url || '#'}" target="_blank" rel="noopener noreferrer"
+           class="inline-block px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg transition-colors">
+          Abrir cuenta en ${primary.platform} →
+        </a>
+      </div>
+    </div>`;
+
+  const step3Html = `
+    <div class="flex gap-3">
+      <div class="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold shrink-0">3</div>
+      <div class="flex-1">
+        <p class="text-sm font-bold text-gray-900 mb-0.5">📅 Aporta cada mes</p>
+        <p class="text-xs text-gray-500">
+          ${ahorroMensual > 0 ? `Programa <strong class="text-gray-700">${fmtEur(ahorroMensual)}/mes</strong> — es lo que nos dijiste que ahorras.` : 'En cuanto empieces a ahorrar cada mes, programa una aportación automática.'}
+          ${invertible > 0 ? ` Además, ya tienes <strong class="text-gray-700">${fmtEur(invertible)}</strong> listos para invertir hoy mismo.` : ''}
+        </p>
+      </div>
+    </div>`;
+
+  return `
+    <div class="mb-6 p-5 bg-gradient-to-br from-blue-50 to-white border border-blue-100 rounded-2xl">
+      <p class="text-xs font-semibold text-blue-600 uppercase tracking-wide mb-4">Qué hacer con tu dinero, en 3 pasos</p>
+      ${step1Html}${step2Html}${step3Html}
+    </div>`;
+}
+
 function renderProductCards(riskProfile, objetivos, ccaa, inversiones, step1, step5, step2) {
   const totalInvertido = (inversiones || []).reduce((s, i) => s + i.importe, 0);
   const complexity = getPortfolioComplexity(step1, step5, totalInvertido);
@@ -1911,6 +2023,8 @@ function renderProductCards(riskProfile, objetivos, ccaa, inversiones, step1, st
       ${invertible === 0 && !isSavingsMode ? `<p class="text-xs text-gray-500">Ahora mismo todo tu ahorro debería ir al fondo de emergencia. Cuando lo completes, el excedente va a inversión.</p>` : alloc}
     </div>`;
   }
+
+  html += renderWhatYouInvestIn(blueprint);
 
   // ── Section 1: Main investment ────────────────────────────────────────────
   if (isSavingsMode) {
@@ -3785,6 +3899,9 @@ window.generateResults = function () {
       horizonContextEl.innerHTML = renderHorizonContext(hzRaw, riskProfile, data.origRiskProfile || riskProfile, data);
     }
   }
+
+  const startChecklistEl = document.getElementById('start-checklist');
+  if (startChecklistEl) startChecklistEl.innerHTML = renderStartChecklist(riskProfile, step1, step2, step5, inversiones);
 
   document.getElementById('products-section').innerHTML = renderProductCards(riskProfile, objetivos, ccaa, inversiones, step1, step5, step2);
   renderProjectionMiniChart(Number(step2?.ahorro_mensual) || 0, Number(step1?.ahorros_liquidos) || 0);

@@ -56,6 +56,12 @@
     @keyframes panelFillIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
     .progress-ring circle { transition: stroke-dashoffset 0.5s ease; }
     .gauge-dot { transition: left 0.35s cubic-bezier(.4,0,.2,1); }
+
+    /* Mobile bottom-sheet live panel: force open + static on desktop */
+    @media (min-width: 1024px) {
+      #panel-content-scroll { max-height: none !important; }
+    }
+    #panel-chevron.rotated { transform: rotate(180deg); }
   </style>
 </head>
 <body class="min-h-screen">
@@ -104,7 +110,7 @@
   <!-- ======================================================= -->
   <div id="wizard-shell" style="display:none">
     <div class="min-h-screen px-4 py-10">
-      <div class="max-w-5xl mx-auto">
+      <div class="max-w-5xl mx-auto pb-14 lg:pb-0">
 
         <div class="flex items-center gap-2 mb-8">
           <div class="w-8 h-8 bg-blue-700 rounded-lg flex items-center justify-center">
@@ -129,14 +135,14 @@
                 </div>
               </div>
 
-              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-8">
+              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-5 sm:p-8">
                 <div class="text-4xl mb-4">💰</div>
-                <h2 class="font-display text-2xl font-semibold text-blue-950 mb-2">¿Cuánto tienes ahorrado ahora mismo?</h2>
+                <h2 class="font-display text-xl sm:text-2xl font-semibold text-blue-950 mb-2">¿Cuánto tienes ahorrado ahora mismo?</h2>
                 <p class="text-gray-500 text-sm mb-6">Incluye todo lo que tienes líquido: cuenta corriente, depósitos, cuenta de ahorro. No cuentes el valor de tu casa ni el plan de pensiones.</p>
 
                 <div class="relative mb-6">
                   <input type="number" id="q1-ahorros" placeholder="0"
-                    class="w-full text-3xl font-bold text-blue-950 border-2 border-blue-100 rounded-2xl px-6 py-4 focus:outline-none focus:border-blue-600 bg-blue-50/50"
+                    class="w-full text-2xl sm:text-3xl font-bold text-blue-950 border-2 border-blue-100 rounded-2xl px-4 sm:px-6 py-3 sm:py-4 focus:outline-none focus:border-blue-600 bg-blue-50/50"
                     style="padding-right: 3.5rem" inputmode="numeric">
                   <span class="absolute right-5 top-1/2 -translate-y-1/2 text-2xl font-bold text-gray-400">€</span>
                 </div>
@@ -166,14 +172,14 @@
                 </div>
               </div>
 
-              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-8">
+              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-5 sm:p-8">
                 <div class="text-4xl mb-4">📅</div>
-                <h2 class="font-display text-2xl font-semibold text-blue-950 mb-2">¿Cuánto puedes apartar cada mes?</h2>
+                <h2 class="font-display text-xl sm:text-2xl font-semibold text-blue-950 mb-2">¿Cuánto puedes apartar cada mes?</h2>
                 <p class="text-gray-500 text-sm mb-6">Piensa en una cantidad que no echarás de menos. Puedes empezar pequeño — lo importante es la constancia, no el importe.</p>
 
                 <div class="relative mb-4">
                   <input type="number" id="q2-mensual" placeholder="0"
-                    class="w-full text-3xl font-bold text-blue-950 border-2 border-blue-100 rounded-2xl px-6 py-4 focus:outline-none focus:border-blue-600 bg-blue-50/50"
+                    class="w-full text-2xl sm:text-3xl font-bold text-blue-950 border-2 border-blue-100 rounded-2xl px-4 sm:px-6 py-3 sm:py-4 focus:outline-none focus:border-blue-600 bg-blue-50/50"
                     style="padding-right: 3.5rem" inputmode="numeric">
                   <span class="absolute right-5 top-1/2 -translate-y-1/2 text-2xl font-bold text-gray-400">€</span>
                 </div>
@@ -210,27 +216,27 @@
                 </div>
               </div>
 
-              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-8">
+              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-5 sm:p-8">
                 <div class="text-4xl mb-4">🗓️</div>
-                <h2 class="font-display text-2xl font-semibold text-blue-950 mb-2">¿Cuándo necesitarás este dinero?</h2>
+                <h2 class="font-display text-xl sm:text-2xl font-semibold text-blue-950 mb-2">¿Cuándo necesitarás este dinero?</h2>
                 <p class="text-gray-500 text-sm mb-6">Cuanto más tiempo dejes crecer tu inversión, más riesgo puedes asumir y más rentabilidad puedes esperar.</p>
 
                 <div class="space-y-3 mb-6">
-                  <div class="card-option border-2 border-gray-200 rounded-2xl p-4 flex items-center gap-4" data-q="q3" data-val="corto" onclick="selectCard(this,'q3')">
+                  <div class="card-option border-2 border-gray-200 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4" data-q="q3" data-val="corto" onclick="selectCard(this,'q3')">
                     <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center text-xl shrink-0">⚡</div>
                     <div>
                       <p class="font-semibold text-gray-900">Menos de 3 años</p>
                       <p class="text-sm text-gray-500">Lo necesitaré pronto — vacaciones, coche, entrada de piso</p>
                     </div>
                   </div>
-                  <div class="card-option border-2 border-gray-200 rounded-2xl p-4 flex items-center gap-4" data-q="q3" data-val="medio" onclick="selectCard(this,'q3')">
+                  <div class="card-option border-2 border-gray-200 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4" data-q="q3" data-val="medio" onclick="selectCard(this,'q3')">
                     <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-xl shrink-0">📆</div>
                     <div>
                       <p class="font-semibold text-gray-900">3 a 10 años</p>
                       <p class="text-sm text-gray-500">Meta a medio plazo — educación de hijos, ampliar vivienda</p>
                     </div>
                   </div>
-                  <div class="card-option border-2 border-gray-200 rounded-2xl p-4 flex items-center gap-4" data-q="q3" data-val="largo" onclick="selectCard(this,'q3')">
+                  <div class="card-option border-2 border-gray-200 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4" data-q="q3" data-val="largo" onclick="selectCard(this,'q3')">
                     <div class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-xl shrink-0">🌳</div>
                     <div>
                       <p class="font-semibold text-gray-900">Más de 10 años</p>
@@ -263,34 +269,34 @@
                 </div>
               </div>
 
-              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-8">
+              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-5 sm:p-8">
                 <div class="text-4xl mb-4">🎢</div>
-                <h2 class="font-display text-2xl font-semibold text-blue-950 mb-2">Inviertes 10.000 € y en un año valen 7.500 €. ¿Qué haces?</h2>
+                <h2 class="font-display text-xl sm:text-2xl font-semibold text-blue-950 mb-2">Inviertes 10.000 € y en un año valen 7.500 €. ¿Qué haces?</h2>
                 <p class="text-gray-500 text-sm mb-6">Una bajada del 25% es normal en los mercados. Lo que importa es cómo reaccionas emocionalmente.</p>
 
                 <div class="space-y-3 mb-6">
-                  <div class="card-option border-2 border-gray-200 rounded-2xl p-4 flex items-center gap-4" data-q="q4" data-val="conservador" onclick="selectCard(this,'q4')">
+                  <div class="card-option border-2 border-gray-200 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4" data-q="q4" data-val="conservador" onclick="selectCard(this,'q4')">
                     <div class="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center text-xl shrink-0">😰</div>
                     <div>
                       <p class="font-semibold text-gray-900">Lo retiro todo</p>
                       <p class="text-sm text-gray-500">Prefiero perder algo seguro que arriesgar más</p>
                     </div>
                   </div>
-                  <div class="card-option border-2 border-gray-200 rounded-2xl p-4 flex items-center gap-4" data-q="q4" data-val="moderado" onclick="selectCard(this,'q4')">
+                  <div class="card-option border-2 border-gray-200 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4" data-q="q4" data-val="moderado" onclick="selectCard(this,'q4')">
                     <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center text-xl shrink-0">😤</div>
                     <div>
                       <p class="font-semibold text-gray-900">Me preocupo, pero espero</p>
                       <p class="text-sm text-gray-500">No me gusta verlo bajar, pero confío en que se recupere</p>
                     </div>
                   </div>
-                  <div class="card-option border-2 border-gray-200 rounded-2xl p-4 flex items-center gap-4" data-q="q4" data-val="dinamico" onclick="selectCard(this,'q4')">
+                  <div class="card-option border-2 border-gray-200 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4" data-q="q4" data-val="dinamico" onclick="selectCard(this,'q4')">
                     <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-xl shrink-0">😎</div>
                     <div>
                       <p class="font-semibold text-gray-900">Sigo aportando, es una oportunidad</p>
                       <p class="text-sm text-gray-500">A largo plazo el mercado siempre ha subido</p>
                     </div>
                   </div>
-                  <div class="card-option border-2 border-gray-200 rounded-2xl p-4 flex items-center gap-4" data-q="q4" data-val="agresivo" onclick="selectCard(this,'q4')">
+                  <div class="card-option border-2 border-gray-200 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4" data-q="q4" data-val="agresivo" onclick="selectCard(this,'q4')">
                     <div class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-xl shrink-0">🤑</div>
                     <div>
                       <p class="font-semibold text-gray-900">Compro más, es el momento</p>
@@ -319,13 +325,13 @@
                 </div>
               </div>
 
-              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-8">
+              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-5 sm:p-8">
                 <div class="text-4xl mb-4">🎛️</div>
-                <h2 class="font-display text-2xl font-semibold text-blue-950 mb-2">¿Cómo quieres gestionar tu inversión?</h2>
+                <h2 class="font-display text-xl sm:text-2xl font-semibold text-blue-950 mb-2">¿Cómo quieres gestionar tu inversión?</h2>
                 <p class="text-gray-500 text-sm mb-6">No hay respuesta incorrecta. Cada camino tiene sus ventajas y las dos opciones son igual de válidas.</p>
 
                 <div class="space-y-4 mb-6">
-                  <div class="card-option border-2 border-gray-200 rounded-2xl p-5 cursor-pointer" data-q="q5" data-val="robo" onclick="selectCard(this,'q5')">
+                  <div class="card-option border-2 border-gray-200 rounded-2xl p-4 sm:p-5 cursor-pointer" data-q="q5" data-val="robo" onclick="selectCard(this,'q5')">
                     <div class="flex items-start gap-4">
                       <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-2xl shrink-0">🤖</div>
                       <div class="flex-1">
@@ -339,7 +345,7 @@
                     </div>
                   </div>
 
-                  <div class="card-option card-option-purple border-2 border-gray-200 rounded-2xl p-5 cursor-pointer" data-q="q5" data-val="diy" onclick="selectCard(this,'q5')">
+                  <div class="card-option card-option-purple border-2 border-gray-200 rounded-2xl p-4 sm:p-5 cursor-pointer" data-q="q5" data-val="diy" onclick="selectCard(this,'q5')">
                     <div class="flex items-start gap-4">
                       <div class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center text-2xl shrink-0">🧠</div>
                       <div class="flex-1">
@@ -365,9 +371,9 @@
 
             <!-- SCREEN 7: LEAD -->
             <div class="screen fade-in" id="screen-lead">
-              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-8">
+              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-5 sm:p-8">
                 <div class="text-4xl mb-4">🎉</div>
-                <h2 class="font-display text-2xl font-semibold text-blue-950 mb-2">¡Tu plan está listo!</h2>
+                <h2 class="font-display text-xl sm:text-2xl font-semibold text-blue-950 mb-2">¡Tu plan está listo!</h2>
                 <p class="text-gray-500 text-sm mb-6">Introduce tu email para guardar los resultados y recibir actualizaciones con consejos de inversión adaptados a tu perfil.</p>
 
                 <div class="space-y-4 mb-6">
@@ -396,11 +402,30 @@
 
           </div>
 
-          <!-- RIGHT: live dashboard panel (sticky on desktop) -->
-          <div class="hidden lg:block sticky top-8">
-            <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-6">
+          <!-- RIGHT / BOTTOM: live dashboard panel — sticky sidebar on desktop, collapsible bottom sheet on mobile -->
+          <div id="live-panel" class="fixed inset-x-0 bottom-0 z-40 bg-white rounded-t-3xl border-t border-black/10 shadow-[0_-8px_24px_rgba(0,0,0,0.10)] lg:static lg:z-auto lg:sticky lg:top-8 lg:rounded-3xl lg:border lg:border-black/5 lg:shadow-sm">
 
-              <div class="flex items-center gap-3 mb-5">
+            <!-- Mobile-only collapsed toggle bar -->
+            <button id="panel-toggle" onclick="togglePanel()" class="lg:hidden w-full flex items-center justify-between px-4 py-2.5">
+              <div class="flex items-center gap-2">
+                <svg class="progress-ring" width="24" height="24" viewBox="0 0 40 40">
+                  <circle cx="20" cy="20" r="17" fill="none" stroke="#E7ECF1" stroke-width="5"/>
+                  <circle id="panel-ring-mobile" cx="20" cy="20" r="17" fill="none" stroke="#1E3F5C" stroke-width="5"
+                    stroke-linecap="round" stroke-dasharray="106.8" stroke-dashoffset="106.8"
+                    transform="rotate(-90 20 20)"/>
+                </svg>
+                <span class="text-xs font-semibold text-blue-950">Tu plan en vivo</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span id="panel-mobile-metric" class="text-sm font-bold text-blue-800">Toca para ver →</span>
+                <svg id="panel-chevron" class="w-3.5 h-3.5 text-gray-400 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+              </div>
+            </button>
+
+            <div id="panel-content-scroll" class="overflow-hidden lg:overflow-visible transition-[max-height] duration-300 ease-out" style="max-height:0">
+            <div class="px-5 pb-5 pt-1 lg:p-6 lg:pt-6">
+
+              <div class="hidden lg:flex items-center gap-3 mb-5">
                 <svg class="progress-ring" width="40" height="40" viewBox="0 0 40 40">
                   <circle cx="20" cy="20" r="17" fill="none" stroke="#E7ECF1" stroke-width="4"/>
                   <circle id="panel-ring" cx="20" cy="20" r="17" fill="none" stroke="#1E3F5C" stroke-width="4"
@@ -413,9 +438,9 @@
                 </div>
               </div>
 
-              <div id="panel-empty" class="text-center py-8 px-2">
-                <p class="text-3xl mb-2">📋</p>
-                <p class="text-sm text-gray-400">Cada respuesta va dando forma a tu plan aquí al lado — en tiempo real.</p>
+              <div id="panel-empty" class="text-center py-4 lg:py-8 px-2">
+                <p class="text-2xl lg:text-3xl mb-2">📋</p>
+                <p class="text-xs lg:text-sm text-gray-400">Cada respuesta va dando forma a tu plan — en tiempo real.</p>
               </div>
 
               <div id="panel-body" class="hidden space-y-4">
@@ -465,6 +490,7 @@
 
               </div>
 
+            </div>
             </div>
           </div>
 
@@ -592,9 +618,27 @@
     }
 
     function setPanelRing(fraction) {
-      const ring = document.getElementById('panel-ring');
       const offset = RING_CIRC - (RING_CIRC * fraction);
-      ring.style.strokeDashoffset = offset;
+      const ring = document.getElementById('panel-ring');
+      const ringMobile = document.getElementById('panel-ring-mobile');
+      if (ring) ring.style.strokeDashoffset = offset;
+      if (ringMobile) ringMobile.style.strokeDashoffset = offset;
+    }
+
+    // ─── Mobile bottom-sheet toggle ──────────────────────────────
+    let panelExpanded = false;
+    function togglePanel() {
+      panelExpanded = !panelExpanded;
+      const scroll = document.getElementById('panel-content-scroll');
+      const chevron = document.getElementById('panel-chevron');
+      scroll.style.maxHeight = panelExpanded ? '65vh' : '0px';
+      scroll.style.overflowY = panelExpanded ? 'auto' : 'hidden';
+      chevron.classList.toggle('rotated', panelExpanded);
+    }
+
+    function syncMobileMetric(text) {
+      const el = document.getElementById('panel-mobile-metric');
+      if (el) el.textContent = text;
     }
 
     function updatePanelSavings(val) {
@@ -610,6 +654,7 @@
       document.getElementById('panel-fund-val').textContent = fmtEurShort(emergencyGuess);
       document.getElementById('panel-invest-val').textContent = fmtEurShort(investGuess);
       document.getElementById('panel-subtitle').textContent = 'Paso 1 de 5 completado';
+      syncMobileMetric('🛡️ ' + fmtEurShort(emergencyGuess) + ' colchón');
       setPanelRing(0.2);
       updatePanelGrowth(panelMonthly);
     }
@@ -648,6 +693,7 @@
         }
       });
       document.getElementById('panel-subtitle').textContent = 'Paso 2 de 5 completado';
+      syncMobileMetric('📈 ' + fmtEurShort(final) + ' proyectado');
       setPanelRing(0.4);
     }
 
@@ -674,6 +720,7 @@
       document.getElementById('panel-gauge-dot').style.left = meta.pos + '%';
       document.getElementById('panel-risk-label').textContent = meta.label;
       document.getElementById('panel-subtitle').textContent = 'Paso 4 de 5 completado';
+      syncMobileMetric('🎯 Perfil ' + val.charAt(0).toUpperCase() + val.slice(1));
       setPanelRing(0.8);
     }
 
@@ -690,6 +737,7 @@
         label.textContent = 'Gestión automática — un roboadvisor lo hace por ti';
       }
       document.getElementById('panel-subtitle').textContent = '¡Plan completo! Sigue para verlo en detalle';
+      syncMobileMetric('✅ Plan listo');
       setPanelRing(1);
     }
 

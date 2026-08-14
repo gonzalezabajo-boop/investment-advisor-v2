@@ -1,8 +1,9 @@
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function fmtEur(n) {
-  if (n >= 1000000) return (n / 1000000).toFixed(1).replace('.0', '') + 'M €';
-  if (n >= 1000) return Math.round(n / 1000) + '.000 €';
-  return Math.round(n).toLocaleString('es-ES') + ' €';
+  var rounded = Math.round(n);
+  var sign = rounded < 0 ? '-' : '';
+  var withDots = Math.abs(rounded).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return sign + withDots + ' €';
 }
 
 function fmtPct(n) { return (Math.round(n * 10) / 10) + '%'; }
@@ -252,7 +253,7 @@ var SAVINGS_ACCOUNTS = [
   },
 ];
 
-function calcEmergencyTarget(step1, step2) {
+function calcEmergencyTarget(step1, step2, totalSavings) {
   var ingresos = parseFloat((step2 || {}).ingresos) || 0;
   var ingresoHogar = parseFloat((step2 || {}).ingresos_hogar) || ingresos;
   var gastoVivienda = parseFloat((step1 || {}).vivienda_coste_sugerido) || 0;
@@ -263,12 +264,18 @@ function calcEmergencyTarget(step1, step2) {
   }
   // Use household income as base if no breakdown available, otherwise estimate total expenses
   var baseGastos = ingresoHogar > 0 ? Math.round(ingresoHogar * 0.70) : 0;
-  if (baseGastos === 0) return 0;
+  if (baseGastos === 0) {
+    // No income data (fast-track flow doesn't ask for it) — fall back to reserving
+    // a conservative share of liquid savings as an estimated cushion, same heuristic
+    // shown live in the wizard panel, instead of assuming a 0€ emergency fund.
+    var savings = parseFloat(totalSavings) || 0;
+    return Math.round(savings * 0.35);
+  }
   return Math.round(baseGastos * meses);
 }
 
 function buildEmergencySection(step1, step2, totalSavings, investibleCapital, accentColor) {
-  var emergencyTarget = calcEmergencyTarget(step1, step2);
+  var emergencyTarget = calcEmergencyTarget(step1, step2, totalSavings);
   if (emergencyTarget === 0) return '';
 
   var reserved = Math.min(totalSavings, emergencyTarget);
@@ -438,7 +445,7 @@ function renderRoboadvisorPlan(profile) {
   var horizKey     = profile.horizonKey  || 'long';
   var pm           = PROFILE_META[risk]     || PROFILE_META.moderado;
   var hm           = HORIZON_META[horizKey] || HORIZON_META.long;
-  var emergTarget  = calcEmergencyTarget(profile.step1, profile.step2);
+  var emergTarget  = calcEmergencyTarget(profile.step1, profile.step2, totalSavings);
   var capital      = Math.max(0, totalSavings - emergTarget);
   var roboKey      = getRoboKey(capital);
   var robo         = ROBO_BLUEPRINTS[roboKey];
@@ -631,7 +638,7 @@ function renderDIYPlan(profile) {
   var horizKey     = profile.horizonKey  || 'long';
   var pm           = PROFILE_META[risk]     || PROFILE_META.moderado;
   var hm           = HORIZON_META[horizKey] || HORIZON_META.long;
-  var emergTarget  = calcEmergencyTarget(profile.step1, profile.step2);
+  var emergTarget  = calcEmergencyTarget(profile.step1, profile.step2, totalSavings);
   var capital      = Math.max(0, totalSavings - emergTarget);
   var level        = getDiyLevel(capital);
   var alloc    = getDiyAllocation(level, risk);

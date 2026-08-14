@@ -253,25 +253,18 @@ var SAVINGS_ACCOUNTS = [
   },
 ];
 
+var EMERGENCY_MONTHS = 3; // fondo de emergencia = 3 nóminas netas
+
 function calcEmergencyTarget(step1, step2, totalSavings) {
   var ingresos = parseFloat((step2 || {}).ingresos) || 0;
   var ingresoHogar = parseFloat((step2 || {}).ingresos_hogar) || ingresos;
-  var gastoVivienda = parseFloat((step1 || {}).vivienda_coste_sugerido) || 0;
-  var meses = parseFloat((step2 || {}).fondo_emergencia) || 0;
-  if (meses === 0) {
-    var estabilidad = (step1 || {}).estabilidad_ingresos;
-    meses = (estabilidad === 'autonomo' || estabilidad === 'variable') ? 6 : 3;
+  if (ingresoHogar > 0) {
+    return Math.round(ingresoHogar * EMERGENCY_MONTHS);
   }
-  // Use household income as base if no breakdown available, otherwise estimate total expenses
-  var baseGastos = ingresoHogar > 0 ? Math.round(ingresoHogar * 0.70) : 0;
-  if (baseGastos === 0) {
-    // No income data (fast-track flow doesn't ask for it) — fall back to reserving
-    // a conservative share of liquid savings as an estimated cushion, same heuristic
-    // shown live in the wizard panel, instead of assuming a 0€ emergency fund.
-    var savings = parseFloat(totalSavings) || 0;
-    return Math.round(savings * 0.35);
-  }
-  return Math.round(baseGastos * meses);
+  // No salary data available — fall back to reserving a conservative share of
+  // liquid savings as an estimated cushion, instead of assuming a 0€ emergency fund.
+  var savings = parseFloat(totalSavings) || 0;
+  return Math.round(savings * 0.35);
 }
 
 function buildEmergencySection(step1, step2, totalSavings, investibleCapital, accentColor) {
@@ -279,11 +272,7 @@ function buildEmergencySection(step1, step2, totalSavings, investibleCapital, ac
   if (emergencyTarget === 0) return '';
 
   var reserved = Math.min(totalSavings, emergencyTarget);
-  var meses = parseFloat((step2 || {}).fondo_emergencia) || 0;
-  if (meses === 0) {
-    var estabilidad = (step1 || {}).estabilidad_ingresos;
-    meses = (estabilidad === 'autonomo' || estabilidad === 'variable') ? 6 : 3;
-  }
+  var meses = EMERGENCY_MONTHS;
   var shortfall = Math.max(0, emergencyTarget - totalSavings);
   var alreadyCovered = totalSavings >= emergencyTarget;
   var bestAccount = SAVINGS_ACCOUNTS[0];

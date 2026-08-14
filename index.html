@@ -128,10 +128,10 @@
             <div class="screen fade-in" id="screen-q1">
               <div class="mb-6">
                 <div class="flex justify-between text-xs text-blue-900/50 mb-2 font-medium">
-                  <span>Pregunta 1 de 5</span><span>20%</span>
+                  <span>Pregunta 1 de 6</span><span>17%</span>
                 </div>
                 <div class="w-full bg-blue-900/10 rounded-full h-1.5">
-                  <div class="bg-blue-700 h-1.5 rounded-full transition-all" style="width:20%"></div>
+                  <div class="bg-blue-700 h-1.5 rounded-full transition-all" style="width:17%"></div>
                 </div>
               </div>
 
@@ -154,21 +154,58 @@
 
                 <p id="q1-err" class="hidden text-xs text-red-500 mb-3 text-center">Introduce un importe válido (puede ser 0).</p>
 
-                <button onclick="goQ2()" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
+                <button onclick="goSalario()" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
                   Continuar →
                 </button>
               </div>
               <button onclick="showScreen('intro')" class="w-full text-center text-gray-400 text-sm mt-4 hover:text-gray-600">← Volver</button>
             </div>
 
-            <!-- SCREEN 3: Q2 -->
+            <!-- SCREEN: Salario neto mensual -->
+            <div class="screen fade-in" id="screen-salario">
+              <div class="mb-6">
+                <div class="flex justify-between text-xs text-blue-900/50 mb-2 font-medium">
+                  <span>Pregunta 2 de 6</span><span>33%</span>
+                </div>
+                <div class="w-full bg-blue-900/10 rounded-full h-1.5">
+                  <div class="bg-blue-700 h-1.5 rounded-full transition-all" style="width:33%"></div>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-5 sm:p-8">
+                <div class="text-4xl mb-4">💼</div>
+                <h2 class="font-display text-xl sm:text-2xl font-semibold text-blue-950 mb-2">¿Cuál es tu salario neto mensual?</h2>
+                <p class="text-gray-500 text-sm mb-6">Lo que recibes en tu cuenta cada mes, después de impuestos. Si tus ingresos varían, pon una media aproximada.</p>
+
+                <div class="relative mb-6">
+                  <input type="number" id="q-salario" placeholder="0"
+                    class="w-full text-2xl sm:text-3xl font-bold text-blue-950 border-2 border-blue-100 rounded-2xl px-4 sm:px-6 py-3 sm:py-4 focus:outline-none focus:border-blue-600 bg-blue-50/50"
+                    style="padding-right: 3.5rem" inputmode="numeric">
+                  <span class="absolute right-5 top-1/2 -translate-y-1/2 text-2xl font-bold text-gray-400">€</span>
+                </div>
+
+                <div id="salario-callout" class="bg-blue-50 border border-blue-100 rounded-2xl p-4 mb-6 callout">
+                  <p class="text-sm text-blue-900 font-medium mb-1">💡 ¿Para qué sirve este dato?</p>
+                  <p class="text-sm text-blue-800" id="salario-callout-text">Tu fondo de emergencia recomendado son 3 nóminas netas. El resto de tus ahorros queda disponible para invertir.</p>
+                </div>
+
+                <p id="salario-err" class="hidden text-xs text-red-500 mb-3 text-center">Introduce un importe válido (puede ser 0).</p>
+
+                <button onclick="goQ2()" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
+                  Continuar →
+                </button>
+              </div>
+              <button onclick="showScreen('q1')" class="w-full text-center text-gray-400 text-sm mt-4 hover:text-gray-600">← Volver</button>
+            </div>
+
+            <!-- SCREEN: Q2 (mensual) -->
             <div class="screen fade-in" id="screen-q2">
               <div class="mb-6">
                 <div class="flex justify-between text-xs text-blue-900/50 mb-2 font-medium">
-                  <span>Pregunta 2 de 5</span><span>40%</span>
+                  <span>Pregunta 3 de 6</span><span>50%</span>
                 </div>
                 <div class="w-full bg-blue-900/10 rounded-full h-1.5">
-                  <div class="bg-blue-700 h-1.5 rounded-full transition-all" style="width:40%"></div>
+                  <div class="bg-blue-700 h-1.5 rounded-full transition-all" style="width:50%"></div>
                 </div>
               </div>
 
@@ -202,17 +239,17 @@
                   Continuar →
                 </button>
               </div>
-              <button onclick="showScreen('q1')" class="w-full text-center text-gray-400 text-sm mt-4 hover:text-gray-600">← Volver</button>
+              <button onclick="showScreen('salario')" class="w-full text-center text-gray-400 text-sm mt-4 hover:text-gray-600">← Volver</button>
             </div>
 
             <!-- SCREEN 4: Q3 -->
             <div class="screen fade-in" id="screen-q3">
               <div class="mb-6">
                 <div class="flex justify-between text-xs text-blue-900/50 mb-2 font-medium">
-                  <span>Pregunta 3 de 5</span><span>60%</span>
+                  <span>Pregunta 4 de 6</span><span>67%</span>
                 </div>
                 <div class="w-full bg-blue-900/10 rounded-full h-1.5">
-                  <div class="bg-blue-700 h-1.5 rounded-full transition-all" style="width:60%"></div>
+                  <div class="bg-blue-700 h-1.5 rounded-full transition-all" style="width:67%"></div>
                 </div>
               </div>
 
@@ -262,10 +299,10 @@
             <div class="screen fade-in" id="screen-q4">
               <div class="mb-6">
                 <div class="flex justify-between text-xs text-blue-900/50 mb-2 font-medium">
-                  <span>Pregunta 4 de 5</span><span>80%</span>
+                  <span>Pregunta 5 de 6</span><span>83%</span>
                 </div>
                 <div class="w-full bg-blue-900/10 rounded-full h-1.5">
-                  <div class="bg-blue-700 h-1.5 rounded-full transition-all" style="width:80%"></div>
+                  <div class="bg-blue-700 h-1.5 rounded-full transition-all" style="width:83%"></div>
                 </div>
               </div>
 
@@ -318,7 +355,7 @@
             <div class="screen fade-in" id="screen-q5">
               <div class="mb-6">
                 <div class="flex justify-between text-xs text-blue-900/50 mb-2 font-medium">
-                  <span>Pregunta 5 de 5</span><span>100%</span>
+                  <span>Pregunta 6 de 6</span><span>100%</span>
                 </div>
                 <div class="w-full bg-blue-900/10 rounded-full h-1.5">
                   <div class="bg-blue-700 h-1.5 rounded-full" style="width:100%"></div>
@@ -508,13 +545,13 @@
 
   <script>
     // ─── State ────────────────────────────────────────────────
-    const answers = { ahorros: null, mensual: null, horizonte: null, riesgo: null, track: null };
+    const answers = { ahorros: null, salario: null, mensual: null, horizonte: null, riesgo: null, track: null };
     const RING_CIRC = 106.8;
 
     // ─── Navigation ───────────────────────────────────────────
     function showScreen(id) {
       const shell = document.getElementById('wizard-shell');
-      const isWizardScreen = ['q1','q2','q3','q4','q5','lead'].indexOf(id) !== -1;
+      const isWizardScreen = ['q1','salario','q2','q3','q4','q5','lead'].indexOf(id) !== -1;
       shell.style.display = isWizardScreen ? 'block' : 'none';
       document.getElementById('screen-intro').classList.toggle('active', id === 'intro');
       document.querySelectorAll('#wizard-shell .screen').forEach(s => s.classList.remove('active'));
@@ -595,14 +632,12 @@
     }
 
     function fmtK(n) {
-      if (n >= 1000000) return (n/1000000).toFixed(1).replace('.0','') + 'M';
-      if (n >= 1000) return Math.round(n/1000) + '.000';
-      return n.toLocaleString('es-ES');
+      return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
     function fmtEurShort(n) {
-      if (n >= 1000000) return (n/1000000).toFixed(1).replace('.0','') + 'M €';
-      if (n >= 1000) return Math.round(n/1000) + '.000 €';
-      return Math.round(n).toLocaleString('es-ES') + ' €';
+      const rounded = Math.round(n);
+      const withDots = Math.abs(rounded).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      return (rounded < 0 ? '-' : '') + withDots + ' €';
     }
 
     // ─── Live panel logic ──────────────────────────────────────
@@ -653,10 +688,27 @@
       document.getElementById('panel-savings-bar-invest').style.width = (investGuess / total * 100) + '%';
       document.getElementById('panel-fund-val').textContent = fmtEurShort(emergencyGuess);
       document.getElementById('panel-invest-val').textContent = fmtEurShort(investGuess);
-      document.getElementById('panel-subtitle').textContent = 'Paso 1 de 5 completado';
+      document.getElementById('panel-subtitle').textContent = 'Paso 1 de 6 completado';
       syncMobileMetric('🛡️ ' + fmtEurShort(emergencyGuess) + ' colchón');
-      setPanelRing(0.2);
+      setPanelRing(1/6);
       updatePanelGrowth(panelMonthly);
+    }
+
+    function updatePanelSalario(salario) {
+      revealPanel();
+      // Fondo de emergencia real: 3 nóminas netas, sin superar el ahorro disponible
+      const el = document.getElementById('panel-savings');
+      el.classList.remove('hidden');
+      const emergencyReal = Math.min(panelCapital, Math.round(salario * 3));
+      const investReal = Math.max(0, panelCapital - emergencyReal);
+      const total = panelCapital > 0 ? panelCapital : 1;
+      document.getElementById('panel-savings-bar-fund').style.width = (emergencyReal / total * 100) + '%';
+      document.getElementById('panel-savings-bar-invest').style.width = (investReal / total * 100) + '%';
+      document.getElementById('panel-fund-val').textContent = fmtEurShort(emergencyReal);
+      document.getElementById('panel-invest-val').textContent = fmtEurShort(investReal);
+      document.getElementById('panel-subtitle').textContent = 'Paso 2 de 6 completado';
+      syncMobileMetric('🛡️ ' + fmtEurShort(emergencyReal) + ' colchón (3 nóminas)');
+      setPanelRing(2/6);
     }
 
     function updatePanelGrowth(monthly) {
@@ -692,17 +744,17 @@
           animation: { duration: 400 }
         }
       });
-      document.getElementById('panel-subtitle').textContent = 'Paso 2 de 5 completado';
+      document.getElementById('panel-subtitle').textContent = 'Paso 3 de 6 completado';
       syncMobileMetric('📈 ' + fmtEurShort(final) + ' proyectado');
-      setPanelRing(0.4);
+      setPanelRing(3/6);
     }
 
     function updatePanelHorizon(val) {
       revealPanel();
       panelYears = val === 'corto' ? 3 : (val === 'medio' ? 7 : 20);
       updatePanelGrowth(panelMonthly);
-      document.getElementById('panel-subtitle').textContent = 'Paso 3 de 5 completado';
-      setPanelRing(0.6);
+      document.getElementById('panel-subtitle').textContent = 'Paso 4 de 6 completado';
+      setPanelRing(4/6);
     }
 
     const RISK_META = {
@@ -719,9 +771,9 @@
       const meta = RISK_META[val] || RISK_META.moderado;
       document.getElementById('panel-gauge-dot').style.left = meta.pos + '%';
       document.getElementById('panel-risk-label').textContent = meta.label;
-      document.getElementById('panel-subtitle').textContent = 'Paso 4 de 5 completado';
+      document.getElementById('panel-subtitle').textContent = 'Paso 5 de 6 completado';
       syncMobileMetric('🎯 Perfil ' + val.charAt(0).toUpperCase() + val.slice(1));
-      setPanelRing(0.8);
+      setPanelRing(5/6);
     }
 
     function updatePanelTrack(val) {
@@ -742,7 +794,7 @@
     }
 
     // ─── Q transitions ────────────────────────────────────────
-    function goQ2() {
+    function goSalario() {
       const val = document.getElementById('q1-ahorros').value;
       if (val === '' || isNaN(parseFloat(val)) || parseFloat(val) < 0) {
         document.getElementById('q1-err').classList.remove('hidden');
@@ -750,6 +802,18 @@
       }
       answers.ahorros = parseFloat(val);
       document.getElementById('q1-err').classList.add('hidden');
+      showScreen('salario');
+    }
+
+    function goQ2() {
+      const val = document.getElementById('q-salario').value;
+      if (val === '' || isNaN(parseFloat(val)) || parseFloat(val) < 0) {
+        document.getElementById('salario-err').classList.remove('hidden');
+        return;
+      }
+      answers.salario = parseFloat(val);
+      document.getElementById('salario-err').classList.add('hidden');
+      updatePanelSalario(answers.salario);
       showScreen('q2');
     }
 
@@ -827,7 +891,8 @@
           email: answers.email || ''
         },
         step2: {
-          ahorro_mensual: answers.mensual
+          ahorro_mensual: answers.mensual,
+          ingresos: answers.salario
         },
         step3: {
           inversiones: []

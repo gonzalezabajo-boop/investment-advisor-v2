@@ -135,9 +135,9 @@ function getRoboKey(capital) {
 // ─── DIY fund building blocks ──────────────────────────────────────────────────
 var FUNDS = {
   world: { name: 'Fidelity MSCI World',            isin: 'IE00BYX5NX33', ter: '0,12%', terN: 0.12, asset: 'RV Mundo' },
-  em:    { name: 'iShares EM IMI',                  isin: 'IE00B5L01S96', ter: '0,20%', terN: 0.20, asset: 'RV Emergentes' },
-  small: { name: 'Vanguard Global Small-Cap',       isin: 'IE00B42W3S00', ter: '0,29%', terN: 0.29, asset: 'RV Small-Cap' },
-  bond:  { name: 'iShares Global Agg Bond EUR Hdg', isin: 'IE00BDBRDM35', ter: '0,10%', terN: 0.10, asset: 'Renta Fija' },
+  em:    { name: 'Amundi Index MSCI Emerging Markets',     isin: 'LU0996175948', ter: '0,20%', terN: 0.20, asset: 'RV Emergentes' },
+  small: { name: 'Vanguard Global Small-Cap',             isin: 'IE00B42W3S00', ter: '0,29%', terN: 0.29, asset: 'RV Small-Cap' },
+  bond:  { name: 'Vanguard Global Bond Index EUR Hdg',    isin: 'IE00B50W2R13', ter: '0,15%', terN: 0.15, asset: 'Renta Fija' },
 };
 
 var BOND_PCT = { conservador: 30, moderado: 20, dinamico: 10, agresivo: 0 };

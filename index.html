@@ -235,21 +235,57 @@
 
                 <p id="q2-err" class="hidden text-xs text-red-500 mb-3 text-center">Introduce un importe válido (puede ser 0).</p>
 
-                <button onclick="goQ3()" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
+                <button onclick="goEdad()" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
                   Continuar →
                 </button>
               </div>
               <button onclick="showScreen('salario')" class="w-full text-center text-gray-400 text-sm mt-4 hover:text-gray-600">← Volver</button>
             </div>
 
+            <!-- SCREEN: EDAD -->
+            <div class="screen fade-in" id="screen-edad">
+              <div class="mb-6">
+                <div class="flex justify-between text-xs text-blue-900/50 mb-2 font-medium">
+                  <span>Pregunta 4 de 7</span><span>57%</span>
+                </div>
+                <div class="w-full bg-blue-900/10 rounded-full h-1.5">
+                  <div class="bg-blue-700 h-1.5 rounded-full transition-all" style="width:57%"></div>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-5 sm:p-8">
+                <div class="text-4xl mb-4">🎂</div>
+                <h2 class="font-display text-xl sm:text-2xl font-semibold text-blue-950 mb-2">¿Cuántos años tienes?</h2>
+                <p class="text-gray-500 text-sm mb-6">La edad determina cuánto tiempo tienes por delante y cómo debe estructurarse tu cartera.</p>
+
+                <div class="relative mb-6">
+                  <input type="number" id="q-edad" placeholder="35"
+                    class="w-full text-2xl sm:text-3xl font-bold text-blue-950 border-2 border-blue-100 rounded-2xl px-4 sm:px-6 py-3 sm:py-4 focus:outline-none focus:border-blue-600 bg-blue-50/50"
+                    inputmode="numeric" min="18" max="99">
+                  <span class="absolute right-5 top-1/2 -translate-y-1/2 text-lg font-bold text-gray-400">años</span>
+                </div>
+
+                <div id="edad-callout" class="bg-blue-50 border border-blue-100 rounded-2xl p-4 mb-6">
+                  <p class="text-sm text-blue-800" id="edad-callout-text">Introduce tu edad para ver cómo afecta a la composición de tu cartera.</p>
+                </div>
+
+                <p id="edad-err" class="hidden text-xs text-red-500 mb-3 text-center">Introduce una edad válida (entre 18 y 99 años).</p>
+
+                <button onclick="goQ3()" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
+                  Continuar →
+                </button>
+              </div>
+              <button onclick="showScreen('q2')" class="w-full text-center text-gray-400 text-sm mt-4 hover:text-gray-600">← Volver</button>
+            </div>
+
             <!-- SCREEN 4: Q3 -->
             <div class="screen fade-in" id="screen-q3">
               <div class="mb-6">
                 <div class="flex justify-between text-xs text-blue-900/50 mb-2 font-medium">
-                  <span>Pregunta 4 de 6</span><span>67%</span>
+                  <span>Pregunta 5 de 7</span><span>71%</span>
                 </div>
                 <div class="w-full bg-blue-900/10 rounded-full h-1.5">
-                  <div class="bg-blue-700 h-1.5 rounded-full transition-all" style="width:67%"></div>
+                  <div class="bg-blue-700 h-1.5 rounded-full transition-all" style="width:71%"></div>
                 </div>
               </div>
 
@@ -292,17 +328,17 @@
                   Continuar →
                 </button>
               </div>
-              <button onclick="showScreen('q2')" class="w-full text-center text-gray-400 text-sm mt-4 hover:text-gray-600">← Volver</button>
+              <button onclick="showScreen('edad')" class="w-full text-center text-gray-400 text-sm mt-4 hover:text-gray-600">← Volver</button>
             </div>
 
             <!-- SCREEN 5: Q4 -->
             <div class="screen fade-in" id="screen-q4">
               <div class="mb-6">
                 <div class="flex justify-between text-xs text-blue-900/50 mb-2 font-medium">
-                  <span>Pregunta 5 de 6</span><span>83%</span>
+                  <span>Pregunta 6 de 7</span><span>86%</span>
                 </div>
                 <div class="w-full bg-blue-900/10 rounded-full h-1.5">
-                  <div class="bg-blue-700 h-1.5 rounded-full transition-all" style="width:83%"></div>
+                  <div class="bg-blue-700 h-1.5 rounded-full transition-all" style="width:86%"></div>
                 </div>
               </div>
 
@@ -355,7 +391,7 @@
             <div class="screen fade-in" id="screen-q5">
               <div class="mb-6">
                 <div class="flex justify-between text-xs text-blue-900/50 mb-2 font-medium">
-                  <span>Pregunta 6 de 6</span><span>100%</span>
+                  <span>Pregunta 7 de 7</span><span>100%</span>
                 </div>
                 <div class="w-full bg-blue-900/10 rounded-full h-1.5">
                   <div class="bg-blue-700 h-1.5 rounded-full" style="width:100%"></div>
@@ -545,7 +581,7 @@
 
   <script>
     // ─── State ────────────────────────────────────────────────
-    const answers = { ahorros: null, salario: null, mensual: null, horizonte: null, riesgo: null, track: null };
+    const answers = { ahorros: null, salario: null, mensual: null, edad: null, horizonte: null, riesgo: null, track: null };
     const RING_CIRC = 106.8;
 
     // ─── Navigation ───────────────────────────────────────────
@@ -599,6 +635,11 @@
         const v = parseFloat(q2.value) || 0;
         updateQ2Callout(v);
         updatePanelGrowth(v);
+      });
+      const qEdad = document.getElementById('q-edad');
+      if (qEdad) qEdad.addEventListener('input', () => {
+        const v = parseInt(qEdad.value) || 0;
+        if (v >= 18 && v <= 99) updateEdadCallout(v);
       });
     });
 
@@ -817,7 +858,7 @@
       showScreen('q2');
     }
 
-    function goQ3() {
+    function goEdad() {
       const val = document.getElementById('q2-mensual').value;
       if (val === '' || isNaN(parseFloat(val)) || parseFloat(val) < 0) {
         document.getElementById('q2-err').classList.remove('hidden');
@@ -825,7 +866,32 @@
       }
       answers.mensual = parseFloat(val);
       document.getElementById('q2-err').classList.add('hidden');
+      showScreen('edad');
+    }
+
+    function goQ3() {
+      const val = parseInt(document.getElementById('q-edad').value);
+      if (isNaN(val) || val < 18 || val > 99) {
+        document.getElementById('edad-err').classList.remove('hidden');
+        return;
+      }
+      answers.edad = val;
+      document.getElementById('edad-err').classList.add('hidden');
       showScreen('q3');
+    }
+
+    function updateEdadCallout(edad) {
+      const txt = document.getElementById('edad-callout-text');
+      if (!txt) return;
+      if (edad < 35) {
+        txt.textContent = 'Con ' + edad + ' años tienes un horizonte largo por delante. Tu cartera puede asumir más renta variable para maximizar el crecimiento.';
+      } else if (edad < 50) {
+        txt.textContent = 'En la fase de acumulación. Buen equilibrio entre crecimiento y estabilidad — tu cartera se ajusta para optimizar ambos.';
+      } else if (edad < 65) {
+        txt.textContent = 'En pre-jubilación. Empezamos a rotar hacia activos más defensivos para proteger lo acumulado sin renunciar al crecimiento.';
+      } else {
+        txt.textContent = 'En fase de preservación. La prioridad es proteger el capital. Tu cartera tendrá mayor peso en renta fija para reducir la volatilidad.';
+      }
     }
 
     function goQ4() {
@@ -881,10 +947,18 @@
 
     function saveAndRedirect() {
       const horizonMap = { corto: 'short', medio: 'medium', largo: 'long' };
+      function calcAgeBucket(age) {
+        if (age < 35) return 'joven';
+        if (age < 50) return 'acumulacion';
+        if (age < 65) return 'prejubilacion';
+        return 'jubilacion';
+      }
       const profile = {
         track: answers.track,
         riskProfile: answers.riesgo,
         horizonKey: horizonMap[answers.horizonte] || 'medium',
+        ageBucket: calcAgeBucket(answers.edad || 35),
+        edad: answers.edad || 35,
         step1: {
           ahorros_liquidos: answers.ahorros,
           nombre: answers.nombre || '',

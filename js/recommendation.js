@@ -140,6 +140,37 @@ var FUNDS = {
   bond:  { name: 'Vanguard Global Bond Index EUR Hdg',    isin: 'IE00B50W2R13', ter: '0,15%', terN: 0.15, asset: 'Renta Fija' },
 };
 
+// RV% por [ageBucket][riskProfile] — el complemento hasta 100 es RF
+var RV_MATRIX = {
+  joven:         { conservador: 60, moderado: 80, dinamico: 95, agresivo: 100 },
+  acumulacion:   { conservador: 40, moderado: 65, dinamico: 82, agresivo: 95  },
+  prejubilacion: { conservador: 25, moderado: 50, dinamico: 70, agresivo: 85  },
+  jubilacion:    { conservador: 15, moderado: 35, dinamico: 55, agresivo: 70  },
+};
+
+function getAgeBucket(age) {
+  if (age < 35) return 'joven';
+  if (age < 50) return 'acumulacion';
+  if (age < 65) return 'prejubilacion';
+  return 'jubilacion';
+}
+
+// Para robo: si la edad baja el perfil efectivo, mostramos la cartera correcta del roboadvisor
+var RISK_ORDER = ['conservador', 'moderado', 'dinamico', 'agresivo'];
+var MAX_RISK_BY_AGE = { joven: 'agresivo', acumulacion: 'agresivo', prejubilacion: 'dinamico', jubilacion: 'moderado' };
+function applyAgeToRisk(risk, ageBucket) {
+  var maxIdx = RISK_ORDER.indexOf(MAX_RISK_BY_AGE[ageBucket] || 'agresivo');
+  var riskIdx = RISK_ORDER.indexOf(risk);
+  return RISK_ORDER[Math.min(riskIdx, maxIdx)];
+}
+
+function getBondPct(ageBucket, risk) {
+  var bucket = RV_MATRIX[ageBucket] || RV_MATRIX['acumulacion'];
+  var rv = bucket[risk] !== undefined ? bucket[risk] : 65;
+  return 100 - rv;
+}
+
+// Legacy fallback para llamadas sin ageBucket
 var BOND_PCT = { conservador: 30, moderado: 20, dinamico: 10, agresivo: 0 };
 
 // ─── Glossary (hover tooltips on jargon chips) ─────────────────────────────────
@@ -165,8 +196,8 @@ function getDiyLevel(capital) {
   return 4;
 }
 
-function getDiyAllocation(level, risk) {
-  var bond = BOND_PCT[risk] !== undefined ? BOND_PCT[risk] : 10;
+function getDiyAllocation(level, risk, ageBucket) {
+  var bond = ageBucket ? getBondPct(ageBucket, risk) : (BOND_PCT[risk] !== undefined ? BOND_PCT[risk] : 10);
   var eq   = 100 - bond;
   if (level === 1) {
     return [{ fund: 'world', pct: 100 }];
@@ -438,13 +469,15 @@ function renderRoboadvisorPlan(profile) {
   var monthly      = parseFloat((profile.step2 || {}).ahorro_mensual)   || 0;
   var risk         = profile.riskProfile || 'moderado';
   var horizKey     = profile.horizonKey  || 'long';
-  var pm           = PROFILE_META[risk]     || PROFILE_META.moderado;
+  var ageBucket    = profile.ageBucket   || getAgeBucket(profile.edad || 35);
+  var effectiveRisk = applyAgeToRisk(risk, ageBucket);
+  var pm           = PROFILE_META[effectiveRisk] || PROFILE_META.moderado;
   var hm           = HORIZON_META[horizKey] || HORIZON_META.long;
   var emergTarget  = calcEmergencyTarget(profile.step1, profile.step2, totalSavings);
   var capital      = Math.max(0, totalSavings - emergTarget);
   var roboKey      = getRoboKey(capital);
   var robo         = ROBO_BLUEPRINTS[roboKey];
-  var portf        = robo.portfolios[risk] || robo.portfolios.moderado;
+  var portf        = robo.portfolios[effectiveRisk] || robo.portfolios.moderado;
   var rate         = roboKey === 'indexa' ? 7.5 : 7;
   var feeYear      = capital > 0 ? Math.round(capital * robo.fee_num / 100) : 0;
   var roboFirst    = robo.name.split(' ')[0];
@@ -651,13 +684,14 @@ function renderDIYPlan(profile) {
   var monthly      = parseFloat((profile.step2 || {}).ahorro_mensual)   || 0;
   var risk         = profile.riskProfile || 'moderado';
   var horizKey     = profile.horizonKey  || 'long';
+  var ageBucket    = profile.ageBucket   || getAgeBucket(profile.edad || 35);
   var pm           = PROFILE_META[risk]     || PROFILE_META.moderado;
   var hm           = HORIZON_META[horizKey] || HORIZON_META.long;
   var emergTarget  = calcEmergencyTarget(profile.step1, profile.step2, totalSavings);
   var capital      = Math.max(0, totalSavings - emergTarget);
   var emergencyCovered = totalSavings >= emergTarget;
   var level        = getDiyLevel(capital);
-  var alloc    = getDiyAllocation(level, risk);
+  var alloc    = getDiyAllocation(level, risk, ageBucket);
   var rate     = 7;
   var levelLabel = ['', '1 fondo', '2 fondos', '3 fondos', '4 fondos'][level];
 

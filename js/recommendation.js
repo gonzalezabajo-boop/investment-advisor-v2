@@ -637,10 +637,7 @@ function renderRoboadvisorPlan(profile) {
             <div class="space-y-1.5 text-sm text-gray-700">
               <p>→ El interés compuesto ya es visible en tu cartera</p>
               ${roboKey === 'indexa' ? '<p>→ A partir de 10.000 € la comisión de Indexa baja al <strong>0,31%</strong></p>' : ''}
-              ${(roboKey === 'finizens' && profile.roboPrefs === 'myinvestor') ? '<p>→ Al llegar a <strong>3.000 €</strong> podrás traspasar a MyInvestor Cartera Indexada (comisión total 0,44%) sin coste fiscal</p>' : ''}
-              ${(roboKey === 'finizens' && profile.roboPrefs === 'indexa') ? '<p>→ Al llegar a <strong>3.000 €</strong> podrás traspasar a Indexa Capital (comisión 0,53%, el historial más largo de España) sin coste fiscal</p>' : ''}
-              ${(roboKey === 'finizens' && !profile.roboPrefs) ? '<p>→ Al llegar a 3.000 € puedes valorar MyInvestor (0,44%) o Indexa Capital (0,53%) según tu perfil</p>' : ''}
-              ${roboKey === 'myinvestor' ? '<p>→ A partir de 10.000 € en MyInvestor valora añadir la cuenta remunerada para el fondo de emergencia</p>' : ''}
+              ${roboKey === 'myinvestor' ? '<p>→ Activa la <strong>cuenta remunerada</strong> de MyInvestor para el fondo de emergencia mientras creces</p>' : ''}
               <p>→ Activa el rebalanceo automático si está disponible</p>
             </div>
             <div class="mt-3 pt-3 border-t border-emerald-100">

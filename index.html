@@ -587,7 +587,7 @@
     // ─── Navigation ───────────────────────────────────────────
     function showScreen(id) {
       const shell = document.getElementById('wizard-shell');
-      const isWizardScreen = ['q1','salario','q2','q3','q4','q5','lead'].indexOf(id) !== -1;
+      const isWizardScreen = ['q1','salario','q2','edad','q3','q4','q5','lead'].indexOf(id) !== -1;
       shell.style.display = isWizardScreen ? 'block' : 'none';
       document.getElementById('screen-intro').classList.toggle('active', id === 'intro');
       document.querySelectorAll('#wizard-shell .screen').forEach(s => s.classList.remove('active'));

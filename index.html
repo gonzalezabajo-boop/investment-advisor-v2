@@ -442,6 +442,69 @@
               <button onclick="showScreen('q4')" class="w-full text-center text-gray-400 text-sm mt-4 hover:text-gray-600">← Volver</button>
             </div>
 
+            <!-- SCREEN: ROBO PREFERENCE -->
+            <div class="screen fade-in" id="screen-robopref">
+              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-5 sm:p-8">
+                <div class="text-4xl mb-4">🤖</div>
+                <h2 class="font-display text-xl sm:text-2xl font-semibold text-blue-950 mb-2">¿Qué es lo más importante para ti en el roboadvisor?</h2>
+                <p class="text-gray-500 text-sm mb-6">Cada plataforma tiene un punto fuerte diferente. Elige el que más encaje contigo.</p>
+
+                <div class="space-y-4 mb-6">
+                  <div class="card-option border-2 border-gray-200 rounded-2xl p-4 sm:p-5 cursor-pointer" data-q="robopref" data-val="finizens" onclick="selectCard(this,'robopref')">
+                    <div class="flex items-start gap-4">
+                      <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center text-2xl shrink-0">🌱</div>
+                      <div class="flex-1">
+                        <p class="font-bold text-gray-900 text-base">Sin complicarme — empezar es lo importante</p>
+                        <p class="text-sm text-gray-500 mt-1">Quiero algo ultra sencillo, sin mínimos de entrada y pensado para que cualquiera pueda empezar desde el primer día.</p>
+                        <div class="flex gap-2 mt-2 flex-wrap">
+                          <span class="px-2 py-0.5 bg-green-50 text-green-800 text-xs rounded-full font-medium">✓ Desde 0 €</span>
+                          <span class="px-2 py-0.5 bg-green-50 text-green-800 text-xs rounded-full font-medium">✓ Máxima sencillez</span>
+                          <span class="px-2 py-0.5 bg-green-50 text-green-800 text-xs rounded-full font-medium">Finizens</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card-option border-2 border-gray-200 rounded-2xl p-4 sm:p-5 cursor-pointer" data-q="robopref" data-val="myinvestor" onclick="selectCard(this,'robopref')">
+                    <div class="flex items-start gap-4">
+                      <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-2xl shrink-0">🏦</div>
+                      <div class="flex-1">
+                        <p class="font-bold text-gray-900 text-base">Todo en un sitio — cuenta + inversión juntos</p>
+                        <p class="text-sm text-gray-500 mt-1">Me atrae tener mis ahorros, la cuenta remunerada y los fondos indexados en una misma plataforma, sin malabarismos.</p>
+                        <div class="flex gap-2 mt-2 flex-wrap">
+                          <span class="px-2 py-0.5 bg-blue-50 text-blue-800 text-xs rounded-full font-medium">✓ Cuenta remunerada</span>
+                          <span class="px-2 py-0.5 bg-blue-50 text-blue-800 text-xs rounded-full font-medium">✓ Todo integrado</span>
+                          <span class="px-2 py-0.5 bg-blue-50 text-blue-800 text-xs rounded-full font-medium">MyInvestor</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card-option border-2 border-gray-200 rounded-2xl p-4 sm:p-5 cursor-pointer" data-q="robopref" data-val="indexa" onclick="selectCard(this,'robopref')">
+                    <div class="flex items-start gap-4">
+                      <div class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center text-2xl shrink-0">📊</div>
+                      <div class="flex-1">
+                        <p class="font-bold text-gray-900 text-base">Riguroso y barato — el mejor gestor automático</p>
+                        <p class="text-sm text-gray-500 mt-1">Quiero la plataforma con el historial más contrastado, mayor transparencia y los costes más bajos del mercado español.</p>
+                        <div class="flex gap-2 mt-2 flex-wrap">
+                          <span class="px-2 py-0.5 bg-purple-50 text-purple-800 text-xs rounded-full font-medium">✓ Historial demostrado</span>
+                          <span class="px-2 py-0.5 bg-purple-50 text-purple-800 text-xs rounded-full font-medium">✓ Menor coste total</span>
+                          <span class="px-2 py-0.5 bg-purple-50 text-purple-800 text-xs rounded-full font-medium">Indexa Capital</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <p id="robopref-err" class="hidden text-xs text-red-500 mb-3 text-center">Selecciona una opción para continuar.</p>
+
+                <button onclick="goRoboPrefNext()" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
+                  Ver mi plan →
+                </button>
+              </div>
+              <button onclick="showScreen('q5')" class="w-full text-center text-gray-400 text-sm mt-4 hover:text-gray-600">← Volver</button>
+            </div>
+
             <!-- SCREEN 7: LEAD -->
             <div class="screen fade-in" id="screen-lead">
               <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-5 sm:p-8">
@@ -581,13 +644,13 @@
 
   <script>
     // ─── State ────────────────────────────────────────────────
-    const answers = { ahorros: null, salario: null, mensual: null, edad: null, horizonte: null, riesgo: null, track: null };
+    const answers = { ahorros: null, salario: null, mensual: null, edad: null, horizonte: null, riesgo: null, track: null, robopref: null };
     const RING_CIRC = 106.8;
 
     // ─── Navigation ───────────────────────────────────────────
     function showScreen(id) {
       const shell = document.getElementById('wizard-shell');
-      const isWizardScreen = ['q1','salario','q2','edad','q3','q4','q5','lead'].indexOf(id) !== -1;
+      const isWizardScreen = ['q1','salario','q2','edad','q3','q4','q5','robopref','lead'].indexOf(id) !== -1;
       shell.style.display = isWizardScreen ? 'block' : 'none';
       document.getElementById('screen-intro').classList.toggle('active', id === 'intro');
       document.querySelectorAll('#wizard-shell .screen').forEach(s => s.classList.remove('active'));
@@ -921,6 +984,20 @@
         return;
       }
       answers.track = sel;
+      if (sel === 'robo') {
+        showScreen('robopref');
+      } else {
+        showScreen('lead');
+      }
+    }
+
+    function goRoboPrefNext() {
+      const sel = getSelected('robopref');
+      if (!sel) {
+        document.getElementById('robopref-err').classList.remove('hidden');
+        return;
+      }
+      answers.robopref = sel;
       showScreen('lead');
     }
 
@@ -959,6 +1036,7 @@
         horizonKey: horizonMap[answers.horizonte] || 'medium',
         ageBucket: calcAgeBucket(answers.edad || 35),
         edad: answers.edad || 35,
+        roboPrefs: answers.robopref || null,
         step1: {
           ahorros_liquidos: answers.ahorros,
           nombre: answers.nombre || '',

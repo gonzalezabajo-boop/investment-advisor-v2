@@ -126,8 +126,9 @@ var ROBO_BLUEPRINTS = {
   },
 };
 
-function getRoboKey(capital) {
-  if (capital < 3000)  return 'finizens';
+function getRoboKey(capital, roboPrefs) {
+  if (capital < 3000) return 'finizens';
+  if (roboPrefs && ROBO_BLUEPRINTS[roboPrefs]) return roboPrefs;
   if (capital < 10000) return 'myinvestor';
   return 'indexa';
 }
@@ -475,7 +476,7 @@ function renderRoboadvisorPlan(profile) {
   var hm           = HORIZON_META[horizKey] || HORIZON_META.long;
   var emergTarget  = calcEmergencyTarget(profile.step1, profile.step2, totalSavings);
   var capital      = Math.max(0, totalSavings - emergTarget);
-  var roboKey      = getRoboKey(capital);
+  var roboKey      = getRoboKey(capital, profile.roboPrefs);
   var robo         = ROBO_BLUEPRINTS[roboKey];
   var portf        = robo.portfolios[effectiveRisk] || robo.portfolios.moderado;
   var rate         = roboKey === 'indexa' ? 7.5 : 7;
@@ -539,6 +540,11 @@ function renderRoboadvisorPlan(profile) {
               ${buildFundsSection(robo, risk)}
             </div>
           </div>
+          ${(capital < 3000 && profile.roboPrefs && profile.roboPrefs !== 'finizens') ? `
+          <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-4">
+            <p class="text-sm font-semibold text-amber-800 mb-1">ℹ️ Por qué Finizens ahora</p>
+            <p class="text-sm text-amber-700">Con menos de 3.000 € disponibles para invertir, Finizens es la única opción sin mínimo de entrada. Cuando alcances ese umbral, puedes traspasar a ${profile.roboPrefs === 'myinvestor' ? 'MyInvestor' : 'Indexa Capital'} sin ningún coste ni impacto fiscal.</p>
+          </div>` : ''}
           <div class="bg-gray-50 rounded-2xl p-4 mb-4">
             <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Coste total anual</p>
             <div class="space-y-2">

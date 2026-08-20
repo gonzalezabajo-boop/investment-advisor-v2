@@ -31,9 +31,33 @@ var ROBO_BLUEPRINTS = {
       dinamico:    { label: 'Cartera Atrevida',     rv: 81,   rf: 18  },
       agresivo:    { label: 'Cartera Agresiva',     rv: 99,   rf: 0   },
     },
-    // Finizens usa Vanguard e iShares pero no publica ISINs en su web pública
-    main_funds: null,
-    funds_note: 'Finizens usa fondos de Vanguard e iShares (BlackRock) custodiados en Inversis Banco. La composición exacta no está publicada públicamente — disponible en el área de cliente y en los documentos KID de la CNMV.',
+    // Fondos Vanguard e iShares confirmados en documentos KID Finizens (CNMV). Pesos aproximados por perfil.
+    funds_by_risk: {
+      conservador: [
+        { name: 'Vanguard Global Bond Index EUR Hdg',   isin: 'IE00B50W2R13', pct: 45, asset: 'Bonos Globales', desc: 'Bonos de todo el mundo cubiertos a euros. El ancla estabilizadora de la cartera conservadora.' },
+        { name: 'Vanguard Euro Government Bond Index',  isin: 'IE00BFPM9W02', pct: 30, asset: 'Bonos Gov EUR',  desc: 'Deuda pública de países del euro. Sin riesgo de divisa, máxima seguridad para el componente europeo.' },
+        { name: 'Vanguard FTSE All-World',               isin: 'IE00B3RBWM25', pct: 15, asset: 'RV Global',     desc: 'Las ~4.000 mayores empresas del mundo. La pequeña exposición a bolsa aporta crecimiento a largo plazo.' },
+        { name: 'iShares Core MSCI World',               isin: 'IE00B4L5Y983', pct: 10, asset: 'RV Mundo',      desc: 'Completar la exposición a mercados desarrollados. Complementa el fondo global.' },
+      ],
+      moderado: [
+        { name: 'Vanguard FTSE All-World',               isin: 'IE00B3RBWM25', pct: 35, asset: 'RV Global',     desc: 'Las ~4.000 mayores empresas del mundo. El motor de crecimiento principal de la cartera.' },
+        { name: 'iShares Core MSCI World',               isin: 'IE00B4L5Y983', pct: 18, asset: 'RV Mundo',      desc: 'Completar la exposición a mercados desarrollados de alto nivel.' },
+        { name: 'Vanguard Global Bond Index EUR Hdg',   isin: 'IE00B50W2R13', pct: 27, asset: 'Bonos Globales', desc: 'Bonos globales cubiertos a euros. Amortigua las caídas de la bolsa.' },
+        { name: 'Vanguard Euro Government Bond Index',  isin: 'IE00BFPM9W02', pct: 20, asset: 'Bonos Gov EUR',  desc: 'Deuda pública eurozona. Estabilidad sin riesgo de divisa.' },
+      ],
+      dinamico: [
+        { name: 'Vanguard FTSE All-World',               isin: 'IE00B3RBWM25', pct: 50, asset: 'RV Global',     desc: 'Las ~4.000 mayores empresas del mundo. La base de la cartera dinámica.' },
+        { name: 'iShares Core MSCI World',               isin: 'IE00B4L5Y983', pct: 31, asset: 'RV Mundo',      desc: 'Refuerza la exposición a mercados desarrollados.' },
+        { name: 'Vanguard Global Bond Index EUR Hdg',   isin: 'IE00B50W2R13', pct: 11, asset: 'Bonos Globales', desc: 'Amortiguador ante caídas bruscas.' },
+        { name: 'Vanguard Euro Government Bond Index',  isin: 'IE00BFPM9W02', pct: 8,  asset: 'Bonos Gov EUR',  desc: 'Componente defensivo eurozona.' },
+      ],
+      agresivo: [
+        { name: 'Vanguard FTSE All-World',               isin: 'IE00B3RBWM25', pct: 62, asset: 'RV Global',     desc: 'Las ~4.000 mayores empresas del mundo. Máxima diversificación global con una sola posición.' },
+        { name: 'iShares Core MSCI World',               isin: 'IE00B4L5Y983', pct: 37, asset: 'RV Mundo',      desc: 'Complementa la cobertura de mercados desarrollados para maximizar el crecimiento.' },
+        { name: 'Vanguard Global Bond Index EUR Hdg',   isin: 'IE00B50W2R13', pct: 1,  asset: 'Bonos Globales', desc: 'Mínima posición defensiva residual.' },
+      ],
+    },
+    funds_note: 'Pesos aproximados según proporciones RV/RF publicadas por Finizens. Fondos confirmados en documentos KID (CNMV). Composición exacta disponible en el área de cliente.',
     transparency_url: 'https://finizens.com',
   },
   myinvestor: {
@@ -613,7 +637,10 @@ function renderRoboadvisorPlan(profile) {
             <div class="space-y-1.5 text-sm text-gray-700">
               <p>→ El interés compuesto ya es visible en tu cartera</p>
               ${roboKey === 'indexa' ? '<p>→ A partir de 10.000 € la comisión de Indexa baja al <strong>0,31%</strong></p>' : ''}
-              ${roboKey === 'finizens' ? '<p>→ Al llegar a 3.000 € puedes valorar MyInvestor Cartera Indexada (comisión total 0,44%)</p>' : ''}
+              ${(roboKey === 'finizens' && profile.roboPrefs === 'myinvestor') ? '<p>→ Al llegar a <strong>3.000 €</strong> podrás traspasar a MyInvestor Cartera Indexada (comisión total 0,44%) sin coste fiscal</p>' : ''}
+              ${(roboKey === 'finizens' && profile.roboPrefs === 'indexa') ? '<p>→ Al llegar a <strong>3.000 €</strong> podrás traspasar a Indexa Capital (comisión 0,53%, el historial más largo de España) sin coste fiscal</p>' : ''}
+              ${(roboKey === 'finizens' && !profile.roboPrefs) ? '<p>→ Al llegar a 3.000 € puedes valorar MyInvestor (0,44%) o Indexa Capital (0,53%) según tu perfil</p>' : ''}
+              ${roboKey === 'myinvestor' ? '<p>→ A partir de 10.000 € en MyInvestor valora añadir la cuenta remunerada para el fondo de emergencia</p>' : ''}
               <p>→ Activa el rebalanceo automático si está disponible</p>
             </div>
             <div class="mt-3 pt-3 border-t border-emerald-100">
@@ -631,8 +658,8 @@ function renderRoboadvisorPlan(profile) {
         <div class="flex-1">
           <p class="text-xs font-semibold text-purple-600 uppercase tracking-wide mb-1">Al llegar a 100.000 € · Da el salto</p>
           <div class="bg-purple-50 border border-purple-100 rounded-2xl p-4">
-            <p class="font-semibold text-gray-900 text-sm mb-2">Gestión propia con fondos en MyInvestor</p>
-            <p class="text-sm text-gray-600 mb-3">A este nivel, gestionar una cartera de 3–4 fondos indexados te ahorra entre 500 € y 1.500 € al año en comisiones.</p>
+            <p class="font-semibold text-gray-900 text-sm mb-2">Gestión propia con fondos indexados</p>
+            <p class="text-sm text-gray-600 mb-3">A este nivel, gestionar una cartera de 3–4 fondos indexados en MyInvestor te ahorra entre 500 € y 1.500 € al año en comisiones.</p>
             <div class="grid grid-cols-2 gap-2 mb-3">
               <div class="bg-white rounded-xl p-3 border border-purple-100">
                 <p class="text-xs text-gray-500 mb-1">Con roboadvisor (${robo.fee_total})</p>
@@ -644,7 +671,7 @@ function renderRoboadvisorPlan(profile) {
               </div>
             </div>
             <p class="text-xs text-purple-700 font-medium">💡 Traspaso sin coste fiscal</p>
-            <p class="text-xs text-purple-600 mt-0.5">En España puedes traspasar entre fondos sin tributar. Podrás mover tu dinero de ${roboFirst} a MyInvestor sin pagar impuestos.</p>
+            <p class="text-xs text-purple-600 mt-0.5">En España puedes traspasar entre fondos de inversión sin tributar. Moverás tu dinero de ${roboFirst} a tus fondos propios en MyInvestor sin pagar impuestos.</p>
           </div>
         </div>
       </div>

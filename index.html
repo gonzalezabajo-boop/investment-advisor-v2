@@ -72,6 +72,20 @@
     .screen-out-back { animation: screenOutBack 0.2s ease forwards; }
     .screen-in-fwd { animation: screenInFwd 0.38s cubic-bezier(.16,1,.3,1); }
     .screen-in-back { animation: screenInBack 0.38s cubic-bezier(.16,1,.3,1); }
+
+    /* Continue-button confirmation check */
+    .btn-continue { position: relative; overflow: hidden; }
+    .btn-continue.confirming::after {
+      content: '✓';
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: #0D7A5F; color: #fff; font-weight: 700; font-size: 1.15em;
+      animation: btnCheckPop 0.5s cubic-bezier(.34,1.56,.64,1) forwards;
+    }
+    @keyframes btnCheckPop {
+      0% { opacity: 0; transform: scale(0.6); }
+      45% { opacity: 1; transform: scale(1.08); }
+      100% { opacity: 1; transform: scale(1); }
+    }
   </style>
 </head>
 <body class="min-h-screen">
@@ -164,7 +178,7 @@
 
                 <p id="q1-err" class="hidden text-xs text-red-500 mb-3 text-center">Introduce un importe válido (puede ser 0).</p>
 
-                <button onclick="goSalario()" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
+                <button onclick="goSalario()" class="btn-continue w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
                   Continuar →
                 </button>
               </div>
@@ -201,7 +215,7 @@
 
                 <p id="salario-err" class="hidden text-xs text-red-500 mb-3 text-center">Introduce un importe válido (puede ser 0).</p>
 
-                <button onclick="goQ2()" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
+                <button onclick="goQ2()" class="btn-continue w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
                   Continuar →
                 </button>
               </div>
@@ -245,7 +259,7 @@
 
                 <p id="q2-err" class="hidden text-xs text-red-500 mb-3 text-center">Introduce un importe válido (puede ser 0).</p>
 
-                <button onclick="goEdad()" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
+                <button onclick="goEdad()" class="btn-continue w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
                   Continuar →
                 </button>
               </div>
@@ -281,7 +295,7 @@
 
                 <p id="edad-err" class="hidden text-xs text-red-500 mb-3 text-center">Introduce una edad válida (entre 18 y 99 años).</p>
 
-                <button onclick="goQ3()" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
+                <button onclick="goQ3()" class="btn-continue w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
                   Continuar →
                 </button>
               </div>
@@ -340,7 +354,7 @@
 
                 <p id="q3-err" class="hidden text-xs text-red-500 mb-3 text-center">Selecciona una opción para continuar.</p>
 
-                <button onclick="goQ4()" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
+                <button onclick="goQ4()" class="btn-continue w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
                   Continuar →
                 </button>
               </div>
@@ -404,7 +418,7 @@
 
                 <p id="q4-err" class="hidden text-xs text-red-500 mb-3 text-center">Selecciona una opción para continuar.</p>
 
-                <button onclick="goQ5()" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
+                <button onclick="goQ5()" class="btn-continue w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
                   Continuar →
                 </button>
               </div>
@@ -455,7 +469,7 @@
 
                 <p id="q5-err" class="hidden text-xs text-red-500 mb-3 text-center">Selecciona una opción para continuar.</p>
 
-                <button onclick="goResults()" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
+                <button onclick="goResults()" class="btn-continue w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
                   Ver mi plan →
                 </button>
               </div>
@@ -509,7 +523,7 @@
 
                 <p id="robopref-err" class="hidden text-xs text-red-500 mb-3 text-center">Selecciona una opción para continuar.</p>
 
-                <button onclick="goRoboPrefNext()" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
+                <button onclick="goRoboPrefNext()" class="btn-continue w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
                   Ver mi plan →
                 </button>
               </div>
@@ -615,6 +629,10 @@
                     <span class="text-2xl font-bold text-blue-800" id="panel-growth-final">0 €</span>
                     <span class="text-xs text-gray-400 block">valor estimado (~7%/año histórico)</span>
                   </p>
+                  <p class="text-center mt-1.5">
+                    <span class="inline-block w-2 h-2 rounded-full bg-amber-500 mr-1.5" style="vertical-align:1px"></span>
+                    <span class="text-xs text-gray-500">aportado: <strong id="panel-growth-contrib" class="text-gray-700">0 €</strong></span>
+                  </p>
                 </div>
 
                 <!-- Risk gauge -->
@@ -659,6 +677,14 @@
     const RING_CIRC = 106.8;
 
     // ─── Navigation ───────────────────────────────────────────
+    // Brief checkmark confirmation on any "Continuar" button before the screen slides out
+    document.addEventListener('click', function(e) {
+      const btn = e.target.closest('.btn-continue');
+      if (!btn) return;
+      btn.classList.add('confirming');
+      setTimeout(() => btn.classList.remove('confirming'), 550);
+    });
+
     const SCREEN_ORDER = ['intro','q1','salario','q2','edad','q3','q4','q5','robopref','lead'];
 
     function showScreen(id) {
@@ -865,7 +891,9 @@
         dataContrib.push(Math.round(panelCapital + monthly * nn));
       }
       const final = dataGrowth[dataGrowth.length - 1];
+      const contribFinal = dataContrib[dataContrib.length - 1];
       document.getElementById('panel-growth-final').textContent = fmtEurShort(final);
+      document.getElementById('panel-growth-contrib').textContent = fmtEurShort(contribFinal);
 
       const ctx = document.getElementById('panel-chart');
       if (panelGrowthChart) panelGrowthChart.destroy();
@@ -887,13 +915,13 @@
             {
               data: dataContrib,
               fill: false,
-              borderColor: '#F59E0B',
+              borderColor: '#D97706',
               backgroundColor: 'transparent',
               tension: 0.4,
               pointRadius: 0,
-              borderWidth: 1.5,
-              borderDash: [4, 3],
-              order: 2
+              borderWidth: 2.5,
+              borderDash: [5, 3],
+              order: 0
             }
           ]
         },

@@ -524,7 +524,7 @@ function renderRoboadvisorPlan(profile) {
       <div class="flex items-center gap-4 mb-4">
         <div class="w-14 h-14 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center text-3xl">${pm.emoji}</div>
         <div>
-          <h2 class="font-display text-2xl font-semibold">Perfil ${pm.label}</h2>
+          <h2 class="font-display text-3xl font-semibold">Perfil ${pm.label}</h2>
           <p class="text-blue-200 text-sm">${hm.label} · ${pm.desc}</p>
         </div>
       </div>
@@ -552,7 +552,7 @@ function renderRoboadvisorPlan(profile) {
             <p class="text-white text-xs font-semibold uppercase tracking-widest">${recoEyebrow}</p>
             <span class="text-xs font-bold text-emerald-300 bg-emerald-900 bg-opacity-40 px-2.5 py-1 rounded-full whitespace-nowrap">${robo.history}</span>
           </div>
-          <h3 class="font-display text-white text-xl font-semibold">${robo.name}</h3>
+          <h3 class="font-display text-white text-2xl font-semibold">${robo.name}</h3>
           <p class="text-blue-200 text-sm">${portf.label} · ${portf.rv}% RV / ${portf.rf}% RF</p>
         </div>
         <div class="p-6">
@@ -768,7 +768,7 @@ function renderDIYPlan(profile) {
       <div class="flex items-center gap-4 mb-4">
         <div class="w-14 h-14 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center text-3xl">${pm.emoji}</div>
         <div>
-          <h2 class="font-display text-2xl font-semibold">Perfil ${pm.label}</h2>
+          <h2 class="font-display text-3xl font-semibold">Perfil ${pm.label}</h2>
           <p class="text-purple-200 text-sm">${hm.label} · ${pm.desc}</p>
         </div>
       </div>
@@ -797,7 +797,7 @@ function renderDIYPlan(profile) {
         </div>
         <div class="flex items-center justify-between mb-4">
           <div>
-            <h3 class="font-display text-lg font-semibold text-gray-900">Tu cartera en MyInvestor</h3>
+            <h3 class="font-display text-xl font-semibold text-gray-900">Tu cartera en MyInvestor</h3>
             <p class="text-sm text-gray-400 mt-0.5">Cartera de ${levelLabel} · TER medio ~${fmtPct(avgTer)}/año</p>
           </div>
           ${emergencyCovered ? `<a href="https://myinvestor.es" target="_blank" rel="noopener" class="text-xs text-blue-700 hover:underline font-medium">Abrir cuenta →</a>` : ''}

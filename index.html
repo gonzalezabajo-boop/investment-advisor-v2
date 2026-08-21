@@ -793,9 +793,9 @@
       document.getElementById('panel-savings-bar-invest').style.width = (investGuess / total * 100) + '%';
       document.getElementById('panel-fund-val').textContent = fmtEurShort(emergencyGuess);
       document.getElementById('panel-invest-val').textContent = fmtEurShort(investGuess);
-      document.getElementById('panel-subtitle').textContent = 'Paso 1 de 6 completado';
+      document.getElementById('panel-subtitle').textContent = 'Paso 1 de 7 completado';
       syncMobileMetric('🛡️ ' + fmtEurShort(emergencyGuess) + ' colchón');
-      setPanelRing(1/6);
+      setPanelRing(1/7);
       updatePanelGrowth(panelMonthly);
     }
 
@@ -811,9 +811,9 @@
       document.getElementById('panel-savings-bar-invest').style.width = (investReal / total * 100) + '%';
       document.getElementById('panel-fund-val').textContent = fmtEurShort(emergencyReal);
       document.getElementById('panel-invest-val').textContent = fmtEurShort(investReal);
-      document.getElementById('panel-subtitle').textContent = 'Paso 2 de 6 completado';
+      document.getElementById('panel-subtitle').textContent = 'Paso 2 de 7 completado';
       syncMobileMetric('🛡️ ' + fmtEurShort(emergencyReal) + ' colchón (3 nóminas)');
-      setPanelRing(2/6);
+      setPanelRing(2/7);
     }
 
     function updatePanelGrowth(monthly) {
@@ -875,17 +875,17 @@
           animation: { duration: 400 }
         }
       });
-      document.getElementById('panel-subtitle').textContent = 'Paso 3 de 6 completado';
+      document.getElementById('panel-subtitle').textContent = 'Paso 3 de 7 completado';
       syncMobileMetric('📈 ' + fmtEurShort(final) + ' proyectado');
-      setPanelRing(3/6);
+      setPanelRing(3/7);
     }
 
     function updatePanelHorizon(val) {
       revealPanel();
       panelYears = val === 'corto' ? 3 : (val === 'medio' ? 7 : 20);
       updatePanelGrowth(panelMonthly);
-      document.getElementById('panel-subtitle').textContent = 'Paso 4 de 6 completado';
-      setPanelRing(4/6);
+      document.getElementById('panel-subtitle').textContent = 'Paso 5 de 7 completado';
+      setPanelRing(5/7);
     }
 
     const RISK_META = {
@@ -902,9 +902,9 @@
       const meta = RISK_META[val] || RISK_META.moderado;
       document.getElementById('panel-gauge-dot').style.left = meta.pos + '%';
       document.getElementById('panel-risk-label').textContent = meta.label;
-      document.getElementById('panel-subtitle').textContent = 'Paso 5 de 6 completado';
+      document.getElementById('panel-subtitle').textContent = 'Paso 6 de 7 completado';
       syncMobileMetric('🎯 Perfil ' + val.charAt(0).toUpperCase() + val.slice(1));
-      setPanelRing(5/6);
+      setPanelRing(6/7);
     }
 
     function updatePanelTrack(val) {
@@ -967,7 +967,15 @@
       }
       answers.edad = val;
       document.getElementById('edad-err').classList.add('hidden');
+      updatePanelEdad(val);
       showScreen('q3');
+    }
+
+    function updatePanelEdad(edad) {
+      revealPanel();
+      document.getElementById('panel-subtitle').textContent = 'Paso 4 de 7 completado';
+      syncMobileMetric('🎂 ' + edad + ' años');
+      setPanelRing(4/7);
     }
 
     function updateEdadCallout(edad) {

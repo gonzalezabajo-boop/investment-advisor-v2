@@ -209,8 +209,8 @@ var GLOSSARY = {
 
 function glossChip(label, key) {
   var def = GLOSSARY[key || label];
-  if (!def) return '<span class="bg-white rounded-lg px-2 py-1 border border-gray-200">' + label + '</span>';
-  return '<span class="gloss-tip bg-white rounded-lg px-2 py-1 border border-gray-200 border-dashed cursor-help">' + label +
+  if (!def) return '<span class="bg-white/10 rounded-lg px-2 py-1 border border-white/15">' + label + '</span>';
+  return '<span class="gloss-tip bg-white/10 rounded-lg px-2 py-1 border border-white/15 border-dashed cursor-help">' + label +
     '<span class="gloss-tip-bubble">' + def + '</span></span>';
 }
 
@@ -338,20 +338,20 @@ function buildEmergencySection(step1, step2, totalSavings, investibleCapital, ac
   if (alreadyCovered) {
     statusHtml =
       '<div class="flex items-center gap-2 mb-3">' +
-        '<span class="text-emerald-600 font-bold text-sm">✓ Colchón cubierto</span>' +
-        '<span class="text-xs text-gray-400">(' + meses + ' meses de gastos estimados)</span>' +
+        '<span class="text-emerald-300 font-bold text-sm">✓ Colchón cubierto</span>' +
+        '<span class="text-xs text-white/40">(' + meses + ' meses de gastos estimados)</span>' +
       '</div>' +
       '<div class="grid grid-cols-2 gap-3 mb-4">' +
-        '<div class="bg-emerald-50 rounded-xl p-3 text-center">' +
-          '<p class="text-xs text-gray-500 mb-0.5">En cuenta remunerada</p>' +
-          '<p class="font-bold text-emerald-700 text-base">' + fmtEur(reserved) + '</p>' +
+        '<div class="bg-emerald-500/10 rounded-xl p-3 text-center">' +
+          '<p class="text-xs text-white/50 mb-0.5">En cuenta remunerada</p>' +
+          '<p class="font-bold text-emerald-300 text-base">' + fmtEur(reserved) + '</p>' +
         '</div>' +
-        '<div class="bg-blue-50 rounded-xl p-3 text-center">' +
-          '<p class="text-xs text-gray-500 mb-0.5">Disponible para invertir</p>' +
-          '<p class="font-bold text-blue-700 text-base">' + fmtEur(investibleCapital) + '</p>' +
+        '<div class="bg-blue-500/10 rounded-xl p-3 text-center">' +
+          '<p class="text-xs text-white/50 mb-0.5">Disponible para invertir</p>' +
+          '<p class="font-bold text-blue-300 text-base">' + fmtEur(investibleCapital) + '</p>' +
         '</div>' +
       '</div>' +
-      '<p class="text-xs text-gray-400 mb-4">La cuenta remunerada te genera ~<strong class="text-gray-600">' + fmtEur(interestYear) + '/año</strong> de intereses mientras el dinero espera.</p>';
+      '<p class="text-xs text-white/40 mb-4">La cuenta remunerada te genera ~<strong class="text-white/60">' + fmtEur(interestYear) + '/año</strong> de intereses mientras el dinero espera.</p>';
   } else {
     var monthlyNum = parseFloat(monthly) || 0;
     var monthsToGo = monthlyNum > 0 ? Math.ceil(shortfall / monthlyNum) : null;
@@ -360,47 +360,47 @@ function buildEmergencySection(step1, step2, totalSavings, investibleCapital, ac
       : '';
     statusHtml =
       '<div class="flex items-center gap-2 mb-3">' +
-        '<span class="w-5 h-5 rounded-full bg-amber-500 text-white text-[10px] font-bold flex items-center justify-center shrink-0">1</span>' +
-        '<span class="text-amber-700 font-bold text-sm">Paso 1 · Completa tu colchón antes de invertir</span>' +
+        '<span class="w-5 h-5 rounded-full bg-amber-500/100 text-white text-[10px] font-bold flex items-center justify-center shrink-0">1</span>' +
+        '<span class="text-amber-300 font-bold text-sm">Paso 1 · Completa tu colchón antes de invertir</span>' +
       '</div>' +
       '<div class="grid grid-cols-2 gap-3 mb-4">' +
-        '<div class="bg-amber-50 rounded-xl p-3 text-center">' +
-          '<p class="text-xs text-gray-500 mb-0.5">Objetivo (' + meses + ' meses)</p>' +
-          '<p class="font-bold text-amber-700 text-base">' + fmtEur(emergencyTarget) + '</p>' +
+        '<div class="bg-amber-500/10 rounded-xl p-3 text-center">' +
+          '<p class="text-xs text-white/50 mb-0.5">Objetivo (' + meses + ' meses)</p>' +
+          '<p class="font-bold text-amber-300 text-base">' + fmtEur(emergencyTarget) + '</p>' +
         '</div>' +
-        '<div class="bg-red-50 rounded-xl p-3 text-center">' +
-          '<p class="text-xs text-gray-500 mb-0.5">Te faltan</p>' +
-          '<p class="font-bold text-red-600 text-base">' + fmtEur(shortfall) + '</p>' +
+        '<div class="bg-red-500/10 rounded-xl p-3 text-center">' +
+          '<p class="text-xs text-white/50 mb-0.5">Te faltan</p>' +
+          '<p class="font-bold text-red-300 text-base">' + fmtEur(shortfall) + '</p>' +
         '</div>' +
       '</div>' +
-      '<p class="text-xs text-amber-700 font-medium mb-3">Antes de invertir nada, dirige tu ahorro mensual a una cuenta remunerada hasta alcanzar ' + fmtEur(emergencyTarget) + '.' + etaHtml + '</p>';
+      '<p class="text-xs text-amber-300 font-medium mb-3">Antes de invertir nada, dirige tu ahorro mensual a una cuenta remunerada hasta alcanzar ' + fmtEur(emergencyTarget) + '.' + etaHtml + '</p>';
   }
 
   var accountsHtml = SAVINGS_ACCOUNTS.map(function(acc, i) {
     var badgeHtml = acc.badge
       ? '<span class="ml-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-' + acc.badgeColor + '-100 text-' + acc.badgeColor + '-700">' + acc.badge + '</span>'
       : '';
-    return '<div class="flex items-start justify-between py-3' + (i > 0 ? ' border-t border-gray-100' : '') + '">' +
+    return '<div class="flex items-start justify-between py-3' + (i > 0 ? ' border-t border-white/10' : '') + '">' +
       '<div class="flex-1 mr-3">' +
         '<div class="flex items-center flex-wrap gap-1 mb-0.5">' +
-          '<p class="font-semibold text-gray-900 text-sm">' + acc.name + '</p>' +
+          '<p class="font-semibold text-white text-sm">' + acc.name + '</p>' +
           badgeHtml +
         '</div>' +
-        '<p class="text-xs text-gray-400">' + acc.note + '</p>' +
+        '<p class="text-xs text-white/40">' + acc.note + '</p>' +
       '</div>' +
       '<div class="text-right shrink-0">' +
-        '<p class="font-bold text-emerald-600 text-base">' + acc.rate + '</p>' +
-        '<p class="text-xs text-gray-400">' + acc.maxLabel + '</p>' +
+        '<p class="font-bold text-emerald-300 text-base">' + acc.rate + '</p>' +
+        '<p class="text-xs text-white/40">' + acc.maxLabel + '</p>' +
       '</div>' +
     '</div>';
   }).join('');
 
-  return '<div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">' +
-    '<h3 class="text-lg font-bold text-gray-900 mb-1">Fondo de emergencia</h3>' +
-    '<p class="text-sm text-gray-400 mb-4">Tu colchón de seguridad antes de invertir</p>' +
+  return '<div class="bg-white/5 backdrop-blur rounded-3xl border border-white/10 p-6">' +
+    '<h3 class="text-lg font-bold text-white mb-1">Fondo de emergencia</h3>' +
+    '<p class="text-sm text-white/40 mb-4">Tu colchón de seguridad antes de invertir</p>' +
     statusHtml +
-    '<p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Cuentas remuneradas más competitivas (España, 2025)</p>' +
-    '<div class="bg-gray-50 rounded-2xl p-4">' +
+    '<p class="text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Cuentas remuneradas más competitivas (España, 2025)</p>' +
+    '<div class="bg-white/5 rounded-2xl p-4">' +
       accountsHtml +
     '</div>' +
     '<a href="' + bestAccount.url + '" target="_blank" rel="noopener" ' +
@@ -419,10 +419,10 @@ function projectionCards(capital, monthly, rate, colA, colB, colC) {
   var i20 = capital + monthly * 240;
   var i30 = capital + monthly * 360;
   return '<div class="grid grid-cols-3 gap-3 mb-4">' +
-    '<div class="text-center p-3 bg-' + colA + '-50 rounded-2xl"><p class="text-xs text-gray-500 mb-1">En 10 años</p><p class="text-lg font-bold text-' + colA + '-700">' + fmtEur(y10) + '</p><p class="text-xs text-gray-400">aportado: ' + fmtEur(Math.round(i10)) + '</p></div>' +
-    '<div class="text-center p-3 bg-' + colB + '-50 rounded-2xl"><p class="text-xs text-gray-500 mb-1">En 20 años</p><p class="text-lg font-bold text-' + colB + '-700">' + fmtEur(y20) + '</p><p class="text-xs text-gray-400">aportado: ' + fmtEur(Math.round(i20)) + '</p></div>' +
-    '<div class="text-center p-3 bg-' + colC + '-50 rounded-2xl"><p class="text-xs text-gray-500 mb-1">En 30 años</p><p class="text-lg font-bold text-' + colC + '-700">' + fmtEur(y30) + '</p><p class="text-xs text-gray-400">aportado: ' + fmtEur(Math.round(i30)) + '</p></div>' +
-    '</div><p class="text-xs text-gray-400 text-center">Proyección estimada. Rentabilidades pasadas no garantizan resultados futuros.</p>';
+    '<div class="text-center p-3 bg-' + colA + '-50 rounded-2xl"><p class="text-xs text-white/50 mb-1">En 10 años</p><p class="text-lg font-bold text-' + colA + '-700">' + fmtEur(y10) + '</p><p class="text-xs text-white/40">aportado: ' + fmtEur(Math.round(i10)) + '</p></div>' +
+    '<div class="text-center p-3 bg-' + colB + '-50 rounded-2xl"><p class="text-xs text-white/50 mb-1">En 20 años</p><p class="text-lg font-bold text-' + colB + '-700">' + fmtEur(y20) + '</p><p class="text-xs text-white/40">aportado: ' + fmtEur(Math.round(i20)) + '</p></div>' +
+    '<div class="text-center p-3 bg-' + colC + '-50 rounded-2xl"><p class="text-xs text-white/50 mb-1">En 30 años</p><p class="text-lg font-bold text-' + colC + '-700">' + fmtEur(y30) + '</p><p class="text-xs text-white/40">aportado: ' + fmtEur(Math.round(i30)) + '</p></div>' +
+    '</div><p class="text-xs text-white/40 text-center">Proyección estimada. Rentabilidades pasadas no garantizan resultados futuros.</p>';
 }
 
 // ─── Render: Roboadvisor plan ──────────────────────────────────────────────────
@@ -435,27 +435,27 @@ function buildFundsSection(robo, risk) {
     var rows = funds.map(function(f) {
       var nameCell = f.desc
         ? '<td class="py-2.5 pr-3 align-top">' +
-            '<p class="text-xs text-gray-800 font-medium leading-snug">' + f.name + '</p>' +
-            '<p class="text-xs text-gray-400 mt-0.5 leading-snug">' + f.desc + '</p>' +
+            '<p class="text-xs text-white/80 font-medium leading-snug">' + f.name + '</p>' +
+            '<p class="text-xs text-white/40 mt-0.5 leading-snug">' + f.desc + '</p>' +
           '</td>'
-        : '<td class="py-2.5 pr-3 text-xs text-gray-800 font-medium align-top">' + f.name + '</td>';
-      return '<tr class="border-t border-gray-100">' +
+        : '<td class="py-2.5 pr-3 text-xs text-white/80 font-medium align-top">' + f.name + '</td>';
+      return '<tr class="border-t border-white/10">' +
         nameCell +
-        '<td class="py-2.5 pr-3 text-xs text-gray-400 font-mono align-top whitespace-nowrap">' + f.isin + '</td>' +
+        '<td class="py-2.5 pr-3 text-xs text-white/40 font-mono align-top whitespace-nowrap">' + f.isin + '</td>' +
         (hasWeights
-          ? '<td class="py-2.5 text-xs font-bold text-blue-700 text-right align-top whitespace-nowrap">' + f.pct + '%</td>'
-          : (f.ter ? '<td class="py-2.5 text-xs text-gray-400 text-right align-top whitespace-nowrap">' + f.ter + '</td>' : '<td></td>')
+          ? '<td class="py-2.5 text-xs font-bold text-blue-300 text-right align-top whitespace-nowrap">' + f.pct + '%</td>'
+          : (f.ter ? '<td class="py-2.5 text-xs text-white/40 text-right align-top whitespace-nowrap">' + f.ter + '</td>' : '<td></td>')
         ) +
         '</tr>';
     }).join('');
 
-    var thPct = hasWeights ? '<th class="pb-2 text-right text-xs font-semibold text-gray-400 whitespace-nowrap">Peso</th>' : '<th class="pb-2 text-right text-xs font-semibold text-gray-400 whitespace-nowrap">TER</th>';
+    var thPct = hasWeights ? '<th class="pb-2 text-right text-xs font-semibold text-white/40 whitespace-nowrap">Peso</th>' : '<th class="pb-2 text-right text-xs font-semibold text-white/40 whitespace-nowrap">TER</th>';
 
     fundsHtml = '<div class="overflow-x-auto">' +
       '<table class="w-full">' +
       '<thead><tr>' +
-        '<th class="pb-2 text-left text-xs font-semibold text-gray-400">Fondo</th>' +
-        '<th class="pb-2 text-left text-xs font-semibold text-gray-400 whitespace-nowrap">ISIN</th>' +
+        '<th class="pb-2 text-left text-xs font-semibold text-white/40">Fondo</th>' +
+        '<th class="pb-2 text-left text-xs font-semibold text-white/40 whitespace-nowrap">ISIN</th>' +
         thPct +
       '</tr></thead>' +
       '<tbody>' + rows + '</tbody>' +
@@ -468,18 +468,18 @@ function buildFundsSection(robo, risk) {
   }
 
   var noteHtml = robo.funds_note
-    ? '<p class="text-xs text-gray-400 mt-3 italic">' + robo.funds_note + '</p>'
+    ? '<p class="text-xs text-white/40 mt-3 italic">' + robo.funds_note + '</p>'
     : '';
 
   var linkHtml = robo.transparency_url
-    ? '<a href="' + robo.transparency_url + '" target="_blank" rel="noopener" class="text-xs text-blue-600 hover:underline mt-2 inline-block">Ver composición oficial →</a>'
+    ? '<a href="' + robo.transparency_url + '" target="_blank" rel="noopener" class="text-xs text-blue-300 hover:underline mt-2 inline-block">Ver composición oficial →</a>'
     : '';
 
-  return '<details class="mt-5 border-t border-gray-100 group">' +
-    '<summary class="cursor-pointer select-none list-none flex items-center justify-between pt-4 pb-1 hover:text-blue-600 transition-colors">' +
-      '<span class="text-sm font-semibold text-gray-700 group-hover:text-blue-600">Fondos subyacentes</span>' +
-      '<span class="text-gray-400 text-xs group-open:hidden">▼ ver</span>' +
-      '<span class="text-gray-400 text-xs hidden group-open:inline">▲ ocultar</span>' +
+  return '<details class="mt-5 border-t border-white/10 group">' +
+    '<summary class="cursor-pointer select-none list-none flex items-center justify-between pt-4 pb-1 hover:text-blue-300 transition-colors">' +
+      '<span class="text-sm font-semibold text-white/70 group-hover:text-blue-300">Fondos subyacentes</span>' +
+      '<span class="text-white/40 text-xs group-open:hidden">▼ ver</span>' +
+      '<span class="text-white/40 text-xs hidden group-open:inline">▲ ocultar</span>' +
     '</summary>' +
     '<div class="pt-3">' +
       fundsHtml +
@@ -512,8 +512,8 @@ function renderRoboadvisorPlan(profile) {
   var recoEyebrow     = emergencyCovered ? 'Recomendado para ti' : 'Tu plan · cuando completes tu colchón';
   var step2Badge = emergencyCovered ? '' : `
     <div class="flex items-center gap-2 mb-3">
-      <span class="w-5 h-5 rounded-full bg-gray-300 text-white text-[10px] font-bold flex items-center justify-center shrink-0">2</span>
-      <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide">Paso 2 · Después de cubrir tu fondo de emergencia</p>
+      <span class="w-5 h-5 rounded-full bg-white/20 text-white text-[10px] font-bold flex items-center justify-center shrink-0">2</span>
+      <p class="text-xs font-semibold text-white/40 uppercase tracking-wide">Paso 2 · Después de cubrir tu fondo de emergencia</p>
     </div>`;
 
   return `
@@ -546,7 +546,7 @@ function renderRoboadvisorPlan(profile) {
 
     <div>
       ${step2Badge}
-      <div class="bg-white rounded-3xl border ${emergencyCovered ? 'border-gray-100' : 'border-dashed border-gray-300'} shadow-sm overflow-hidden ${emergencyCovered ? '' : 'opacity-90'}">
+      <div class="bg-white/5 backdrop-blur rounded-3xl border ${emergencyCovered ? 'border-white/10' : 'border-dashed border-white/20'} overflow-hidden ${emergencyCovered ? '' : 'opacity-90'}">
         <div class="bg-blue-700 px-6 py-4">
           <div class="flex items-center justify-between gap-3 mb-1">
             <p class="text-white text-xs font-semibold uppercase tracking-widest">${recoEyebrow}</p>
@@ -557,69 +557,69 @@ function renderRoboadvisorPlan(profile) {
         </div>
         <div class="p-6">
           <div class="flex items-start gap-3 mb-5">
-            <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center shrink-0"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="9" stroke="#3B82F6" stroke-width="1.5"/><circle cx="11" cy="11" r="4" fill="#3B82F6" opacity=".3"/><circle cx="11" cy="11" r="1.5" fill="#3B82F6"/><line x1="11" y1="2" x2="11" y2="5" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round"/><line x1="11" y1="17" x2="11" y2="20" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="11" x2="5" y2="11" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round"/><line x1="17" y1="11" x2="20" y2="11" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+            <div class="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center shrink-0"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="9" stroke="#3B82F6" stroke-width="1.5"/><circle cx="11" cy="11" r="4" fill="#3B82F6" opacity=".3"/><circle cx="11" cy="11" r="1.5" fill="#3B82F6"/><line x1="11" y1="2" x2="11" y2="5" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round"/><line x1="11" y1="17" x2="11" y2="20" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="11" x2="5" y2="11" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round"/><line x1="17" y1="11" x2="20" y2="11" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round"/></svg></div>
             <div class="flex-1">
-              <p class="font-semibold text-gray-900">¿Por qué ${roboFirst}?</p>
-              <p class="text-sm text-gray-500 mt-1">${robo.why}</p>
+              <p class="font-semibold text-white">¿Por qué ${roboFirst}?</p>
+              <p class="text-sm text-white/50 mt-1">${robo.why}</p>
               ${buildFundsSection(robo, risk)}
             </div>
           </div>
           ${(capital < 3000 && profile.roboPrefs && profile.roboPrefs !== 'finizens') ? `
-          <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-4">
-            <p class="text-sm font-semibold text-amber-800 mb-1">ℹ️ Por qué Finizens ahora</p>
-            <p class="text-sm text-amber-700">Con menos de 3.000 € disponibles para invertir, Finizens es la única opción sin mínimo de entrada. Cuando alcances ese umbral, puedes traspasar a ${profile.roboPrefs === 'myinvestor' ? 'MyInvestor' : 'Indexa Capital'} sin ningún coste ni impacto fiscal.</p>
+          <div class="bg-amber-500/10 border border-amber-200 rounded-2xl p-4 mb-4">
+            <p class="text-sm font-semibold text-amber-200 mb-1">ℹ️ Por qué Finizens ahora</p>
+            <p class="text-sm text-amber-300">Con menos de 3.000 € disponibles para invertir, Finizens es la única opción sin mínimo de entrada. Cuando alcances ese umbral, puedes traspasar a ${profile.roboPrefs === 'myinvestor' ? 'MyInvestor' : 'Indexa Capital'} sin ningún coste ni impacto fiscal.</p>
           </div>` : ''}
-          <div class="bg-gray-50 rounded-2xl p-4 mb-4">
-            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Coste total anual</p>
+          <div class="bg-white/5 rounded-2xl p-4 mb-4">
+            <p class="text-xs font-semibold text-white/50 uppercase tracking-wide mb-3">Coste total anual</p>
             <div class="space-y-2">
-              <div class="flex justify-between text-sm"><span class="text-gray-600">${robo.fee_mgmt_label || 'Comisión de gestión'}</span><span class="font-medium text-gray-900">${robo.fee_mgmt}</span></div>
-              <div class="flex justify-between text-sm"><span class="text-gray-600">${robo.fee_funds_label || 'TER fondos subyacentes'}</span><span class="font-medium text-gray-900">${robo.fee_funds}</span></div>
-              <div class="border-t border-gray-200 pt-2 flex justify-between text-sm font-bold">
-                <span class="text-gray-900">Total anual</span>
-                <span class="text-blue-700">${robo.fee_total}${feeYear > 0 ? ' · ~' + fmtEur(feeYear) + '/año' : ''}</span>
+              <div class="flex justify-between text-sm"><span class="text-white/60">${robo.fee_mgmt_label || 'Comisión de gestión'}</span><span class="font-medium text-white">${robo.fee_mgmt}</span></div>
+              <div class="flex justify-between text-sm"><span class="text-white/60">${robo.fee_funds_label || 'TER fondos subyacentes'}</span><span class="font-medium text-white">${robo.fee_funds}</span></div>
+              <div class="border-t border-white/15 pt-2 flex justify-between text-sm font-bold">
+                <span class="text-white">Total anual</span>
+                <span class="text-blue-300">${robo.fee_total}${feeYear > 0 ? ' · ~' + fmtEur(feeYear) + '/año' : ''}</span>
               </div>
             </div>
-            <p class="text-xs text-gray-400 mt-2">La banca tradicional cobra de media un 2–3%/año. Este roboadvisor te ahorra esa diferencia año tras año.</p>
+            <p class="text-xs text-white/40 mt-2">La banca tradicional cobra de media un 2–3%/año. Este roboadvisor te ahorra esa diferencia año tras año.</p>
           </div>
           ${emergencyCovered
-            ? `<a href="${robo.url}" target="_blank" rel="noopener" class="w-full block text-center bg-blue-700 text-white font-bold py-3.5 rounded-2xl hover:bg-blue-800 transition-all text-sm">Abrir cuenta en ${roboFirst} →</a>`
-            : `<p class="text-xs text-gray-400 text-center italic">Vuelve a esta pantalla cuando tengas tu colchón completo para abrir la cuenta.</p>`
+            ? `<a href="${robo.url}" target="_blank" rel="noopener" class="w-full block text-center bg-white text-blue-900 font-bold py-3.5 rounded-2xl hover:bg-gray-100 transition-all text-sm">Abrir cuenta en ${roboFirst} →</a>`
+            : `<p class="text-xs text-white/40 text-center italic">Vuelve a esta pantalla cuando tengas tu colchón completo para abrir la cuenta.</p>`
           }
         </div>
       </div>
     </div>
 
-    <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
-      <h3 class="text-lg font-bold text-gray-900 mb-1">Tu hoja de ruta</h3>
-      <p class="text-sm text-gray-400 mb-6">Cómo evoluciona tu inversión en el tiempo</p>
+    <div class="bg-white/5 backdrop-blur rounded-3xl border border-white/10 p-6">
+      <h3 class="text-lg font-bold text-white mb-1">Tu hoja de ruta</h3>
+      <p class="text-sm text-white/40 mb-6">Cómo evoluciona tu inversión en el tiempo</p>
 
       <div class="flex gap-4 mb-6">
         <div class="flex flex-col items-center shrink-0" style="width:28px">
           <div class="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold z-10">1</div>
-          <div class="w-0.5 bg-gray-200 flex-1 mt-1" style="min-height:60px"></div>
+          <div class="w-0.5 bg-white/15 flex-1 mt-1" style="min-height:60px"></div>
         </div>
         <div class="flex-1 pb-2">
-          <p class="text-xs font-semibold text-blue-600 uppercase tracking-wide mb-1">Ahora mismo</p>
-          <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4">
+          <p class="text-xs font-semibold text-blue-300 uppercase tracking-wide mb-1">Ahora mismo</p>
+          <div class="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-4">
             ${emergencyCovered ? `
-            <p class="font-semibold text-gray-900 text-sm mb-2">Abre tu cuenta y empieza</p>
-            <div class="space-y-1.5 text-sm text-gray-700">
+            <p class="font-semibold text-white text-sm mb-2">Abre tu cuenta y empieza</p>
+            <div class="space-y-1.5 text-sm text-white/70">
               ${capital > 0 ? `<p>→ Ingresa <strong>${fmtEur(capital)}</strong> como capital inicial</p>` : '<p>→ Empieza con aportaciones mensuales</p>'}
               ${monthly > 0 ? `<p>→ Activa aportación automática de <strong>${fmtEur(monthly)}/mes</strong></p>` : ''}
               <p>→ Elige el perfil <strong>${portf.label}</strong></p>
             </div>
-            <div class="mt-3 pt-3 border-t border-blue-100">
-              <p class="text-xs text-blue-700 font-medium">Empieza ya, no esperes</p>
-              <p class="text-xs text-blue-600 mt-0.5">Cada mes que esperas es tiempo que el interés compuesto no trabaja para ti.</p>
+            <div class="mt-3 pt-3 border-t border-blue-500/20">
+              <p class="text-xs text-blue-300 font-medium">Empieza ya, no esperes</p>
+              <p class="text-xs text-blue-300 mt-0.5">Cada mes que esperas es tiempo que el interés compuesto no trabaja para ti.</p>
             </div>` : `
-            <p class="font-semibold text-gray-900 text-sm mb-2">Completa tu fondo de emergencia</p>
-            <div class="space-y-1.5 text-sm text-gray-700">
+            <p class="font-semibold text-white text-sm mb-2">Completa tu fondo de emergencia</p>
+            <div class="space-y-1.5 text-sm text-white/70">
               <p>→ Dirige tu ahorro mensual (<strong>${fmtEur(monthly)}/mes</strong>) a una cuenta remunerada</p>
               <p>→ Objetivo: <strong>${fmtEur(emergTarget)}</strong> (3 nóminas netas)</p>
             </div>
-            <div class="mt-3 pt-3 border-t border-blue-100">
-              <p class="text-xs text-blue-700 font-medium">Todavía no inviertas</p>
-              <p class="text-xs text-blue-600 mt-0.5">Sin colchón, una caída del mercado te obligaría a vender en el peor momento. Primero seguridad, luego rentabilidad.</p>
+            <div class="mt-3 pt-3 border-t border-blue-500/20">
+              <p class="text-xs text-blue-300 font-medium">Todavía no inviertas</p>
+              <p class="text-xs text-blue-300 mt-0.5">Sin colchón, una caída del mercado te obligaría a vender en el peor momento. Primero seguridad, luego rentabilidad.</p>
             </div>`}
           </div>
         </div>
@@ -627,22 +627,22 @@ function renderRoboadvisorPlan(profile) {
 
       <div class="flex gap-4 mb-6">
         <div class="flex flex-col items-center shrink-0" style="width:28px">
-          <div class="w-7 h-7 rounded-full bg-emerald-500 flex items-center justify-center text-white text-xs font-bold z-10">2</div>
-          <div class="w-0.5 bg-gray-200 flex-1 mt-1" style="min-height:60px"></div>
+          <div class="w-7 h-7 rounded-full bg-emerald-500/100 flex items-center justify-center text-white text-xs font-bold z-10">2</div>
+          <div class="w-0.5 bg-white/15 flex-1 mt-1" style="min-height:60px"></div>
         </div>
         <div class="flex-1 pb-2">
-          <p class="text-xs font-semibold text-emerald-600 uppercase tracking-wide mb-1">Años 3–5 · Tu cartera gana escala</p>
-          <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-4">
-            <p class="font-semibold text-gray-900 text-sm mb-2">No toques nada — la constancia es tu mayor ventaja</p>
-            <div class="space-y-1.5 text-sm text-gray-700">
+          <p class="text-xs font-semibold text-emerald-300 uppercase tracking-wide mb-1">Años 3–5 · Tu cartera gana escala</p>
+          <div class="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4">
+            <p class="font-semibold text-white text-sm mb-2">No toques nada — la constancia es tu mayor ventaja</p>
+            <div class="space-y-1.5 text-sm text-white/70">
               <p>→ El interés compuesto ya es visible en tu cartera</p>
               ${roboKey === 'indexa' ? '<p>→ A partir de 10.000 € la comisión de Indexa baja al <strong>0,31%</strong></p>' : ''}
               ${roboKey === 'myinvestor' ? '<p>→ Activa la <strong>cuenta remunerada</strong> de MyInvestor para el fondo de emergencia mientras creces</p>' : ''}
               <p>→ Activa el rebalanceo automático si está disponible</p>
             </div>
-            <div class="mt-3 pt-3 border-t border-emerald-100">
-              <p class="text-xs text-emerald-700 font-medium">No intentes predecir el mercado</p>
-              <p class="text-xs text-emerald-600 mt-0.5">Los inversores que intentan "adivinar" el mejor momento obtienen peores resultados que los que se quedan quietos.</p>
+            <div class="mt-3 pt-3 border-t border-emerald-500/20">
+              <p class="text-xs text-emerald-300 font-medium">No intentes predecir el mercado</p>
+              <p class="text-xs text-emerald-300 mt-0.5">Los inversores que intentan "adivinar" el mejor momento obtienen peores resultados que los que se quedan quietos.</p>
             </div>
           </div>
         </div>
@@ -653,55 +653,55 @@ function renderRoboadvisorPlan(profile) {
           <div class="w-7 h-7 rounded-full bg-purple-600 flex items-center justify-center text-white text-xs font-bold z-10">3</div>
         </div>
         <div class="flex-1">
-          <p class="text-xs font-semibold text-purple-600 uppercase tracking-wide mb-1">Al llegar a 100.000 € · Da el salto</p>
-          <div class="bg-purple-50 border border-purple-100 rounded-2xl p-4">
-            <p class="font-semibold text-gray-900 text-sm mb-2">Gestión propia con fondos indexados</p>
-            <p class="text-sm text-gray-600 mb-3">A este nivel, gestionar una cartera de 3–4 fondos indexados en MyInvestor te ahorra entre 500 € y 1.500 € al año en comisiones.</p>
+          <p class="text-xs font-semibold text-purple-300 uppercase tracking-wide mb-1">Al llegar a 100.000 € · Da el salto</p>
+          <div class="bg-purple-500/10 border border-purple-500/20 rounded-2xl p-4">
+            <p class="font-semibold text-white text-sm mb-2">Gestión propia con fondos indexados</p>
+            <p class="text-sm text-white/60 mb-3">A este nivel, gestionar una cartera de 3–4 fondos indexados en MyInvestor te ahorra entre 500 € y 1.500 € al año en comisiones.</p>
             <div class="grid grid-cols-2 gap-2 mb-3">
-              <div class="bg-white rounded-xl p-3 border border-purple-100">
-                <p class="text-xs text-gray-500 mb-1">Con roboadvisor (${robo.fee_total})</p>
-                <p class="font-bold text-gray-700 text-sm">${fmtEur(Math.round(100000 * robo.fee_num / 100))}/año</p>
+              <div class="bg-white/5 rounded-xl p-3 border border-purple-500/20">
+                <p class="text-xs text-white/50 mb-1">Con roboadvisor (${robo.fee_total})</p>
+                <p class="font-bold text-white/70 text-sm">${fmtEur(Math.round(100000 * robo.fee_num / 100))}/año</p>
               </div>
-              <div class="bg-white rounded-xl p-3 border border-purple-100">
-                <p class="text-xs text-gray-500 mb-1">Con fondos propios (~0,15%)</p>
-                <p class="font-bold text-purple-700 text-sm">150 €/año ✓</p>
+              <div class="bg-white/5 rounded-xl p-3 border border-purple-500/20">
+                <p class="text-xs text-white/50 mb-1">Con fondos propios (~0,15%)</p>
+                <p class="font-bold text-purple-300 text-sm">150 €/año ✓</p>
               </div>
             </div>
-            <p class="text-xs text-purple-700 font-medium">Traspaso sin coste fiscal</p>
-            <p class="text-xs text-purple-600 mt-0.5">En España puedes traspasar entre fondos de inversión sin tributar. Moverás tu dinero de ${roboFirst} a tus fondos propios en MyInvestor sin pagar impuestos.</p>
+            <p class="text-xs text-purple-300 font-medium">Traspaso sin coste fiscal</p>
+            <p class="text-xs text-purple-300 mt-0.5">En España puedes traspasar entre fondos de inversión sin tributar. Moverás tu dinero de ${roboFirst} a tus fondos propios en MyInvestor sin pagar impuestos.</p>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
-      <h3 class="text-lg font-bold text-gray-900 mb-1">¿Cuánto puede crecer tu dinero?</h3>
-      <p class="text-sm text-gray-400 mb-4">Con ${fmtEur(capital)} iniciales${monthly > 0 ? ' + ' + fmtEur(monthly) + '/mes' : ''} · ~${rate}% anual histórico</p>
+    <div class="bg-white/5 backdrop-blur rounded-3xl border border-white/10 p-6">
+      <h3 class="text-lg font-bold text-white mb-1">¿Cuánto puede crecer tu dinero?</h3>
+      <p class="text-sm text-white/40 mb-4">Con ${fmtEur(capital)} iniciales${monthly > 0 ? ' + ' + fmtEur(monthly) + '/mes' : ''} · ~${rate}% anual histórico</p>
       ${projectionCards(capital, monthly, rate, 'blue', 'emerald', 'purple')}
     </div>
 
-    <details class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden group">
-      <summary class="cursor-pointer select-none list-none flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors">
-        <span class="font-semibold text-gray-900">Conceptos que debes saber</span>
-        <span class="text-gray-400 text-sm group-open:hidden">▼ ver</span>
-        <span class="text-gray-400 text-sm hidden group-open:inline">▲ ocultar</span>
+    <details class="bg-white/5 backdrop-blur rounded-3xl border border-white/10 overflow-hidden group">
+      <summary class="cursor-pointer select-none list-none flex items-center justify-between px-6 py-4 hover:bg-white/5 transition-colors">
+        <span class="font-semibold text-white">Conceptos que debes saber</span>
+        <span class="text-white/40 text-sm group-open:hidden">▼ ver</span>
+        <span class="text-white/40 text-sm hidden group-open:inline">▲ ocultar</span>
       </summary>
       <div class="px-6 pb-6 space-y-4">
         <div class="border-l-4 border-blue-200 pl-4">
-          <p class="font-semibold text-gray-800 text-sm">¿Qué es un roboadvisor?</p>
-          <p class="text-sm text-gray-500 mt-1">Un gestor automatizado que construye y mantiene una cartera de fondos indexados por ti. Sin decisiones manuales, sin emociones, sin errores humanos.</p>
+          <p class="font-semibold text-white/80 text-sm">¿Qué es un roboadvisor?</p>
+          <p class="text-sm text-white/50 mt-1">Un gestor automatizado que construye y mantiene una cartera de fondos indexados por ti. Sin decisiones manuales, sin emociones, sin errores humanos.</p>
         </div>
         <div class="border-l-4 border-emerald-200 pl-4">
-          <p class="font-semibold text-gray-800 text-sm">¿Qué es un fondo indexado?</p>
-          <p class="text-sm text-gray-500 mt-1">Un fondo que replica un índice (como el MSCI World) comprando todas sus empresas. Al no necesitar gestores activos, cobra comisiones mucho menores.</p>
+          <p class="font-semibold text-white/80 text-sm">¿Qué es un fondo indexado?</p>
+          <p class="text-sm text-white/50 mt-1">Un fondo que replica un índice (como el MSCI World) comprando todas sus empresas. Al no necesitar gestores activos, cobra comisiones mucho menores.</p>
         </div>
         <div class="border-l-4 border-purple-200 pl-4">
-          <p class="font-semibold text-gray-800 text-sm">¿Qué es el rebalanceo?</p>
-          <p class="text-sm text-gray-500 mt-1">Ajustar periódicamente la proporción de cada activo para que la cartera vuelva a tu perfil objetivo. El roboadvisor lo hace automáticamente.</p>
+          <p class="font-semibold text-white/80 text-sm">¿Qué es el rebalanceo?</p>
+          <p class="text-sm text-white/50 mt-1">Ajustar periódicamente la proporción de cada activo para que la cartera vuelva a tu perfil objetivo. El roboadvisor lo hace automáticamente.</p>
         </div>
         <div class="border-l-4 border-amber-200 pl-4">
-          <p class="font-semibold text-gray-800 text-sm">¿Es seguro mi dinero?</p>
-          <p class="text-sm text-gray-500 mt-1">Tu dinero está en fondos regulados por la CNMV, custodiados en entidades separadas del roboadvisor. Si el roboadvisor cierra, tu dinero sigue siendo tuyo.</p>
+          <p class="font-semibold text-white/80 text-sm">¿Es seguro mi dinero?</p>
+          <p class="text-sm text-white/50 mt-1">Tu dinero está en fondos regulados por la CNMV, custodiados en entidades separadas del roboadvisor. Si el roboadvisor cierra, tu dinero sigue siendo tuyo.</p>
         </div>
       </div>
     </details>
@@ -736,17 +736,17 @@ function renderDIYPlan(profile) {
     var col = FUND_COL[item.fund] || 'gray';
     var capAmt = capital > 0 ? Math.round(capital * item.pct / 100) : 0;
     var monAmt = (emergencyCovered && monthly > 0) ? Math.round(monthly * item.pct / 100) : 0;
-    return '<div class="bg-gray-50 rounded-2xl p-4 border border-gray-100">' +
+    return '<div class="bg-white/5 rounded-2xl p-4 border border-white/10">' +
       '<div class="flex items-start justify-between mb-2">' +
-        '<div class="flex-1"><p class="font-semibold text-gray-900 text-sm">' + f.name + '</p>' +
-        '<p class="text-xs text-gray-400 mt-0.5 font-mono">' + f.isin + '</p></div>' +
+        '<div class="flex-1"><p class="font-semibold text-white text-sm">' + f.name + '</p>' +
+        '<p class="text-xs text-white/40 mt-0.5 font-mono">' + f.isin + '</p></div>' +
         '<span class="ml-3 px-2.5 py-1 bg-' + col + '-100 text-' + col + '-700 text-sm font-bold rounded-xl shrink-0">' + item.pct + '%</span>' +
       '</div>' +
-      '<div class="flex flex-wrap gap-2 mt-2 text-xs text-gray-500">' +
+      '<div class="flex flex-wrap gap-2 mt-2 text-xs text-white/50">' +
         glossChip('TER ' + f.ter, 'TER') +
         glossChip(f.asset, f.asset) +
-        (capAmt > 0 ? '<span class="bg-white rounded-lg px-2 py-1 border border-gray-200">Inicial: ' + fmtEur(capAmt) + '</span>' : '') +
-        (monAmt > 0 ? '<span class="bg-white rounded-lg px-2 py-1 border border-gray-200">' + fmtEur(monAmt) + '/mes</span>' : '') +
+        (capAmt > 0 ? '<span class="bg-white/10 rounded-lg px-2 py-1 border border-white/15">Inicial: ' + fmtEur(capAmt) + '</span>' : '') +
+        (monAmt > 0 ? '<span class="bg-white/10 rounded-lg px-2 py-1 border border-white/15">' + fmtEur(monAmt) + '/mes</span>' : '') +
       '</div></div>';
   }).join('');
 
@@ -756,8 +756,8 @@ function renderDIYPlan(profile) {
   var recoEyebrowDiy   = emergencyCovered ? 'Recomendado para ti' : 'Tu plan · cuando completes tu colchón';
   var step2BadgeDiy = emergencyCovered ? '' : `
     <div class="flex items-center gap-2 mb-1">
-      <span class="w-5 h-5 rounded-full bg-gray-300 text-white text-[10px] font-bold flex items-center justify-center shrink-0">2</span>
-      <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide">Paso 2 · Después de cubrir tu fondo de emergencia</p>
+      <span class="w-5 h-5 rounded-full bg-white/20 text-white text-[10px] font-bold flex items-center justify-center shrink-0">2</span>
+      <p class="text-xs font-semibold text-white/40 uppercase tracking-wide">Paso 2 · Después de cubrir tu fondo de emergencia</p>
     </div>`;
 
   return `
@@ -790,56 +790,56 @@ function renderDIYPlan(profile) {
 
     <div>
       ${step2BadgeDiy}
-      <div class="bg-white rounded-3xl border ${emergencyCovered ? 'border-gray-100' : 'border-dashed border-gray-300'} shadow-sm p-6 ${emergencyCovered ? '' : 'opacity-90'}">
+      <div class="bg-white/5 backdrop-blur rounded-3xl border ${emergencyCovered ? 'border-white/10' : 'border-dashed border-white/20'} p-6 ${emergencyCovered ? '' : 'opacity-90'}">
         <div class="flex items-center justify-between gap-3 mb-1">
-          <p class="text-xs font-semibold uppercase tracking-widest text-purple-700">${recoEyebrowDiy}</p>
-          <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full whitespace-nowrap">MSCI World ~8% anual (últimos 20 años)</span>
+          <p class="text-xs font-semibold uppercase tracking-widest text-purple-300">${recoEyebrowDiy}</p>
+          <span class="text-xs font-bold text-emerald-300 bg-emerald-500/10 px-2.5 py-1 rounded-full whitespace-nowrap">MSCI World ~8% anual (últimos 20 años)</span>
         </div>
         <div class="flex items-center justify-between mb-4">
           <div>
-            <h3 class="font-display text-xl font-semibold text-gray-900">Tu cartera en MyInvestor</h3>
-            <p class="text-sm text-gray-400 mt-0.5">Cartera de ${levelLabel} · TER medio ~${fmtPct(avgTer)}/año</p>
+            <h3 class="font-display text-xl font-semibold text-white">Tu cartera en MyInvestor</h3>
+            <p class="text-sm text-white/40 mt-0.5">Cartera de ${levelLabel} · TER medio ~${fmtPct(avgTer)}/año</p>
           </div>
-          ${emergencyCovered ? `<a href="https://myinvestor.es" target="_blank" rel="noopener" class="text-xs text-blue-700 hover:underline font-medium">Abrir cuenta →</a>` : ''}
+          ${emergencyCovered ? `<a href="https://myinvestor.es" target="_blank" rel="noopener" class="text-xs text-blue-300 hover:underline font-medium">Abrir cuenta →</a>` : ''}
         </div>
         <div class="space-y-3 mb-5">${fundCardsHtml}</div>
-        <div class="bg-purple-50 border border-purple-100 rounded-2xl p-4">
-          <p class="text-xs font-semibold text-purple-700 mb-1">¿Por qué MyInvestor?</p>
-          <p class="text-xs text-purple-600">Es la única plataforma española que permite comprar fondos de Fidelity, Vanguard e iShares directamente, sin intermediarios ni comisiones de custodia. Cuenta regulada por la CNMV.</p>
+        <div class="bg-purple-500/10 border border-purple-500/20 rounded-2xl p-4">
+          <p class="text-xs font-semibold text-purple-300 mb-1">¿Por qué MyInvestor?</p>
+          <p class="text-xs text-purple-300">Es la única plataforma española que permite comprar fondos de Fidelity, Vanguard e iShares directamente, sin intermediarios ni comisiones de custodia. Cuenta regulada por la CNMV.</p>
         </div>
-        ${emergencyCovered ? '' : `<p class="text-xs text-gray-400 text-center italic mt-3">Vuelve a esta pantalla cuando tengas tu colchón completo para empezar.</p>`}
+        ${emergencyCovered ? '' : `<p class="text-xs text-white/40 text-center italic mt-3">Vuelve a esta pantalla cuando tengas tu colchón completo para empezar.</p>`}
       </div>
     </div>
 
-    <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
-      <h3 class="text-lg font-bold text-gray-900 mb-4">Cómo gestionar tu cartera</h3>
+    <div class="bg-white/5 backdrop-blur rounded-3xl border border-white/10 p-6">
+      <h3 class="text-lg font-bold text-white mb-4">Cómo gestionar tu cartera</h3>
       <div class="space-y-4">
         <div class="flex gap-3">
-          <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 font-bold text-sm shrink-0">1</div>
-          <div><p class="font-semibold text-gray-900 text-sm">Abre cuenta en MyInvestor</p>
-          <p class="text-sm text-gray-500">Proceso 100% online en 10 minutos. Busca cada fondo por ISIN en el buscador de fondos.</p></div>
+          <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-300 font-bold text-sm shrink-0">1</div>
+          <div><p class="font-semibold text-white text-sm">Abre cuenta en MyInvestor</p>
+          <p class="text-sm text-white/50">Proceso 100% online en 10 minutos. Busca cada fondo por ISIN en el buscador de fondos.</p></div>
         </div>
         <div class="flex gap-3">
-          <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 font-bold text-sm shrink-0">2</div>
-          <div><p class="font-semibold text-gray-900 text-sm">Invierte según la distribución</p>
-          <p class="text-sm text-gray-500">Compra cada fondo en la proporción indicada. No hace falta hacerlo todo de una vez.</p></div>
+          <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-300 font-bold text-sm shrink-0">2</div>
+          <div><p class="font-semibold text-white text-sm">Invierte según la distribución</p>
+          <p class="text-sm text-white/50">Compra cada fondo en la proporción indicada. No hace falta hacerlo todo de una vez.</p></div>
         </div>
         ${monthly > 0 ? `<div class="flex gap-3">
-          <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 font-bold text-sm shrink-0">3</div>
-          <div><p class="font-semibold text-gray-900 text-sm">Automatiza las aportaciones</p>
-          <p class="text-sm text-gray-500">Configura una transferencia automática de ${fmtEur(monthly)}/mes y repártela entre los fondos según los porcentajes.</p></div>
+          <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-300 font-bold text-sm shrink-0">3</div>
+          <div><p class="font-semibold text-white text-sm">Automatiza las aportaciones</p>
+          <p class="text-sm text-white/50">Configura una transferencia automática de ${fmtEur(monthly)}/mes y repártela entre los fondos según los porcentajes.</p></div>
         </div>` : ''}
         <div class="flex gap-3">
-          <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 font-bold text-sm shrink-0">${stepN}</div>
-          <div><p class="font-semibold text-gray-900 text-sm">Rebalancea una vez al año</p>
-          <p class="text-sm text-gray-500">Si algún fondo se desvía más de un 5% de su objetivo, compra el más rezagado para volver al equilibrio.</p></div>
+          <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-300 font-bold text-sm shrink-0">${stepN}</div>
+          <div><p class="font-semibold text-white text-sm">Rebalancea una vez al año</p>
+          <p class="text-sm text-white/50">Si algún fondo se desvía más de un 5% de su objetivo, compra el más rezagado para volver al equilibrio.</p></div>
         </div>
       </div>
     </div>
 
-    <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
-      <h3 class="text-lg font-bold text-gray-900 mb-1">¿Cuánto puede crecer tu dinero?</h3>
-      <p class="text-sm text-gray-400 mb-4">Con ${fmtEur(capital)} iniciales${monthly > 0 ? ' + ' + fmtEur(monthly) + '/mes' : ''} · ~${rate}% anual histórico</p>
+    <div class="bg-white/5 backdrop-blur rounded-3xl border border-white/10 p-6">
+      <h3 class="text-lg font-bold text-white mb-1">¿Cuánto puede crecer tu dinero?</h3>
+      <p class="text-sm text-white/40 mb-4">Con ${fmtEur(capital)} iniciales${monthly > 0 ? ' + ' + fmtEur(monthly) + '/mes' : ''} · ~${rate}% anual histórico</p>
       ${projectionCards(capital, monthly, rate, 'purple', 'emerald', 'blue')}
     </div>
   `;
@@ -895,16 +895,16 @@ function initSimulator(defaultCapital, defaultMonthly) {
       data: {
         labels: labels,
         datasets: [
-          { label: 'Valor estimado', data: fvData,  fill: true,  borderColor: '#2563EB', backgroundColor: 'rgba(37,99,235,0.08)', tension: 0.4, pointRadius: 0 },
-          { label: 'Total aportado', data: invData, fill: false, borderColor: '#9CA3AF', borderDash: [4,4], tension: 0.4, pointRadius: 0 },
+          { label: 'Valor estimado', data: fvData,  fill: true,  borderColor: '#93C5FD', backgroundColor: 'rgba(147,197,253,0.12)', tension: 0.4, pointRadius: 0, borderWidth: 2 },
+          { label: 'Total aportado', data: invData, fill: false, borderColor: '#FBBF24', borderDash: [4,4], tension: 0.4, pointRadius: 0, borderWidth: 2 },
         ]
       },
       options: {
         responsive: true, maintainAspectRatio: false,
         plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
         scales: {
-          x: { grid: { display: false }, ticks: { maxTicksLimit: 6, font: { size: 10 } } },
-          y: { grid: { color: '#F3F4F6' }, ticks: { font: { size: 10 }, callback: function(v) { return fmtEur(v); } } }
+          x: { grid: { display: false }, ticks: { maxTicksLimit: 6, font: { size: 10 }, color: 'rgba(255,255,255,0.4)' } },
+          y: { grid: { color: 'rgba(255,255,255,0.08)' }, ticks: { font: { size: 10 }, color: 'rgba(255,255,255,0.4)', callback: function(v) { return fmtEur(v); } } }
         }
       }
     });
@@ -925,9 +925,9 @@ function generateResults() {
     if (el) el.innerHTML =
       '<div class="text-center py-20">' +
         '<p class="text-5xl mb-4">🤔</p>' +
-        '<p class="text-gray-600 font-medium mb-2">No encontramos tu perfil</p>' +
-        '<p class="text-gray-400 text-sm mb-6">Completa el cuestionario para ver tu plan personalizado.</p>' +
-        '<a href="index.html" class="inline-block bg-blue-600 text-white font-bold py-3 px-6 rounded-2xl hover:bg-blue-700 transition-all">Empezar el cuestionario →</a>' +
+        '<p class="text-white/60 font-medium mb-2">No encontramos tu perfil</p>' +
+        '<p class="text-white/40 text-sm mb-6">Completa el cuestionario para ver tu plan personalizado.</p>' +
+        '<a href="index.html" class="inline-block bg-white text-blue-900 font-bold py-3 px-6 rounded-2xl hover:bg-gray-100 transition-all">Empezar el cuestionario →</a>' +
       '</div>';
     return;
   }

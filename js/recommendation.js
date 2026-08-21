@@ -396,7 +396,7 @@ function buildEmergencySection(step1, step2, totalSavings, investibleCapital, ac
   }).join('');
 
   return '<div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">' +
-    '<h3 class="text-lg font-bold text-gray-900 mb-1">🛡️ Fondo de emergencia</h3>' +
+    '<h3 class="text-lg font-bold text-gray-900 mb-1">Fondo de emergencia</h3>' +
     '<p class="text-sm text-gray-400 mb-4">Tu colchón de seguridad antes de invertir</p>' +
     statusHtml +
     '<p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Cuentas remuneradas más competitivas (España, 2025)</p>' +
@@ -477,7 +477,7 @@ function buildFundsSection(robo, risk) {
 
   return '<details class="mt-5 border-t border-gray-100 group">' +
     '<summary class="cursor-pointer select-none list-none flex items-center justify-between pt-4 pb-1 hover:text-blue-600 transition-colors">' +
-      '<span class="text-sm font-semibold text-gray-700 group-hover:text-blue-600">🔍 Fondos subyacentes</span>' +
+      '<span class="text-sm font-semibold text-gray-700 group-hover:text-blue-600">Fondos subyacentes</span>' +
       '<span class="text-gray-400 text-xs group-open:hidden">▼ ver</span>' +
       '<span class="text-gray-400 text-xs hidden group-open:inline">▲ ocultar</span>' +
     '</summary>' +
@@ -550,14 +550,14 @@ function renderRoboadvisorPlan(profile) {
         <div class="bg-blue-700 px-6 py-4">
           <div class="flex items-center justify-between gap-3 mb-1">
             <p class="text-white text-xs font-semibold uppercase tracking-widest">${recoEyebrow}</p>
-            <span class="text-xs font-bold text-emerald-300 bg-emerald-900 bg-opacity-40 px-2.5 py-1 rounded-full whitespace-nowrap">📊 ${robo.history}</span>
+            <span class="text-xs font-bold text-emerald-300 bg-emerald-900 bg-opacity-40 px-2.5 py-1 rounded-full whitespace-nowrap">${robo.history}</span>
           </div>
           <h3 class="font-display text-white text-xl font-semibold">${robo.name}</h3>
           <p class="text-blue-200 text-sm">${portf.label} · ${portf.rv}% RV / ${portf.rf}% RF</p>
         </div>
         <div class="p-6">
           <div class="flex items-start gap-3 mb-5">
-            <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center shrink-0 text-2xl">🤖</div>
+            <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center shrink-0"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="9" stroke="#3B82F6" stroke-width="1.5"/><circle cx="11" cy="11" r="4" fill="#3B82F6" opacity=".3"/><circle cx="11" cy="11" r="1.5" fill="#3B82F6"/><line x1="11" y1="2" x2="11" y2="5" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round"/><line x1="11" y1="17" x2="11" y2="20" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="11" x2="5" y2="11" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round"/><line x1="17" y1="11" x2="20" y2="11" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round"/></svg></div>
             <div class="flex-1">
               <p class="font-semibold text-gray-900">¿Por qué ${roboFirst}?</p>
               <p class="text-sm text-gray-500 mt-1">${robo.why}</p>
@@ -590,7 +590,7 @@ function renderRoboadvisorPlan(profile) {
     </div>
 
     <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
-      <h3 class="text-lg font-bold text-gray-900 mb-1">🗺️ Tu hoja de ruta</h3>
+      <h3 class="text-lg font-bold text-gray-900 mb-1">Tu hoja de ruta</h3>
       <p class="text-sm text-gray-400 mb-6">Cómo evoluciona tu inversión en el tiempo</p>
 
       <div class="flex gap-4 mb-6">
@@ -609,7 +609,7 @@ function renderRoboadvisorPlan(profile) {
               <p>→ Elige el perfil <strong>${portf.label}</strong></p>
             </div>
             <div class="mt-3 pt-3 border-t border-blue-100">
-              <p class="text-xs text-blue-700 font-medium">💡 Empieza ya, no esperes</p>
+              <p class="text-xs text-blue-700 font-medium">Empieza ya, no esperes</p>
               <p class="text-xs text-blue-600 mt-0.5">Cada mes que esperas es tiempo que el interés compuesto no trabaja para ti.</p>
             </div>` : `
             <p class="font-semibold text-gray-900 text-sm mb-2">Completa tu fondo de emergencia</p>
@@ -618,7 +618,7 @@ function renderRoboadvisorPlan(profile) {
               <p>→ Objetivo: <strong>${fmtEur(emergTarget)}</strong> (3 nóminas netas)</p>
             </div>
             <div class="mt-3 pt-3 border-t border-blue-100">
-              <p class="text-xs text-blue-700 font-medium">💡 Todavía no inviertas</p>
+              <p class="text-xs text-blue-700 font-medium">Todavía no inviertas</p>
               <p class="text-xs text-blue-600 mt-0.5">Sin colchón, una caída del mercado te obligaría a vender en el peor momento. Primero seguridad, luego rentabilidad.</p>
             </div>`}
           </div>
@@ -641,7 +641,7 @@ function renderRoboadvisorPlan(profile) {
               <p>→ Activa el rebalanceo automático si está disponible</p>
             </div>
             <div class="mt-3 pt-3 border-t border-emerald-100">
-              <p class="text-xs text-emerald-700 font-medium">🧠 No intentes predecir el mercado</p>
+              <p class="text-xs text-emerald-700 font-medium">No intentes predecir el mercado</p>
               <p class="text-xs text-emerald-600 mt-0.5">Los inversores que intentan "adivinar" el mejor momento obtienen peores resultados que los que se quedan quietos.</p>
             </div>
           </div>
@@ -667,7 +667,7 @@ function renderRoboadvisorPlan(profile) {
                 <p class="font-bold text-purple-700 text-sm">150 €/año ✓</p>
               </div>
             </div>
-            <p class="text-xs text-purple-700 font-medium">💡 Traspaso sin coste fiscal</p>
+            <p class="text-xs text-purple-700 font-medium">Traspaso sin coste fiscal</p>
             <p class="text-xs text-purple-600 mt-0.5">En España puedes traspasar entre fondos de inversión sin tributar. Moverás tu dinero de ${roboFirst} a tus fondos propios en MyInvestor sin pagar impuestos.</p>
           </div>
         </div>
@@ -675,14 +675,14 @@ function renderRoboadvisorPlan(profile) {
     </div>
 
     <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
-      <h3 class="text-lg font-bold text-gray-900 mb-1">📈 ¿Cuánto puede crecer tu dinero?</h3>
+      <h3 class="text-lg font-bold text-gray-900 mb-1">¿Cuánto puede crecer tu dinero?</h3>
       <p class="text-sm text-gray-400 mb-4">Con ${fmtEur(capital)} iniciales${monthly > 0 ? ' + ' + fmtEur(monthly) + '/mes' : ''} · ~${rate}% anual histórico</p>
       ${projectionCards(capital, monthly, rate, 'blue', 'emerald', 'purple')}
     </div>
 
     <details class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden group">
       <summary class="cursor-pointer select-none list-none flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors">
-        <span class="font-semibold text-gray-900">📚 Conceptos que debes saber</span>
+        <span class="font-semibold text-gray-900">Conceptos que debes saber</span>
         <span class="text-gray-400 text-sm group-open:hidden">▼ ver</span>
         <span class="text-gray-400 text-sm hidden group-open:inline">▲ ocultar</span>
       </summary>
@@ -793,18 +793,18 @@ function renderDIYPlan(profile) {
       <div class="bg-white rounded-3xl border ${emergencyCovered ? 'border-gray-100' : 'border-dashed border-gray-300'} shadow-sm p-6 ${emergencyCovered ? '' : 'opacity-90'}">
         <div class="flex items-center justify-between gap-3 mb-1">
           <p class="text-xs font-semibold uppercase tracking-widest text-purple-700">${recoEyebrowDiy}</p>
-          <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full whitespace-nowrap">📊 MSCI World ~8% anual (últimos 20 años)</span>
+          <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full whitespace-nowrap">MSCI World ~8% anual (últimos 20 años)</span>
         </div>
         <div class="flex items-center justify-between mb-4">
           <div>
-            <h3 class="font-display text-lg font-semibold text-gray-900">🧩 Tu cartera en MyInvestor</h3>
+            <h3 class="font-display text-lg font-semibold text-gray-900">Tu cartera en MyInvestor</h3>
             <p class="text-sm text-gray-400 mt-0.5">Cartera de ${levelLabel} · TER medio ~${fmtPct(avgTer)}/año</p>
           </div>
           ${emergencyCovered ? `<a href="https://myinvestor.es" target="_blank" rel="noopener" class="text-xs text-blue-700 hover:underline font-medium">Abrir cuenta →</a>` : ''}
         </div>
         <div class="space-y-3 mb-5">${fundCardsHtml}</div>
         <div class="bg-purple-50 border border-purple-100 rounded-2xl p-4">
-          <p class="text-xs font-semibold text-purple-700 mb-1">💡 ¿Por qué MyInvestor?</p>
+          <p class="text-xs font-semibold text-purple-700 mb-1">¿Por qué MyInvestor?</p>
           <p class="text-xs text-purple-600">Es la única plataforma española que permite comprar fondos de Fidelity, Vanguard e iShares directamente, sin intermediarios ni comisiones de custodia. Cuenta regulada por la CNMV.</p>
         </div>
         ${emergencyCovered ? '' : `<p class="text-xs text-gray-400 text-center italic mt-3">Vuelve a esta pantalla cuando tengas tu colchón completo para empezar.</p>`}
@@ -812,7 +812,7 @@ function renderDIYPlan(profile) {
     </div>
 
     <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
-      <h3 class="text-lg font-bold text-gray-900 mb-4">⚙️ Cómo gestionar tu cartera</h3>
+      <h3 class="text-lg font-bold text-gray-900 mb-4">Cómo gestionar tu cartera</h3>
       <div class="space-y-4">
         <div class="flex gap-3">
           <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 font-bold text-sm shrink-0">1</div>
@@ -838,7 +838,7 @@ function renderDIYPlan(profile) {
     </div>
 
     <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
-      <h3 class="text-lg font-bold text-gray-900 mb-1">📈 ¿Cuánto puede crecer tu dinero?</h3>
+      <h3 class="text-lg font-bold text-gray-900 mb-1">¿Cuánto puede crecer tu dinero?</h3>
       <p class="text-sm text-gray-400 mb-4">Con ${fmtEur(capital)} iniciales${monthly > 0 ? ' + ' + fmtEur(monthly) + '/mes' : ''} · ~${rate}% anual histórico</p>
       ${projectionCards(capital, monthly, rate, 'purple', 'emerald', 'blue')}
     </div>

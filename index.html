@@ -4,8 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>InvestWise — Tu plan de inversión personalizado</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind = { config: {
+    tailwind.config = {
       theme: {
         extend: {
           colors: {
@@ -26,9 +27,8 @@
           }
         }
       }
-    }};
+    };
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <link rel="stylesheet" href="css/main.css">
   <style>
@@ -39,11 +39,11 @@
     .screen { display: none; }
     .screen.active { display: block; }
     .card-option { transition: all 0.15s; cursor: pointer; }
-    .card-option:hover { border-color: #1E3F5C; background: #EEF3F8; transform: translateY(-1px); }
-    .card-option.selected { border-color: #1E3F5C !important; background: #EEF3F8 !important; }
-    .card-option-purple.selected { border-color: #4E3A6E !important; background: #F3F1F8 !important; }
-    .callout { border-left: 3px solid #1E3F5C; }
-    .callout-green { border-left: 3px solid #0D7A5F; }
+    .card-option:hover { border-color: rgba(34,197,94,0.4); background: rgba(255,255,255,0.08); transform: translateY(-1px); }
+    .card-option.selected { border-color: #22C58B !important; background: rgba(34,197,94,0.12) !important; }
+    .card-option-purple.selected { border-color: #A78BFA !important; background: rgba(167,139,250,0.12) !important; }
+    .callout { border-left: 3px solid #22C58B; }
+    .callout-green { border-left: 3px solid #22C58B; }
     .fade-in { animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     input[type=number]::-webkit-inner-spin-button,
@@ -133,14 +133,14 @@
   <!-- WIZARD SHELL (Q1–Q5): split layout, question + live panel -->
   <!-- ======================================================= -->
   <div id="wizard-shell" style="display:none">
-    <div class="min-h-screen px-4 py-10">
+    <div class="min-h-screen px-4 py-10" style="background: linear-gradient(180deg, #14273D 0%, #0C1927 100%);">
       <div class="max-w-5xl mx-auto pb-14 lg:pb-0">
 
         <div class="flex items-center gap-2 mb-8">
-          <div class="w-8 h-8 bg-blue-700 rounded-lg flex items-center justify-center">
-            <span class="text-white font-bold text-xs font-display">IW</span>
+          <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+            <span class="text-blue-900 font-bold text-xs font-display">IW</span>
           </div>
-          <span class="font-semibold text-blue-900 text-sm">InvestWise</span>
+          <span class="font-semibold text-white text-sm">InvestWise</span>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 items-start">
@@ -151,411 +151,411 @@
             <!-- SCREEN 2: Q1 -->
             <div class="screen" id="screen-q1">
               <div class="mb-6">
-                <div class="flex justify-between text-xs text-blue-900/50 mb-2 font-medium">
+                <div class="flex justify-between text-xs text-white/40 mb-2 font-medium">
                   <span>Pregunta 1 de 7</span><span>14%</span>
                 </div>
-                <div class="w-full bg-blue-900/10 rounded-full h-1.5">
-                  <div class="bg-blue-700 h-1.5 rounded-full transition-all" style="width:14%"></div>
+                <div class="w-full bg-white/10 rounded-full h-1.5">
+                  <div class="bg-emerald-500 h-1.5 rounded-full transition-all" style="width:14%"></div>
                 </div>
               </div>
 
-              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-5 sm:p-8">
-                <p class="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">Capital disponible</p>
-                <h2 class="font-display text-2xl sm:text-3xl font-semibold text-blue-950 mb-2">¿Cuánto tienes ahorrado ahora mismo?</h2>
-                <p class="text-gray-500 text-sm mb-6">Incluye todo lo que tienes líquido: cuenta corriente, depósitos, cuenta de ahorro. No cuentes el valor de tu casa ni el plan de pensiones.</p>
+              <div class="bg-white/5 backdrop-blur rounded-3xl border border-white/10 p-5 sm:p-8">
+                <p class="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-3">Capital disponible</p>
+                <h2 class="font-display text-2xl sm:text-3xl font-semibold text-white mb-2">¿Cuánto tienes ahorrado ahora mismo?</h2>
+                <p class="text-white/50 text-sm mb-6">Incluye todo lo que tienes líquido: cuenta corriente, depósitos, cuenta de ahorro. No cuentes el valor de tu casa ni el plan de pensiones.</p>
 
                 <div class="relative mb-6">
                   <input type="number" id="q1-ahorros" placeholder="0"
-                    class="w-full text-2xl sm:text-3xl font-bold text-blue-950 border-2 border-blue-100 rounded-2xl px-4 sm:px-6 py-3 sm:py-4 focus:outline-none focus:border-blue-600 bg-blue-50/50"
+                    class="w-full text-2xl sm:text-3xl font-bold text-white border-2 border-white/15 rounded-2xl px-4 sm:px-6 py-3 sm:py-4 focus:outline-none focus:border-emerald-400 bg-white/5"
                     style="padding-right: 3.5rem" inputmode="numeric">
-                  <span class="absolute right-5 top-1/2 -translate-y-1/2 text-2xl font-bold text-gray-400">€</span>
+                  <span class="absolute right-5 top-1/2 -translate-y-1/2 text-2xl font-bold text-white/25">€</span>
                 </div>
 
-                <div id="q1-callout" class="bg-blue-50 border border-blue-100 rounded-2xl p-4 mb-6 callout">
-                  <p class="text-sm text-blue-900 font-medium mb-1">💡 ¿Para qué sirve este dato?</p>
-                  <p class="text-sm text-blue-800" id="q1-callout-text">Una parte se quedará como fondo de emergencia (3–6 meses de gastos) y el resto será tu capital inicial de inversión.</p>
+                <div id="q1-callout" class="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4 mb-6 callout">
+                  <p class="text-sm text-emerald-300 font-medium mb-1">💡 ¿Para qué sirve este dato?</p>
+                  <p class="text-sm text-white/70" id="q1-callout-text">Una parte se quedará como fondo de emergencia (3–6 meses de gastos) y el resto será tu capital inicial de inversión.</p>
                 </div>
 
-                <p id="q1-err" class="hidden text-xs text-red-500 mb-3 text-center">Introduce un importe válido (puede ser 0).</p>
+                <p id="q1-err" class="hidden text-xs text-red-400 mb-3 text-center">Introduce un importe válido (puede ser 0).</p>
 
-                <button onclick="goSalario()" class="btn-continue w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
+                <button onclick="goSalario()" class="btn-continue w-full bg-white text-blue-900 font-bold py-4 rounded-2xl hover:bg-gray-100 transition-all">
                   Continuar →
                 </button>
               </div>
-              <button onclick="showScreen('intro')" class="w-full text-center text-gray-400 text-sm mt-4 hover:text-gray-600">← Volver</button>
+              <button onclick="showScreen('intro')" class="w-full text-center text-white/35 text-sm mt-4 hover:text-white/60">← Volver</button>
             </div>
 
             <!-- SCREEN: Salario neto mensual -->
             <div class="screen" id="screen-salario">
               <div class="mb-6">
-                <div class="flex justify-between text-xs text-blue-900/50 mb-2 font-medium">
+                <div class="flex justify-between text-xs text-white/40 mb-2 font-medium">
                   <span>Pregunta 2 de 7</span><span>29%</span>
                 </div>
-                <div class="w-full bg-blue-900/10 rounded-full h-1.5">
-                  <div class="bg-blue-700 h-1.5 rounded-full transition-all" style="width:29%"></div>
+                <div class="w-full bg-white/10 rounded-full h-1.5">
+                  <div class="bg-emerald-500 h-1.5 rounded-full transition-all" style="width:29%"></div>
                 </div>
               </div>
 
-              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-5 sm:p-8">
-                <p class="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">Ingresos</p>
-                <h2 class="font-display text-2xl sm:text-3xl font-semibold text-blue-950 mb-2">¿Cuál es tu salario neto mensual?</h2>
-                <p class="text-gray-500 text-sm mb-6">Lo que recibes en tu cuenta cada mes, después de impuestos. Si tus ingresos varían, pon una media aproximada.</p>
+              <div class="bg-white/5 backdrop-blur rounded-3xl border border-white/10 p-5 sm:p-8">
+                <p class="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-3">Ingresos</p>
+                <h2 class="font-display text-2xl sm:text-3xl font-semibold text-white mb-2">¿Cuál es tu salario neto mensual?</h2>
+                <p class="text-white/50 text-sm mb-6">Lo que recibes en tu cuenta cada mes, después de impuestos. Si tus ingresos varían, pon una media aproximada.</p>
 
                 <div class="relative mb-6">
                   <input type="number" id="q-salario" placeholder="0"
-                    class="w-full text-2xl sm:text-3xl font-bold text-blue-950 border-2 border-blue-100 rounded-2xl px-4 sm:px-6 py-3 sm:py-4 focus:outline-none focus:border-blue-600 bg-blue-50/50"
+                    class="w-full text-2xl sm:text-3xl font-bold text-white border-2 border-white/15 rounded-2xl px-4 sm:px-6 py-3 sm:py-4 focus:outline-none focus:border-emerald-400 bg-white/5"
                     style="padding-right: 3.5rem" inputmode="numeric">
-                  <span class="absolute right-5 top-1/2 -translate-y-1/2 text-2xl font-bold text-gray-400">€</span>
+                  <span class="absolute right-5 top-1/2 -translate-y-1/2 text-2xl font-bold text-white/25">€</span>
                 </div>
 
-                <div id="salario-callout" class="bg-blue-50 border border-blue-100 rounded-2xl p-4 mb-6 callout">
-                  <p class="text-sm text-blue-900 font-medium mb-1">💡 ¿Para qué sirve este dato?</p>
-                  <p class="text-sm text-blue-800" id="salario-callout-text">Tu fondo de emergencia recomendado son 3 nóminas netas. El resto de tus ahorros queda disponible para invertir.</p>
+                <div id="salario-callout" class="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4 mb-6 callout">
+                  <p class="text-sm text-emerald-300 font-medium mb-1">💡 ¿Para qué sirve este dato?</p>
+                  <p class="text-sm text-white/70" id="salario-callout-text">Tu fondo de emergencia recomendado son 3 nóminas netas. El resto de tus ahorros queda disponible para invertir.</p>
                 </div>
 
-                <p id="salario-err" class="hidden text-xs text-red-500 mb-3 text-center">Introduce un importe válido (puede ser 0).</p>
+                <p id="salario-err" class="hidden text-xs text-red-400 mb-3 text-center">Introduce un importe válido (puede ser 0).</p>
 
-                <button onclick="goQ2()" class="btn-continue w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
+                <button onclick="goQ2()" class="btn-continue w-full bg-white text-blue-900 font-bold py-4 rounded-2xl hover:bg-gray-100 transition-all">
                   Continuar →
                 </button>
               </div>
-              <button onclick="showScreen('q1')" class="w-full text-center text-gray-400 text-sm mt-4 hover:text-gray-600">← Volver</button>
+              <button onclick="showScreen('q1')" class="w-full text-center text-white/35 text-sm mt-4 hover:text-white/60">← Volver</button>
             </div>
 
             <!-- SCREEN: Q2 (mensual) -->
             <div class="screen" id="screen-q2">
               <div class="mb-6">
-                <div class="flex justify-between text-xs text-blue-900/50 mb-2 font-medium">
+                <div class="flex justify-between text-xs text-white/40 mb-2 font-medium">
                   <span>Pregunta 3 de 7</span><span>43%</span>
                 </div>
-                <div class="w-full bg-blue-900/10 rounded-full h-1.5">
-                  <div class="bg-blue-700 h-1.5 rounded-full transition-all" style="width:43%"></div>
+                <div class="w-full bg-white/10 rounded-full h-1.5">
+                  <div class="bg-emerald-500 h-1.5 rounded-full transition-all" style="width:43%"></div>
                 </div>
               </div>
 
-              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-5 sm:p-8">
-                <p class="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">Aportación mensual</p>
-                <h2 class="font-display text-2xl sm:text-3xl font-semibold text-blue-950 mb-2">¿Cuánto puedes apartar cada mes?</h2>
-                <p class="text-gray-500 text-sm mb-6">Piensa en una cantidad que no echarás de menos. Puedes empezar pequeño — lo importante es la constancia, no el importe.</p>
+              <div class="bg-white/5 backdrop-blur rounded-3xl border border-white/10 p-5 sm:p-8">
+                <p class="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-3">Aportación mensual</p>
+                <h2 class="font-display text-2xl sm:text-3xl font-semibold text-white mb-2">¿Cuánto puedes apartar cada mes?</h2>
+                <p class="text-white/50 text-sm mb-6">Piensa en una cantidad que no echarás de menos. Puedes empezar pequeño — lo importante es la constancia, no el importe.</p>
 
                 <div class="relative mb-4">
                   <input type="number" id="q2-mensual" placeholder="0"
-                    class="w-full text-2xl sm:text-3xl font-bold text-blue-950 border-2 border-blue-100 rounded-2xl px-4 sm:px-6 py-3 sm:py-4 focus:outline-none focus:border-blue-600 bg-blue-50/50"
+                    class="w-full text-2xl sm:text-3xl font-bold text-white border-2 border-white/15 rounded-2xl px-4 sm:px-6 py-3 sm:py-4 focus:outline-none focus:border-emerald-400 bg-white/5"
                     style="padding-right: 3.5rem" inputmode="numeric">
-                  <span class="absolute right-5 top-1/2 -translate-y-1/2 text-2xl font-bold text-gray-400">€</span>
+                  <span class="absolute right-5 top-1/2 -translate-y-1/2 text-2xl font-bold text-white/25">€</span>
                 </div>
 
                 <div class="flex gap-2 flex-wrap mb-6">
-                  <span class="chip px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm cursor-pointer hover:bg-blue-50 hover:text-blue-800" onclick="setMensual(50)">50 €</span>
-                  <span class="chip px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm cursor-pointer hover:bg-blue-50 hover:text-blue-800" onclick="setMensual(100)">100 €</span>
-                  <span class="chip px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm cursor-pointer hover:bg-blue-50 hover:text-blue-800" onclick="setMensual(300)">300 €</span>
-                  <span class="chip px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm cursor-pointer hover:bg-blue-50 hover:text-blue-800" onclick="setMensual(500)">500 €</span>
+                  <span class="chip px-3 py-1 bg-white/10 text-white/60 rounded-full text-sm cursor-pointer hover:bg-emerald-500/20 hover:text-emerald-200" onclick="setMensual(50)">50 €</span>
+                  <span class="chip px-3 py-1 bg-white/10 text-white/60 rounded-full text-sm cursor-pointer hover:bg-emerald-500/20 hover:text-emerald-200" onclick="setMensual(100)">100 €</span>
+                  <span class="chip px-3 py-1 bg-white/10 text-white/60 rounded-full text-sm cursor-pointer hover:bg-emerald-500/20 hover:text-emerald-200" onclick="setMensual(300)">300 €</span>
+                  <span class="chip px-3 py-1 bg-white/10 text-white/60 rounded-full text-sm cursor-pointer hover:bg-emerald-500/20 hover:text-emerald-200" onclick="setMensual(500)">500 €</span>
                 </div>
 
-                <div id="q2-callout" class="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 mb-6 callout-green">
-                  <p class="text-sm text-emerald-900 font-medium mb-1">El poder del interés compuesto</p>
-                  <p class="text-sm text-emerald-800" id="q2-callout-text">Aportando cada mes de forma constante, el tiempo trabaja a tu favor gracias al interés compuesto.</p>
+                <div id="q2-callout" class="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4 mb-6 callout-green">
+                  <p class="text-sm text-emerald-300 font-medium mb-1">El poder del interés compuesto</p>
+                  <p class="text-sm text-white/70" id="q2-callout-text">Aportando cada mes de forma constante, el tiempo trabaja a tu favor gracias al interés compuesto.</p>
                 </div>
 
-                <p id="q2-err" class="hidden text-xs text-red-500 mb-3 text-center">Introduce un importe válido (puede ser 0).</p>
+                <p id="q2-err" class="hidden text-xs text-red-400 mb-3 text-center">Introduce un importe válido (puede ser 0).</p>
 
-                <button onclick="goEdad()" class="btn-continue w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
+                <button onclick="goEdad()" class="btn-continue w-full bg-white text-blue-900 font-bold py-4 rounded-2xl hover:bg-gray-100 transition-all">
                   Continuar →
                 </button>
               </div>
-              <button onclick="showScreen('salario')" class="w-full text-center text-gray-400 text-sm mt-4 hover:text-gray-600">← Volver</button>
+              <button onclick="showScreen('salario')" class="w-full text-center text-white/35 text-sm mt-4 hover:text-white/60">← Volver</button>
             </div>
 
             <!-- SCREEN: EDAD -->
             <div class="screen" id="screen-edad">
               <div class="mb-6">
-                <div class="flex justify-between text-xs text-blue-900/50 mb-2 font-medium">
+                <div class="flex justify-between text-xs text-white/40 mb-2 font-medium">
                   <span>Pregunta 4 de 7</span><span>57%</span>
                 </div>
-                <div class="w-full bg-blue-900/10 rounded-full h-1.5">
-                  <div class="bg-blue-700 h-1.5 rounded-full transition-all" style="width:57%"></div>
+                <div class="w-full bg-white/10 rounded-full h-1.5">
+                  <div class="bg-emerald-500 h-1.5 rounded-full transition-all" style="width:57%"></div>
                 </div>
               </div>
 
-              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-5 sm:p-8">
-                <p class="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">Edad</p>
-                <h2 class="font-display text-2xl sm:text-3xl font-semibold text-blue-950 mb-2">¿Cuántos años tienes?</h2>
-                <p class="text-gray-500 text-sm mb-6">La edad determina cuánto tiempo tienes por delante y cómo debe estructurarse tu cartera.</p>
+              <div class="bg-white/5 backdrop-blur rounded-3xl border border-white/10 p-5 sm:p-8">
+                <p class="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-3">Edad</p>
+                <h2 class="font-display text-2xl sm:text-3xl font-semibold text-white mb-2">¿Cuántos años tienes?</h2>
+                <p class="text-white/50 text-sm mb-6">La edad determina cuánto tiempo tienes por delante y cómo debe estructurarse tu cartera.</p>
 
                 <div class="relative mb-6">
                   <input type="number" id="q-edad" placeholder="35"
-                    class="w-full text-2xl sm:text-3xl font-bold text-blue-950 border-2 border-blue-100 rounded-2xl px-4 sm:px-6 py-3 sm:py-4 focus:outline-none focus:border-blue-600 bg-blue-50/50"
+                    class="w-full text-2xl sm:text-3xl font-bold text-white border-2 border-white/15 rounded-2xl px-4 sm:px-6 py-3 sm:py-4 focus:outline-none focus:border-emerald-400 bg-white/5"
                     inputmode="numeric" min="18" max="99">
-                  <span class="absolute right-5 top-1/2 -translate-y-1/2 text-lg font-bold text-gray-400">años</span>
+                  <span class="absolute right-5 top-1/2 -translate-y-1/2 text-lg font-bold text-white/25">años</span>
                 </div>
 
-                <div id="edad-callout" class="bg-blue-50 border border-blue-100 rounded-2xl p-4 mb-6">
-                  <p class="text-sm text-blue-800" id="edad-callout-text">Introduce tu edad para ver cómo afecta a la composición de tu cartera.</p>
+                <div id="edad-callout" class="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4 mb-6">
+                  <p class="text-sm text-white/70" id="edad-callout-text">Introduce tu edad para ver cómo afecta a la composición de tu cartera.</p>
                 </div>
 
-                <p id="edad-err" class="hidden text-xs text-red-500 mb-3 text-center">Introduce una edad válida (entre 18 y 99 años).</p>
+                <p id="edad-err" class="hidden text-xs text-red-400 mb-3 text-center">Introduce una edad válida (entre 18 y 99 años).</p>
 
-                <button onclick="goQ3()" class="btn-continue w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
+                <button onclick="goQ3()" class="btn-continue w-full bg-white text-blue-900 font-bold py-4 rounded-2xl hover:bg-gray-100 transition-all">
                   Continuar →
                 </button>
               </div>
-              <button onclick="showScreen('q2')" class="w-full text-center text-gray-400 text-sm mt-4 hover:text-gray-600">← Volver</button>
+              <button onclick="showScreen('q2')" class="w-full text-center text-white/35 text-sm mt-4 hover:text-white/60">← Volver</button>
             </div>
 
             <!-- SCREEN 4: Q3 -->
             <div class="screen" id="screen-q3">
               <div class="mb-6">
-                <div class="flex justify-between text-xs text-blue-900/50 mb-2 font-medium">
+                <div class="flex justify-between text-xs text-white/40 mb-2 font-medium">
                   <span>Pregunta 5 de 7</span><span>71%</span>
                 </div>
-                <div class="w-full bg-blue-900/10 rounded-full h-1.5">
-                  <div class="bg-blue-700 h-1.5 rounded-full transition-all" style="width:71%"></div>
+                <div class="w-full bg-white/10 rounded-full h-1.5">
+                  <div class="bg-emerald-500 h-1.5 rounded-full transition-all" style="width:71%"></div>
                 </div>
               </div>
 
-              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-5 sm:p-8">
-                <p class="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">Horizonte temporal</p>
-                <h2 class="font-display text-2xl sm:text-3xl font-semibold text-blue-950 mb-2">¿Cuándo necesitarás este dinero?</h2>
-                <p class="text-gray-500 text-sm mb-6">Cuanto más tiempo dejes crecer tu inversión, más riesgo puedes asumir y más rentabilidad puedes esperar.</p>
+              <div class="bg-white/5 backdrop-blur rounded-3xl border border-white/10 p-5 sm:p-8">
+                <p class="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-3">Horizonte temporal</p>
+                <h2 class="font-display text-2xl sm:text-3xl font-semibold text-white mb-2">¿Cuándo necesitarás este dinero?</h2>
+                <p class="text-white/50 text-sm mb-6">Cuanto más tiempo dejes crecer tu inversión, más riesgo puedes asumir y más rentabilidad puedes esperar.</p>
 
                 <div class="space-y-3 mb-6">
-                  <div class="card-option border-2 border-gray-200 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4" data-q="q3" data-val="corto" onclick="selectCard(this,'q3')">
+                  <div class="card-option border-2 border-white/15 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4" data-q="q3" data-val="corto" onclick="selectCard(this,'q3')">
                     <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center shrink-0">
                       <div class="w-3 h-3 rounded-sm bg-amber-500"></div>
                     </div>
                     <div>
-                      <p class="font-semibold text-gray-900">Menos de 3 años</p>
-                      <p class="text-sm text-gray-500">Lo necesitaré pronto — vacaciones, coche, entrada de piso</p>
+                      <p class="font-semibold text-white">Menos de 3 años</p>
+                      <p class="text-sm text-white/50">Lo necesitaré pronto — vacaciones, coche, entrada de piso</p>
                     </div>
                   </div>
-                  <div class="card-option border-2 border-gray-200 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4" data-q="q3" data-val="medio" onclick="selectCard(this,'q3')">
+                  <div class="card-option border-2 border-white/15 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4" data-q="q3" data-val="medio" onclick="selectCard(this,'q3')">
                     <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center shrink-0">
                       <div class="w-3 h-3 rounded-sm bg-blue-500"></div>
                     </div>
                     <div>
-                      <p class="font-semibold text-gray-900">3 a 10 años</p>
-                      <p class="text-sm text-gray-500">Meta a medio plazo — educación de hijos, ampliar vivienda</p>
+                      <p class="font-semibold text-white">3 a 10 años</p>
+                      <p class="text-sm text-white/50">Meta a medio plazo — educación de hijos, ampliar vivienda</p>
                     </div>
                   </div>
-                  <div class="card-option border-2 border-gray-200 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4" data-q="q3" data-val="largo" onclick="selectCard(this,'q3')">
+                  <div class="card-option border-2 border-white/15 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4" data-q="q3" data-val="largo" onclick="selectCard(this,'q3')">
                     <div class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center shrink-0">
                       <div class="w-3 h-3 rounded-sm bg-emerald-500"></div>
                     </div>
                     <div>
-                      <p class="font-semibold text-gray-900">Más de 10 años</p>
-                      <p class="text-sm text-gray-500">Largo plazo — jubilación, independencia financiera</p>
+                      <p class="font-semibold text-white">Más de 10 años</p>
+                      <p class="text-sm text-white/50">Largo plazo — jubilación, independencia financiera</p>
                     </div>
                   </div>
                 </div>
 
-                <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4 mb-6 callout">
-                  <p class="text-sm text-blue-800">💡 A más plazo, más tiempo tiene el mercado para recuperarse de bajadas. El horizonte temporal es el factor más importante para definir cuánto riesgo puedes asumir.</p>
+                <div class="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4 mb-6 callout">
+                  <p class="text-sm text-white/70">💡 A más plazo, más tiempo tiene el mercado para recuperarse de bajadas. El horizonte temporal es el factor más importante para definir cuánto riesgo puedes asumir.</p>
                 </div>
 
-                <p id="q3-err" class="hidden text-xs text-red-500 mb-3 text-center">Selecciona una opción para continuar.</p>
+                <p id="q3-err" class="hidden text-xs text-red-400 mb-3 text-center">Selecciona una opción para continuar.</p>
 
-                <button onclick="goQ4()" class="btn-continue w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
+                <button onclick="goQ4()" class="btn-continue w-full bg-white text-blue-900 font-bold py-4 rounded-2xl hover:bg-gray-100 transition-all">
                   Continuar →
                 </button>
               </div>
-              <button onclick="showScreen('edad')" class="w-full text-center text-gray-400 text-sm mt-4 hover:text-gray-600">← Volver</button>
+              <button onclick="showScreen('edad')" class="w-full text-center text-white/35 text-sm mt-4 hover:text-white/60">← Volver</button>
             </div>
 
             <!-- SCREEN 5: Q4 -->
             <div class="screen" id="screen-q4">
               <div class="mb-6">
-                <div class="flex justify-between text-xs text-blue-900/50 mb-2 font-medium">
+                <div class="flex justify-between text-xs text-white/40 mb-2 font-medium">
                   <span>Pregunta 6 de 7</span><span>86%</span>
                 </div>
-                <div class="w-full bg-blue-900/10 rounded-full h-1.5">
-                  <div class="bg-blue-700 h-1.5 rounded-full transition-all" style="width:86%"></div>
+                <div class="w-full bg-white/10 rounded-full h-1.5">
+                  <div class="bg-emerald-500 h-1.5 rounded-full transition-all" style="width:86%"></div>
                 </div>
               </div>
 
-              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-5 sm:p-8">
-                <p class="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">Tolerancia al riesgo</p>
-                <h2 class="font-display text-2xl sm:text-3xl font-semibold text-blue-950 mb-2">Inviertes 10.000 € y en un año valen 7.500 €. ¿Qué haces?</h2>
-                <p class="text-gray-500 text-sm mb-6">Una bajada del 25% es normal en los mercados. Lo que importa es cómo reaccionas emocionalmente.</p>
+              <div class="bg-white/5 backdrop-blur rounded-3xl border border-white/10 p-5 sm:p-8">
+                <p class="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-3">Tolerancia al riesgo</p>
+                <h2 class="font-display text-2xl sm:text-3xl font-semibold text-white mb-2">Inviertes 10.000 € y en un año valen 7.500 €. ¿Qué haces?</h2>
+                <p class="text-white/50 text-sm mb-6">Una bajada del 25% es normal en los mercados. Lo que importa es cómo reaccionas emocionalmente.</p>
 
                 <div class="space-y-3 mb-6">
-                  <div class="card-option border-2 border-gray-200 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4" data-q="q4" data-val="conservador" onclick="selectCard(this,'q4')">
+                  <div class="card-option border-2 border-white/15 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4" data-q="q4" data-val="conservador" onclick="selectCard(this,'q4')">
                     <div class="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center shrink-0">
                       <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="9" width="16" height="8" rx="2" fill="#EF4444" opacity=".25"/><rect x="4" y="5" width="10" height="4" rx="1.5" fill="#EF4444" opacity=".5"/><rect x="7" y="2" width="4" height="3" rx="1" fill="#EF4444"/></svg>
                     </div>
                     <div>
-                      <p class="font-semibold text-gray-900">Lo retiro todo</p>
-                      <p class="text-sm text-gray-500">Prefiero perder algo seguro que arriesgar más</p>
+                      <p class="font-semibold text-white">Lo retiro todo</p>
+                      <p class="text-sm text-white/50">Prefiero perder algo seguro que arriesgar más</p>
                     </div>
                   </div>
-                  <div class="card-option border-2 border-gray-200 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4" data-q="q4" data-val="moderado" onclick="selectCard(this,'q4')">
+                  <div class="card-option border-2 border-white/15 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4" data-q="q4" data-val="moderado" onclick="selectCard(this,'q4')">
                     <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center shrink-0">
                       <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="11" width="16" height="6" rx="2" fill="#F59E0B" opacity=".25"/><rect x="4" y="6" width="10" height="5" rx="1.5" fill="#F59E0B" opacity=".5"/><rect x="7" y="2" width="4" height="4" rx="1" fill="#F59E0B"/></svg>
                     </div>
                     <div>
-                      <p class="font-semibold text-gray-900">Me preocupo, pero espero</p>
-                      <p class="text-sm text-gray-500">No me gusta verlo bajar, pero confío en que se recupere</p>
+                      <p class="font-semibold text-white">Me preocupo, pero espero</p>
+                      <p class="text-sm text-white/50">No me gusta verlo bajar, pero confío en que se recupere</p>
                     </div>
                   </div>
-                  <div class="card-option border-2 border-gray-200 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4" data-q="q4" data-val="dinamico" onclick="selectCard(this,'q4')">
+                  <div class="card-option border-2 border-white/15 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4" data-q="q4" data-val="dinamico" onclick="selectCard(this,'q4')">
                     <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
                       <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="13" width="16" height="4" rx="2" fill="#3B82F6" opacity=".25"/><rect x="4" y="7" width="10" height="6" rx="1.5" fill="#3B82F6" opacity=".5"/><rect x="7" y="2" width="4" height="5" rx="1" fill="#3B82F6"/></svg>
                     </div>
                     <div>
-                      <p class="font-semibold text-gray-900">Sigo aportando, es una oportunidad</p>
-                      <p class="text-sm text-gray-500">A largo plazo el mercado siempre ha subido</p>
+                      <p class="font-semibold text-white">Sigo aportando, es una oportunidad</p>
+                      <p class="text-sm text-white/50">A largo plazo el mercado siempre ha subido</p>
                     </div>
                   </div>
-                  <div class="card-option border-2 border-gray-200 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4" data-q="q4" data-val="agresivo" onclick="selectCard(this,'q4')">
+                  <div class="card-option border-2 border-white/15 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4" data-q="q4" data-val="agresivo" onclick="selectCard(this,'q4')">
                     <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
                       <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="15" width="16" height="2" rx="1" fill="#10B981" opacity=".25"/><rect x="4" y="8" width="10" height="7" rx="1.5" fill="#10B981" opacity=".5"/><rect x="7" y="2" width="4" height="6" rx="1" fill="#10B981"/></svg>
                     </div>
                     <div>
-                      <p class="font-semibold text-gray-900">Compro más, es el momento</p>
-                      <p class="text-sm text-gray-500">Las bajadas son oportunidades para acumular más barato</p>
+                      <p class="font-semibold text-white">Compro más, es el momento</p>
+                      <p class="text-sm text-white/50">Las bajadas son oportunidades para acumular más barato</p>
                     </div>
                   </div>
                 </div>
 
-                <p id="q4-err" class="hidden text-xs text-red-500 mb-3 text-center">Selecciona una opción para continuar.</p>
+                <p id="q4-err" class="hidden text-xs text-red-400 mb-3 text-center">Selecciona una opción para continuar.</p>
 
-                <button onclick="goQ5()" class="btn-continue w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
+                <button onclick="goQ5()" class="btn-continue w-full bg-white text-blue-900 font-bold py-4 rounded-2xl hover:bg-gray-100 transition-all">
                   Continuar →
                 </button>
               </div>
-              <button onclick="showScreen('q3')" class="w-full text-center text-gray-400 text-sm mt-4 hover:text-gray-600">← Volver</button>
+              <button onclick="showScreen('q3')" class="w-full text-center text-white/35 text-sm mt-4 hover:text-white/60">← Volver</button>
             </div>
 
             <!-- SCREEN 6: Q5 -->
             <div class="screen" id="screen-q5">
               <div class="mb-6">
-                <div class="flex justify-between text-xs text-blue-900/50 mb-2 font-medium">
+                <div class="flex justify-between text-xs text-white/40 mb-2 font-medium">
                   <span>Pregunta 7 de 7</span><span>100%</span>
                 </div>
-                <div class="w-full bg-blue-900/10 rounded-full h-1.5">
-                  <div class="bg-blue-700 h-1.5 rounded-full" style="width:100%"></div>
+                <div class="w-full bg-white/10 rounded-full h-1.5">
+                  <div class="bg-emerald-500 h-1.5 rounded-full" style="width:100%"></div>
                 </div>
               </div>
 
-              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-5 sm:p-8">
-                <p class="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">Estilo de gestión</p>
-                <h2 class="font-display text-2xl sm:text-3xl font-semibold text-blue-950 mb-2">¿Cómo quieres gestionar tu inversión?</h2>
-                <p class="text-gray-500 text-sm mb-6">No hay respuesta incorrecta. Cada camino tiene sus ventajas y las dos opciones son igual de válidas.</p>
+              <div class="bg-white/5 backdrop-blur rounded-3xl border border-white/10 p-5 sm:p-8">
+                <p class="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-3">Estilo de gestión</p>
+                <h2 class="font-display text-2xl sm:text-3xl font-semibold text-white mb-2">¿Cómo quieres gestionar tu inversión?</h2>
+                <p class="text-white/50 text-sm mb-6">No hay respuesta incorrecta. Cada camino tiene sus ventajas y las dos opciones son igual de válidas.</p>
 
                 <div class="space-y-4 mb-6">
-                  <div class="card-option border-2 border-gray-200 rounded-2xl p-4 sm:p-5 cursor-pointer" data-q="q5" data-val="robo" onclick="selectCard(this,'q5')">
+                  <div class="card-option border-2 border-white/15 rounded-2xl p-4 sm:p-5 cursor-pointer" data-q="q5" data-val="robo" onclick="selectCard(this,'q5')">
                     <div class="flex items-start gap-4">
                       <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center shrink-0">
                         <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="9" stroke="#3B82F6" stroke-width="1.5"/><circle cx="11" cy="11" r="4" fill="#3B82F6" opacity=".3"/><circle cx="11" cy="11" r="1.5" fill="#3B82F6"/><line x1="11" y1="2" x2="11" y2="5" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round"/><line x1="11" y1="17" x2="11" y2="20" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="11" x2="5" y2="11" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round"/><line x1="17" y1="11" x2="20" y2="11" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round"/></svg>
                       </div>
                       <div class="flex-1">
-                        <p class="font-bold text-gray-900 text-base">Quiero olvidarme — gestión automática</p>
-                        <p class="text-sm text-gray-500 mt-1">Un sistema lo hace todo por ti: elige los fondos, rebalancea y optimiza. Tú solo aportas cada mes, sin tomar ninguna decisión.</p>
+                        <p class="font-bold text-white text-base">Quiero olvidarme — gestión automática</p>
+                        <p class="text-sm text-white/50 mt-1">Un sistema lo hace todo por ti: elige los fondos, rebalancea y optimiza. Tú solo aportas cada mes, sin tomar ninguna decisión.</p>
                       </div>
                     </div>
                   </div>
 
-                  <div class="card-option card-option-purple border-2 border-gray-200 rounded-2xl p-4 sm:p-5 cursor-pointer" data-q="q5" data-val="diy" onclick="selectCard(this,'q5')">
+                  <div class="card-option card-option-purple border-2 border-white/15 rounded-2xl p-4 sm:p-5 cursor-pointer" data-q="q5" data-val="diy" onclick="selectCard(this,'q5')">
                     <div class="flex items-start gap-4">
                       <div class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center shrink-0">
                         <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 17 L8 10 L12 13 L16 6 L20 9" stroke="#7C3AED" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="10" r="1.5" fill="#7C3AED" opacity=".5"/><circle cx="12" cy="13" r="1.5" fill="#7C3AED" opacity=".5"/><circle cx="16" cy="6" r="1.5" fill="#7C3AED"/></svg>
                       </div>
                       <div class="flex-1">
-                        <p class="font-bold text-gray-900 text-base">Quiero aprender y llevarlo yo mismo</p>
-                        <p class="text-sm text-gray-500 mt-1">Tú eliges los fondos concretos, decides cuánto poner en cada uno y controlas cada euro. Más involucración, menor coste a largo plazo.</p>
+                        <p class="font-bold text-white text-base">Quiero aprender y llevarlo yo mismo</p>
+                        <p class="text-sm text-white/50 mt-1">Tú eliges los fondos concretos, decides cuánto poner en cada uno y controlas cada euro. Más involucración, menor coste a largo plazo.</p>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <p id="q5-err" class="hidden text-xs text-red-500 mb-3 text-center">Selecciona una opción para continuar.</p>
+                <p id="q5-err" class="hidden text-xs text-red-400 mb-3 text-center">Selecciona una opción para continuar.</p>
 
-                <button onclick="goResults()" class="btn-continue w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
+                <button onclick="goResults()" class="btn-continue w-full bg-white text-blue-900 font-bold py-4 rounded-2xl hover:bg-gray-100 transition-all">
                   Ver mi plan →
                 </button>
               </div>
-              <button onclick="showScreen('q4')" class="w-full text-center text-gray-400 text-sm mt-4 hover:text-gray-600">← Volver</button>
+              <button onclick="showScreen('q4')" class="w-full text-center text-white/35 text-sm mt-4 hover:text-white/60">← Volver</button>
             </div>
 
             <!-- SCREEN: ROBO PREFERENCE -->
             <div class="screen" id="screen-robopref">
-              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-5 sm:p-8">
-                <p class="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">Preferencia de plataforma</p>
-                <h2 class="font-display text-2xl sm:text-3xl font-semibold text-blue-950 mb-2">¿Qué es lo más importante para ti en el roboadvisor?</h2>
-                <p class="text-gray-500 text-sm mb-6">Cada plataforma tiene un punto fuerte diferente. Elige el que más encaje contigo.</p>
+              <div class="bg-white/5 backdrop-blur rounded-3xl border border-white/10 p-5 sm:p-8">
+                <p class="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-3">Preferencia de plataforma</p>
+                <h2 class="font-display text-2xl sm:text-3xl font-semibold text-white mb-2">¿Qué es lo más importante para ti en el roboadvisor?</h2>
+                <p class="text-white/50 text-sm mb-6">Cada plataforma tiene un punto fuerte diferente. Elige el que más encaje contigo.</p>
 
                 <div class="space-y-4 mb-6">
-                  <div class="card-option border-2 border-gray-200 rounded-2xl p-4 sm:p-5 cursor-pointer" data-q="robopref" data-val="finizens" onclick="selectCard(this,'robopref')">
+                  <div class="card-option border-2 border-white/15 rounded-2xl p-4 sm:p-5 cursor-pointer" data-q="robopref" data-val="finizens" onclick="selectCard(this,'robopref')">
                     <div class="flex items-start gap-4">
                       <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#10B981" stroke-width="1.5"/><path d="M7 10h6M10 7v6" stroke="#10B981" stroke-width="1.5" stroke-linecap="round"/></svg>
                       </div>
                       <div class="flex-1">
-                        <p class="font-bold text-gray-900 text-base">Sin complicarme — empezar es lo importante</p>
-                        <p class="text-sm text-gray-500 mt-1">Algo ultra sencillo, sin mínimos de entrada. Ideal para empezar desde el primer euro. <span class="font-medium text-gray-700">Finizens</span></p>
+                        <p class="font-bold text-white text-base">Sin complicarme — empezar es lo importante</p>
+                        <p class="text-sm text-white/50 mt-1">Algo ultra sencillo, sin mínimos de entrada. Ideal para empezar desde el primer euro. <span class="font-medium text-white/70">Finizens</span></p>
                       </div>
                     </div>
                   </div>
 
-                  <div class="card-option border-2 border-gray-200 rounded-2xl p-4 sm:p-5 cursor-pointer" data-q="robopref" data-val="myinvestor" onclick="selectCard(this,'robopref')">
+                  <div class="card-option border-2 border-white/15 rounded-2xl p-4 sm:p-5 cursor-pointer" data-q="robopref" data-val="myinvestor" onclick="selectCard(this,'robopref')">
                     <div class="flex items-start gap-4">
                       <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="6" width="16" height="11" rx="2" stroke="#3B82F6" stroke-width="1.5"/><path d="M6 6V5a4 4 0 0 1 8 0v1" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round"/><path d="M7 11h6" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round"/></svg>
                       </div>
                       <div class="flex-1">
-                        <p class="font-bold text-gray-900 text-base">Todo en un sitio — cuenta + inversión juntos</p>
-                        <p class="text-sm text-gray-500 mt-1">Ahorros, cuenta remunerada y fondos indexados en una misma plataforma, sin malabarismos. <span class="font-medium text-gray-700">MyInvestor</span></p>
+                        <p class="font-bold text-white text-base">Todo en un sitio — cuenta + inversión juntos</p>
+                        <p class="text-sm text-white/50 mt-1">Ahorros, cuenta remunerada y fondos indexados en una misma plataforma, sin malabarismos. <span class="font-medium text-white/70">MyInvestor</span></p>
                       </div>
                     </div>
                   </div>
 
-                  <div class="card-option border-2 border-gray-200 rounded-2xl p-4 sm:p-5 cursor-pointer" data-q="robopref" data-val="indexa" onclick="selectCard(this,'robopref')">
+                  <div class="card-option border-2 border-white/15 rounded-2xl p-4 sm:p-5 cursor-pointer" data-q="robopref" data-val="indexa" onclick="selectCard(this,'robopref')">
                     <div class="flex items-start gap-4">
                       <div class="w-12 h-12 rounded-xl bg-violet-50 flex items-center justify-center shrink-0">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><polyline points="2,15 6,9 10,11 14,5 18,8" stroke="#7C3AED" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="14" cy="5" r="1.5" fill="#7C3AED"/></svg>
                       </div>
                       <div class="flex-1">
-                        <p class="font-bold text-gray-900 text-base">Riguroso y barato — el mejor gestor automático</p>
-                        <p class="text-sm text-gray-500 mt-1">Historial más contrastado, mayor transparencia y los costes más bajos del mercado español. <span class="font-medium text-gray-700">Indexa Capital</span></p>
+                        <p class="font-bold text-white text-base">Riguroso y barato — el mejor gestor automático</p>
+                        <p class="text-sm text-white/50 mt-1">Historial más contrastado, mayor transparencia y los costes más bajos del mercado español. <span class="font-medium text-white/70">Indexa Capital</span></p>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <p id="robopref-err" class="hidden text-xs text-red-500 mb-3 text-center">Selecciona una opción para continuar.</p>
+                <p id="robopref-err" class="hidden text-xs text-red-400 mb-3 text-center">Selecciona una opción para continuar.</p>
 
-                <button onclick="goRoboPrefNext()" class="btn-continue w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all">
+                <button onclick="goRoboPrefNext()" class="btn-continue w-full bg-white text-blue-900 font-bold py-4 rounded-2xl hover:bg-gray-100 transition-all">
                   Ver mi plan →
                 </button>
               </div>
-              <button onclick="showScreen('q5')" class="w-full text-center text-gray-400 text-sm mt-4 hover:text-gray-600">← Volver</button>
+              <button onclick="showScreen('q5')" class="w-full text-center text-white/35 text-sm mt-4 hover:text-white/60">← Volver</button>
             </div>
 
             <!-- SCREEN 7: LEAD -->
             <div class="screen" id="screen-lead">
-              <div class="bg-white rounded-3xl shadow-sm border border-black/5 p-5 sm:p-8">
-                <p class="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">Último paso</p>
-                <h2 class="font-display text-2xl sm:text-3xl font-semibold text-blue-950 mb-2">¡Tu plan está listo!</h2>
-                <p class="text-gray-500 text-sm mb-6">Introduce tu email para guardar los resultados y recibir actualizaciones con consejos de inversión adaptados a tu perfil.</p>
+              <div class="bg-white/5 backdrop-blur rounded-3xl border border-white/10 p-5 sm:p-8">
+                <p class="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-3">Último paso</p>
+                <h2 class="font-display text-2xl sm:text-3xl font-semibold text-white mb-2">¡Tu plan está listo!</h2>
+                <p class="text-white/50 text-sm mb-6">Introduce tu email para guardar los resultados y recibir actualizaciones con consejos de inversión adaptados a tu perfil.</p>
 
                 <div class="space-y-4 mb-6">
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+                    <label class="block text-sm font-medium text-white/60 mb-1">Nombre</label>
                     <input type="text" id="lead-nombre" placeholder="Tu nombre"
-                      class="w-full border-2 border-gray-200 rounded-2xl px-4 py-3 focus:outline-none focus:border-blue-600 text-gray-900">
+                      class="w-full border-2 border-white/15 rounded-2xl px-4 py-3 focus:outline-none focus:border-emerald-400 bg-white/5 text-white">
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <label class="block text-sm font-medium text-white/60 mb-1">Email</label>
                     <input type="email" id="lead-email" placeholder="tu@email.com"
-                      class="w-full border-2 border-gray-200 rounded-2xl px-4 py-3 focus:outline-none focus:border-blue-600 text-gray-900">
+                      class="w-full border-2 border-white/15 rounded-2xl px-4 py-3 focus:outline-none focus:border-emerald-400 bg-white/5 text-white">
                   </div>
                 </div>
 
-                <p id="lead-err" class="hidden text-xs text-red-500 mb-3 text-center">Introduce un email válido para continuar.</p>
+                <p id="lead-err" class="hidden text-xs text-red-400 mb-3 text-center">Introduce un email válido para continuar.</p>
 
-                <button onclick="goResultsFinal()" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all mb-3">
+                <button onclick="goResultsFinal()" class="btn-continue w-full bg-white text-blue-900 font-bold py-4 rounded-2xl hover:bg-gray-100 transition-all mb-3">
                   Ver mi plan de inversión →
                 </button>
-                <button onclick="skipLead()" class="w-full text-gray-400 text-sm py-2 hover:text-gray-600">
+                <button onclick="skipLead()" class="w-full text-white/40 text-sm py-2 hover:text-white/60">
                   Continuar sin guardar
                 </button>
               </div>
@@ -564,22 +564,22 @@
           </div>
 
           <!-- RIGHT / BOTTOM: live dashboard panel — sticky sidebar on desktop, collapsible bottom sheet on mobile -->
-          <div id="live-panel" class="fixed inset-x-0 bottom-0 z-40 bg-white rounded-t-3xl border-t border-black/10 shadow-[0_-8px_24px_rgba(0,0,0,0.10)] lg:static lg:z-auto lg:sticky lg:top-8 lg:rounded-3xl lg:border lg:border-black/5 lg:shadow-sm">
+          <div id="live-panel" class="fixed inset-x-0 bottom-0 z-40 bg-[#14273D] backdrop-blur rounded-t-3xl border-t border-white/10 shadow-[0_-8px_24px_rgba(0,0,0,0.35)] lg:static lg:z-auto lg:sticky lg:top-8 lg:rounded-3xl lg:border lg:border-white/10 lg:bg-white/5">
 
             <!-- Mobile-only collapsed toggle bar -->
             <button id="panel-toggle" onclick="togglePanel()" class="lg:hidden w-full flex items-center justify-between px-4 py-2.5">
               <div class="flex items-center gap-2">
                 <svg class="progress-ring" width="24" height="24" viewBox="0 0 40 40">
-                  <circle cx="20" cy="20" r="17" fill="none" stroke="#E7ECF1" stroke-width="5"/>
-                  <circle id="panel-ring-mobile" cx="20" cy="20" r="17" fill="none" stroke="#1E3F5C" stroke-width="5"
+                  <circle cx="20" cy="20" r="17" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="5"/>
+                  <circle id="panel-ring-mobile" cx="20" cy="20" r="17" fill="none" stroke="#22C58B" stroke-width="5"
                     stroke-linecap="round" stroke-dasharray="106.8" stroke-dashoffset="106.8"
                     transform="rotate(-90 20 20)"/>
                 </svg>
-                <span class="text-xs font-semibold text-blue-950">Tu plan en vivo</span>
+                <span class="text-xs font-semibold text-white">Tu plan en vivo</span>
               </div>
               <div class="flex items-center gap-2">
-                <span id="panel-mobile-metric" class="text-sm font-bold text-blue-800">Toca para ver →</span>
-                <svg id="panel-chevron" class="w-3.5 h-3.5 text-gray-400 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+                <span id="panel-mobile-metric" class="text-sm font-bold text-emerald-300">Toca para ver →</span>
+                <svg id="panel-chevron" class="w-3.5 h-3.5 text-white/40 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
               </div>
             </button>
 
@@ -588,68 +588,75 @@
 
               <div class="hidden lg:flex items-center gap-3 mb-5">
                 <svg class="progress-ring" width="40" height="40" viewBox="0 0 40 40">
-                  <circle cx="20" cy="20" r="17" fill="none" stroke="#E7ECF1" stroke-width="4"/>
-                  <circle id="panel-ring" cx="20" cy="20" r="17" fill="none" stroke="#1E3F5C" stroke-width="4"
+                  <circle cx="20" cy="20" r="17" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="4"/>
+                  <circle id="panel-ring" cx="20" cy="20" r="17" fill="none" stroke="#22C58B" stroke-width="4"
                     stroke-linecap="round" stroke-dasharray="106.8" stroke-dashoffset="106.8"
                     transform="rotate(-90 20 20)"/>
                 </svg>
                 <div>
-                  <p class="font-display text-sm font-semibold text-blue-950">Tu plan en vivo</p>
-                  <p class="text-xs text-gray-400" id="panel-subtitle">Se construye mientras respondes</p>
+                  <p class="font-display text-sm font-semibold text-white">Tu plan en vivo</p>
+                  <p class="text-xs text-white/40" id="panel-subtitle">Se construye mientras respondes</p>
                 </div>
               </div>
 
               <div id="panel-empty" class="text-center py-4 lg:py-8 px-2">
                 <p class="text-2xl lg:text-3xl mb-2">📋</p>
-                <p class="text-xs lg:text-sm text-gray-400">Cada respuesta va dando forma a tu plan — en tiempo real.</p>
+                <p class="text-xs lg:text-sm text-white/40">Cada respuesta va dando forma a tu plan — en tiempo real.</p>
               </div>
 
               <div id="panel-body" class="hidden space-y-4">
 
                 <!-- Savings split -->
                 <div id="panel-savings" class="hidden panel-fill-in panel-metric">
-                  <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Cómo se reparte tu ahorro</p>
-                  <div class="w-full h-3 rounded-full overflow-hidden flex bg-gray-100 mb-2">
+                  <p class="text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Cómo se reparte tu ahorro</p>
+                  <div class="w-full h-3 rounded-full overflow-hidden flex bg-white/10 mb-2">
                     <div id="panel-savings-bar-fund" class="h-full bg-amber-400" style="width:0%"></div>
-                    <div id="panel-savings-bar-invest" class="h-full bg-blue-600" style="width:0%"></div>
+                    <div id="panel-savings-bar-invest" class="h-full bg-emerald-400" style="width:0%"></div>
                   </div>
                   <div class="flex justify-between text-xs">
-                    <span class="text-gray-500">🛡️ Colchón: <strong id="panel-fund-val" class="text-gray-800">0 €</strong></span>
-                    <span class="text-gray-500">📈 Invertible: <strong id="panel-invest-val" class="text-gray-800">0 €</strong></span>
+                    <span class="text-white/50">🛡️ Colchón: <strong id="panel-fund-val" class="text-white">0 €</strong></span>
+                    <span class="text-white/50">📈 Invertible: <strong id="panel-invest-val" class="text-white">0 €</strong></span>
                   </div>
                 </div>
 
                 <!-- Growth preview -->
-                <div id="panel-growth" class="hidden panel-fill-in panel-metric border-t border-gray-100 pt-4">
-                  <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Proyección a <span id="panel-growth-years">20</span> años</p>
+                <div id="panel-growth" class="hidden panel-fill-in panel-metric border-t border-white/10 pt-4">
+                  <p class="text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Proyección a <span id="panel-growth-years">20</span> años</p>
                   <div style="height:110px">
                     <canvas id="panel-chart"></canvas>
                   </div>
+                  <div class="flex items-center justify-center gap-4 mt-2 mb-1">
+                    <span class="text-[11px] text-white/50"><span class="inline-block w-2.5 h-0.5 rounded-full bg-blue-300 mr-1.5" style="vertical-align:2px"></span>Valor proyectado</span>
+                    <span class="text-[11px] text-white/50"><span class="inline-block w-2.5 h-0.5 rounded-full bg-amber-400 mr-1.5" style="vertical-align:2px"></span>Aportado</span>
+                  </div>
                   <p class="text-center mt-2">
-                    <span class="text-2xl font-bold text-blue-800" id="panel-growth-final">0 €</span>
-                    <span class="text-xs text-gray-400 block">valor estimado (~7%/año histórico)</span>
+                    <span class="text-2xl font-bold text-blue-200" id="panel-growth-final">0 €</span>
+                    <span class="text-xs text-white/40 block">valor estimado (~7%/año histórico)</span>
                   </p>
                   <p class="text-center mt-1.5">
-                    <span class="inline-block w-2 h-2 rounded-full bg-amber-500 mr-1.5" style="vertical-align:1px"></span>
-                    <span class="text-xs text-gray-500">aportado: <strong id="panel-growth-contrib" class="text-gray-700">0 €</strong></span>
+                    <span class="inline-block w-2 h-2 rounded-full bg-amber-400 mr-1.5" style="vertical-align:1px"></span>
+                    <span class="text-xs text-white/50">aportado: <strong id="panel-growth-contrib" class="text-white/80">0 €</strong></span>
+                  </p>
+                  <p class="text-center mt-1">
+                    <span class="text-xs font-semibold text-emerald-300">📈 rentabilidad generada: <strong id="panel-growth-gain">0 €</strong></span>
                   </p>
                 </div>
 
                 <!-- Risk gauge -->
-                <div id="panel-risk" class="hidden panel-fill-in panel-metric border-t border-gray-100 pt-4">
-                  <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Tu perfil de riesgo</p>
+                <div id="panel-risk" class="hidden panel-fill-in panel-metric border-t border-white/10 pt-4">
+                  <p class="text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Tu perfil de riesgo</p>
                   <div class="relative h-2 rounded-full mb-1" style="background: linear-gradient(90deg,#EF4444,#F59E0B,#3B82F6,#10B981)">
-                    <div id="panel-gauge-dot" class="gauge-dot absolute -top-1.5 w-5 h-5 rounded-full bg-white border-2 border-blue-700 shadow" style="left:0%"></div>
+                    <div id="panel-gauge-dot" class="gauge-dot absolute -top-1.5 w-5 h-5 rounded-full bg-white border-2 border-blue-900 shadow" style="left:0%"></div>
                   </div>
-                  <p class="text-xs text-gray-500 text-center mt-2" id="panel-risk-label">—</p>
+                  <p class="text-xs text-white/50 text-center mt-2" id="panel-risk-label">—</p>
                 </div>
 
                 <!-- Track -->
-                <div id="panel-track" class="hidden panel-fill-in border-t border-gray-100 pt-4 flex items-center gap-3">
+                <div id="panel-track" class="hidden panel-fill-in border-t border-white/10 pt-4 flex items-center gap-3">
                   <div id="panel-track-icon" class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-xl shrink-0">🤖</div>
                   <div>
-                    <p class="text-sm font-semibold text-gray-900" id="panel-track-label">Gestión automática</p>
-                    <p class="text-xs text-gray-400">Estilo de gestión elegido</p>
+                    <p class="text-sm font-semibold text-white" id="panel-track-label">Gestión automática</p>
+                    <p class="text-xs text-white/40">Estilo de gestión elegido</p>
                   </div>
                 </div>
 
@@ -894,6 +901,7 @@
       const contribFinal = dataContrib[dataContrib.length - 1];
       document.getElementById('panel-growth-final').textContent = fmtEurShort(final);
       document.getElementById('panel-growth-contrib').textContent = fmtEurShort(contribFinal);
+      document.getElementById('panel-growth-gain').textContent = '+' + fmtEurShort(Math.max(0, final - contribFinal));
 
       const ctx = document.getElementById('panel-chart');
       if (panelGrowthChart) panelGrowthChart.destroy();
@@ -905,8 +913,8 @@
             {
               data: dataGrowth,
               fill: true,
-              borderColor: '#1E3F5C',
-              backgroundColor: 'rgba(30,63,92,0.08)',
+              borderColor: '#93C5FD',
+              backgroundColor: 'rgba(147,197,253,0.12)',
               tension: 0.4,
               pointRadius: 0,
               borderWidth: 2,
@@ -915,7 +923,7 @@
             {
               data: dataContrib,
               fill: false,
-              borderColor: '#D97706',
+              borderColor: '#FBBF24',
               backgroundColor: 'transparent',
               tension: 0.4,
               pointRadius: 0,

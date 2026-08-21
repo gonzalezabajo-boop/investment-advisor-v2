@@ -824,21 +824,47 @@
       document.getElementById('panel-growth-years').textContent = panelYears;
 
       const r = 0.07 / 12;
-      const labels = [], data = [];
+      const labels = [], dataGrowth = [], dataContrib = [];
       for (let y = 0; y <= panelYears; y++) {
         labels.push(y === 0 ? '' : (y % 5 === 0 ? y + 'a' : ''));
         const nn = y * 12;
         const fv = nn === 0 ? panelCapital : panelCapital * Math.pow(1 + r, nn) + monthly * ((Math.pow(1 + r, nn) - 1) / (r || 1));
-        data.push(Math.round(fv));
+        dataGrowth.push(Math.round(fv));
+        dataContrib.push(Math.round(panelCapital + monthly * nn));
       }
-      const final = data[data.length - 1];
+      const final = dataGrowth[dataGrowth.length - 1];
       document.getElementById('panel-growth-final').textContent = fmtEurShort(final);
 
       const ctx = document.getElementById('panel-chart');
       if (panelGrowthChart) panelGrowthChart.destroy();
       panelGrowthChart = new Chart(ctx, {
         type: 'line',
-        data: { labels, datasets: [{ data, fill: true, borderColor: '#1E3F5C', backgroundColor: 'rgba(30,63,92,0.08)', tension: 0.4, pointRadius: 0, borderWidth: 2 }] },
+        data: {
+          labels,
+          datasets: [
+            {
+              data: dataGrowth,
+              fill: true,
+              borderColor: '#1E3F5C',
+              backgroundColor: 'rgba(30,63,92,0.08)',
+              tension: 0.4,
+              pointRadius: 0,
+              borderWidth: 2,
+              order: 1
+            },
+            {
+              data: dataContrib,
+              fill: false,
+              borderColor: '#F59E0B',
+              backgroundColor: 'transparent',
+              tension: 0.4,
+              pointRadius: 0,
+              borderWidth: 1.5,
+              borderDash: [4, 3],
+              order: 2
+            }
+          ]
+        },
         options: {
           responsive: true, maintainAspectRatio: false,
           plugins: { legend: { display: false }, tooltip: { enabled: false } },

@@ -121,7 +121,7 @@
           </div>
         </div>
 
-        <button onclick="showScreen('q1')" class="w-full bg-white text-blue-800 font-bold py-4 rounded-2xl text-lg shadow-xl hover:shadow-2xl transition-all hover:bg-blue-50">
+        <button onclick="showScreen('entry')" class="w-full bg-white text-blue-800 font-bold py-4 rounded-2xl text-lg shadow-xl hover:shadow-2xl transition-all hover:bg-blue-50">
           Empezar mi plan →
         </button>
         <p class="text-blue-400 text-xs mt-4">Análisis informativo. No es asesoramiento financiero regulado.</p>
@@ -561,6 +561,268 @@
               </div>
             </div>
 
+            <!-- ═══════════════════════════════════════════════════ -->
+            <!-- INVESTOR PATH: entry + 3 screens                   -->
+            <!-- ═══════════════════════════════════════════════════ -->
+
+            <!-- SCREEN: ENTRY — branching question -->
+            <div class="screen" id="screen-entry">
+              <div class="bg-white/5 backdrop-blur rounded-3xl border border-white/10 p-5 sm:p-8">
+                <p class="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-3">Punto de partida</p>
+                <h2 class="font-display text-2xl sm:text-3xl font-semibold text-white mb-2">¿Cómo es tu situación?</h2>
+                <p class="text-white/50 text-sm mb-6">Tu plan depende completamente de dónde partes. Elige lo que mejor te describe.</p>
+
+                <div class="space-y-4 mb-6">
+                  <div class="card-option border-2 border-white/15 rounded-2xl p-4 sm:p-5 cursor-pointer" data-q="entry" data-val="empezando" onclick="selectCard(this,'entry')">
+                    <div class="flex items-start gap-4">
+                      <div class="w-12 h-12 rounded-xl bg-emerald-900/50 border border-emerald-500/30 flex items-center justify-center shrink-0 text-2xl">🌱</div>
+                      <div class="flex-1">
+                        <p class="font-bold text-white text-base">Estoy empezando</p>
+                        <p class="text-sm text-white/50 mt-1">No tengo inversiones todavía o acabo de empezar. Quiero un plan desde cero adaptado a mi situación.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-option border-2 border-white/15 rounded-2xl p-4 sm:p-5 cursor-pointer" data-q="entry" data-val="invierte" onclick="selectCard(this,'entry')">
+                    <div class="flex items-start gap-4">
+                      <div class="w-12 h-12 rounded-xl bg-blue-900/50 border border-blue-500/30 flex items-center justify-center shrink-0 text-2xl">📊</div>
+                      <div class="flex-1">
+                        <p class="font-bold text-white text-base">Ya invierto</p>
+                        <p class="text-sm text-white/50 mt-1">Tengo una cartera activa y quiero saber si lo estoy haciendo bien o cómo mejorarla.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <p id="entry-err" class="hidden text-xs text-red-400 mb-3 text-center">Selecciona una opción para continuar.</p>
+
+                <button onclick="goFromEntry()" class="btn-continue w-full bg-white text-blue-900 font-bold py-4 rounded-2xl hover:bg-gray-100 transition-all">
+                  Continuar →
+                </button>
+              </div>
+              <button onclick="showScreen('intro')" class="w-full text-center text-white/35 text-sm mt-4 hover:text-white/60">← Volver</button>
+            </div>
+
+            <!-- SCREEN: INV-Q1 — What do you have? -->
+            <div class="screen" id="screen-inv-q1">
+              <div class="mb-6">
+                <div class="flex justify-between text-xs text-white/40 mb-2 font-medium">
+                  <span>Paso 1 de 3</span><span>33%</span>
+                </div>
+                <div class="w-full bg-white/10 rounded-full h-1.5">
+                  <div class="bg-blue-400 h-1.5 rounded-full" style="width:33%"></div>
+                </div>
+              </div>
+              <div class="bg-white/5 backdrop-blur rounded-3xl border border-white/10 p-5 sm:p-8">
+                <p class="text-xs font-semibold text-blue-400 uppercase tracking-widest mb-3">Tu cartera actual</p>
+                <h2 class="font-display text-2xl sm:text-3xl font-semibold text-white mb-2">¿Qué tienes ahora mismo?</h2>
+                <p class="text-white/50 text-sm mb-6">Elige la opción que mejor describe tu situación principal.</p>
+
+                <div class="space-y-3 mb-6">
+                  <div class="card-option border-2 border-white/15 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4 cursor-pointer" data-q="inv-q1" data-val="robo" onclick="selectCard(this,'inv-q1')">
+                    <div class="w-10 h-10 rounded-xl bg-blue-900/50 border border-blue-500/20 flex items-center justify-center shrink-0 text-lg">🤖</div>
+                    <div>
+                      <p class="font-semibold text-white">Roboadvisor</p>
+                      <p class="text-sm text-white/50">Indexa, Finizens, MyInvestor, Openbank Inversión...</p>
+                    </div>
+                  </div>
+                  <div class="card-option border-2 border-white/15 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4 cursor-pointer" data-q="inv-q1" data-val="fondos" onclick="selectCard(this,'inv-q1')">
+                    <div class="w-10 h-10 rounded-xl bg-purple-900/50 border border-purple-500/20 flex items-center justify-center shrink-0 text-lg">📦</div>
+                    <div>
+                      <p class="font-semibold text-white">Fondos indexados propios</p>
+                      <p class="text-sm text-white/50">Fidelity MSCI World, Vanguard, iShares, Amundi...</p>
+                    </div>
+                  </div>
+                  <div class="card-option border-2 border-white/15 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4 cursor-pointer" data-q="inv-q1" data-val="acciones" onclick="selectCard(this,'inv-q1')">
+                    <div class="w-10 h-10 rounded-xl bg-amber-900/50 border border-amber-500/20 flex items-center justify-center shrink-0 text-lg">📈</div>
+                    <div>
+                      <p class="font-semibold text-white">Acciones o ETFs directos</p>
+                      <p class="text-sm text-white/50">Valores concretos, ETFs en bolsa (DEGIRO, IBKR...)</p>
+                    </div>
+                  </div>
+                  <div class="card-option border-2 border-white/15 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4 cursor-pointer" data-q="inv-q1" data-val="pensiones" onclick="selectCard(this,'inv-q1')">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-900/50 border border-emerald-500/20 flex items-center justify-center shrink-0 text-lg">🏦</div>
+                    <div>
+                      <p class="font-semibold text-white">Plan de pensiones / EPSV</p>
+                      <p class="text-sm text-white/50">Principalmente vehículos de ahorro para la jubilación</p>
+                    </div>
+                  </div>
+                  <div class="card-option border-2 border-white/15 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4 cursor-pointer" data-q="inv-q1" data-val="mezcla" onclick="selectCard(this,'inv-q1')">
+                    <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/20 flex items-center justify-center shrink-0 text-lg">🔀</div>
+                    <div>
+                      <p class="font-semibold text-white">Mezcla de varios</p>
+                      <p class="text-sm text-white/50">Tengo varios tipos de productos de inversión a la vez</p>
+                    </div>
+                  </div>
+                </div>
+
+                <p id="inv-q1-err" class="hidden text-xs text-red-400 mb-3 text-center">Selecciona una opción para continuar.</p>
+
+                <button onclick="goInvQ2()" class="btn-continue w-full bg-white text-blue-900 font-bold py-4 rounded-2xl hover:bg-gray-100 transition-all">
+                  Continuar →
+                </button>
+              </div>
+              <button onclick="showScreen('entry')" class="w-full text-center text-white/35 text-sm mt-4 hover:text-white/60">← Volver</button>
+            </div>
+
+            <!-- SCREEN: INV-Q2 — What do you want to improve? -->
+            <div class="screen" id="screen-inv-q2">
+              <div class="mb-6">
+                <div class="flex justify-between text-xs text-white/40 mb-2 font-medium">
+                  <span>Paso 2 de 3</span><span>66%</span>
+                </div>
+                <div class="w-full bg-white/10 rounded-full h-1.5">
+                  <div class="bg-blue-400 h-1.5 rounded-full" style="width:66%"></div>
+                </div>
+              </div>
+              <div class="bg-white/5 backdrop-blur rounded-3xl border border-white/10 p-5 sm:p-8">
+                <p class="text-xs font-semibold text-blue-400 uppercase tracking-widest mb-3">Tu situación</p>
+                <h2 class="font-display text-2xl sm:text-3xl font-semibold text-white mb-2">¿Qué quieres mejorar?</h2>
+                <p class="text-white/50 text-sm mb-6">Elige lo que más te preocupa ahora mismo de tu cartera.</p>
+
+                <div class="space-y-3 mb-6">
+                  <div class="card-option border-2 border-white/15 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4 cursor-pointer" data-q="inv-q2" data-val="comisiones" onclick="selectCard(this,'inv-q2')">
+                    <div class="w-10 h-10 rounded-xl bg-red-900/50 border border-red-500/20 flex items-center justify-center shrink-0 text-lg">💸</div>
+                    <div>
+                      <p class="font-semibold text-white">Pago demasiado en comisiones</p>
+                      <p class="text-sm text-white/50">Creo que mi banco o plataforma me cobra más de lo que debería</p>
+                    </div>
+                  </div>
+                  <div class="card-option border-2 border-white/15 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4 cursor-pointer" data-q="inv-q2" data-val="diversificacion" onclick="selectCard(this,'inv-q2')">
+                    <div class="w-10 h-10 rounded-xl bg-amber-900/50 border border-amber-500/20 flex items-center justify-center shrink-0 text-lg">🌍</div>
+                    <div>
+                      <p class="font-semibold text-white">No sé si estoy bien diversificado</p>
+                      <p class="text-sm text-white/50">Tengo dudas sobre si tengo demasiado concentrado en algo</p>
+                    </div>
+                  </div>
+                  <div class="card-option border-2 border-white/15 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4 cursor-pointer" data-q="inv-q2" data-val="rentabilidad" onclick="selectCard(this,'inv-q2')">
+                    <div class="w-10 h-10 rounded-xl bg-blue-900/50 border border-blue-500/20 flex items-center justify-center shrink-0 text-lg">📉</div>
+                    <div>
+                      <p class="font-semibold text-white">Mi rentabilidad no me convence</p>
+                      <p class="text-sm text-white/50">Siento que podría estar obteniendo más por mi dinero</p>
+                    </div>
+                  </div>
+                  <div class="card-option border-2 border-white/15 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4 cursor-pointer" data-q="inv-q2" data-val="perfil" onclick="selectCard(this,'inv-q2')">
+                    <div class="w-10 h-10 rounded-xl bg-purple-900/50 border border-purple-500/20 flex items-center justify-center shrink-0 text-lg">🎯</div>
+                    <div>
+                      <p class="font-semibold text-white">No sé si mi perfil de riesgo es el correcto</p>
+                      <p class="text-sm text-white/50">Mis circunstancias han cambiado y quiero revisarlo</p>
+                    </div>
+                  </div>
+                  <div class="card-option border-2 border-white/15 rounded-2xl p-3 sm:p-4 flex items-center gap-3 sm:gap-4 cursor-pointer" data-q="inv-q2" data-val="general" onclick="selectCard(this,'inv-q2')">
+                    <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/20 flex items-center justify-center shrink-0 text-lg">🔍</div>
+                    <div>
+                      <p class="font-semibold text-white">Quiero una segunda opinión general</p>
+                      <p class="text-sm text-white/50">Todo parece estar bien pero me gustaría que alguien lo revisara</p>
+                    </div>
+                  </div>
+                </div>
+
+                <p id="inv-q2-err" class="hidden text-xs text-red-400 mb-3 text-center">Selecciona una opción para continuar.</p>
+
+                <button onclick="goInvBook()" class="btn-continue w-full bg-white text-blue-900 font-bold py-4 rounded-2xl hover:bg-gray-100 transition-all">
+                  Continuar →
+                </button>
+              </div>
+              <button onclick="showScreen('inv-q1')" class="w-full text-center text-white/35 text-sm mt-4 hover:text-white/60">← Volver</button>
+            </div>
+
+            <!-- SCREEN: INV-BOOK — booking form -->
+            <div class="screen" id="screen-inv-book">
+              <div class="mb-6">
+                <div class="flex justify-between text-xs text-white/40 mb-2 font-medium">
+                  <span>Paso 3 de 3</span><span>100%</span>
+                </div>
+                <div class="w-full bg-white/10 rounded-full h-1.5">
+                  <div class="bg-blue-400 h-1.5 rounded-full" style="width:100%"></div>
+                </div>
+              </div>
+              <div class="bg-white/5 backdrop-blur rounded-3xl border border-white/10 p-5 sm:p-8">
+                <p class="text-xs font-semibold text-blue-400 uppercase tracking-widest mb-3">Casi listo</p>
+                <h2 class="font-display text-2xl sm:text-3xl font-semibold text-white mb-2">Habla con un experto</h2>
+                <p class="text-white/50 text-sm mb-5">Una llamada de 20 minutos para revisar tu cartera y darte recomendaciones concretas. Sin compromiso.</p>
+
+                <div id="inv-summary" class="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-4 mb-5">
+                  <p class="text-xs font-semibold text-blue-300 uppercase tracking-widest mb-2">Tu resumen</p>
+                  <p class="text-sm text-white/70">Tienes: <strong id="inv-summary-q1" class="text-white">—</strong></p>
+                  <p class="text-sm text-white/70 mt-1">Quieres mejorar: <strong id="inv-summary-q2" class="text-white">—</strong></p>
+                </div>
+
+                <div class="space-y-4 mb-5">
+                  <div>
+                    <label class="block text-sm font-medium text-white/60 mb-1">Nombre</label>
+                    <input type="text" id="inv-nombre" placeholder="Tu nombre"
+                      class="w-full border-2 border-white/15 rounded-2xl px-4 py-3 focus:outline-none focus:border-blue-400 bg-white/5 text-white placeholder:text-white/30">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-white/60 mb-1">Email</label>
+                    <input type="email" id="inv-email" placeholder="tu@email.com"
+                      class="w-full border-2 border-white/15 rounded-2xl px-4 py-3 focus:outline-none focus:border-blue-400 bg-white/5 text-white placeholder:text-white/30">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-white/60 mb-1">Teléfono <span class="text-white/30 font-normal">(opcional)</span></label>
+                    <input type="tel" id="inv-telefono" placeholder="+34 600 000 000"
+                      class="w-full border-2 border-white/15 rounded-2xl px-4 py-3 focus:outline-none focus:border-blue-400 bg-white/5 text-white placeholder:text-white/30">
+                  </div>
+                </div>
+
+                <p id="inv-book-err" class="hidden text-xs text-red-400 mb-3 text-center">Introduce un email válido para continuar.</p>
+
+                <button onclick="goInvConfirm()" class="btn-continue w-full bg-blue-500 hover:bg-blue-400 text-white font-bold py-4 rounded-2xl transition-all mb-3">
+                  Reservar llamada gratuita →
+                </button>
+                <button onclick="skipInvBook()" class="w-full text-white/40 text-sm py-2 hover:text-white/60">
+                  Continuar sin reservar
+                </button>
+              </div>
+              <button onclick="showScreen('inv-q2')" class="w-full text-center text-white/35 text-sm mt-4 hover:text-white/60">← Volver</button>
+            </div>
+
+            <!-- SCREEN: INV-CONFIRM — success state -->
+            <div class="screen" id="screen-inv-confirm">
+              <div class="bg-white/5 backdrop-blur rounded-3xl border border-white/10 p-5 sm:p-8 text-center">
+                <div class="w-16 h-16 bg-blue-500/20 border border-blue-500/30 rounded-2xl flex items-center justify-center mx-auto mb-5 text-3xl">✅</div>
+                <h2 class="font-display text-2xl sm:text-3xl font-semibold text-white mb-2">¡Solicitud recibida!</h2>
+                <p class="text-white/50 text-sm mb-6">Te contactaremos en las próximas 24h para confirmar la fecha y hora de la llamada.</p>
+
+                <div class="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-4 mb-5 text-left">
+                  <p class="text-xs font-semibold text-blue-300 uppercase tracking-widest mb-3">Qué esperar</p>
+                  <div class="space-y-3">
+                    <div class="flex items-start gap-3">
+                      <div class="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold shrink-0 mt-0.5">1</div>
+                      <div class="text-left">
+                        <p class="text-sm font-semibold text-white">Confirmación por email</p>
+                        <p class="text-xs text-white/50">Te mandamos un email con la fecha y el enlace a la videollamada</p>
+                      </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                      <div class="w-6 h-6 rounded-full bg-blue-400/60 flex items-center justify-center text-white text-xs font-bold shrink-0 mt-0.5">2</div>
+                      <div class="text-left">
+                        <p class="text-sm font-semibold text-white">Llamada de 20 minutos</p>
+                        <p class="text-xs text-white/50">Revisamos tu cartera actual y hablamos de cómo optimizarla</p>
+                      </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                      <div class="w-6 h-6 rounded-full bg-blue-400/30 flex items-center justify-center text-white text-xs font-bold shrink-0 mt-0.5">3</div>
+                      <div class="text-left">
+                        <p class="text-sm font-semibold text-white">Plan de mejora personalizado</p>
+                        <p class="text-xs text-white/50">Si hay algo que cambiar, te lo explicamos con fundamentos y sin jerga</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-white/5 rounded-2xl p-4 mb-5 text-left">
+                  <p class="text-xs text-white/40 mb-2">Hemos anotado para la llamada:</p>
+                  <p class="text-sm text-white/70">Tipo de cartera: <strong id="inv-confirm-q1" class="text-white">—</strong></p>
+                  <p class="text-sm text-white/70 mt-1">Área de mejora: <strong id="inv-confirm-q2" class="text-white">—</strong></p>
+                </div>
+
+                <a href="index.html" class="w-full block text-center bg-white text-blue-900 font-bold py-3.5 rounded-2xl hover:bg-gray-100 transition-all text-sm">
+                  Volver al inicio →
+                </a>
+              </div>
+            </div>
+
           </div>
 
           <!-- RIGHT / BOTTOM: live dashboard panel — sticky sidebar on desktop, collapsible bottom sheet on mobile -->
@@ -680,7 +942,7 @@
 
   <script>
     // ─── State ────────────────────────────────────────────────
-    const answers = { ahorros: null, salario: null, mensual: null, edad: null, horizonte: null, riesgo: null, track: null, robopref: null };
+    const answers = { ahorros: null, salario: null, mensual: null, edad: null, horizonte: null, riesgo: null, track: null, robopref: null, invVehicle: null, invConcern: null };
     const RING_CIRC = 106.8;
 
     // ─── Navigation ───────────────────────────────────────────
@@ -692,12 +954,19 @@
       setTimeout(() => btn.classList.remove('confirming'), 550);
     });
 
-    const SCREEN_ORDER = ['intro','q1','salario','q2','edad','q3','q4','q5','robopref','lead'];
+    const SCREEN_ORDER = ['intro','entry','q1','salario','q2','edad','q3','q4','q5','robopref','lead','inv-q1','inv-q2','inv-book','inv-confirm'];
+
+    const INV_SCREENS = ['entry','inv-q1','inv-q2','inv-book','inv-confirm'];
+    const WIZARD_SCREENS = ['entry','q1','salario','q2','edad','q3','q4','q5','robopref','lead','inv-q1','inv-q2','inv-book','inv-confirm'];
 
     function showScreen(id) {
       const shell = document.getElementById('wizard-shell');
-      const isWizardScreen = ['q1','salario','q2','edad','q3','q4','q5','robopref','lead'].indexOf(id) !== -1;
+      const isWizardScreen = WIZARD_SCREENS.indexOf(id) !== -1;
       shell.style.display = isWizardScreen ? 'block' : 'none';
+
+      // Hide live panel on investor path (they don't fill out the wizard)
+      const lp = document.getElementById('live-panel');
+      if (lp) lp.style.display = INV_SCREENS.indexOf(id) !== -1 ? 'none' : '';
 
       const nextEl = document.getElementById('screen-' + id);
       if (!nextEl) return;
@@ -1158,6 +1427,81 @@
       };
       localStorage.setItem('iw_profile', JSON.stringify(profile));
       window.location.href = 'results.html';
+    }
+
+    // ─── Investor path ────────────────────────────────────────
+    const INV_VEHICLE_LABELS = {
+      robo: 'Roboadvisor',
+      fondos: 'Fondos indexados propios',
+      acciones: 'Acciones o ETFs directos',
+      pensiones: 'Plan de pensiones / EPSV',
+      mezcla: 'Mezcla de varios'
+    };
+
+    const INV_CONCERN_LABELS = {
+      comisiones: 'Reducir comisiones',
+      diversificacion: 'Mejorar diversificación',
+      rentabilidad: 'Mejorar rentabilidad',
+      perfil: 'Revisar perfil de riesgo',
+      general: 'Segunda opinión general'
+    };
+
+    function goFromEntry() {
+      const sel = getSelected('entry');
+      if (!sel) {
+        document.getElementById('entry-err').classList.remove('hidden');
+        return;
+      }
+      document.getElementById('entry-err').classList.add('hidden');
+      showScreen(sel === 'invierte' ? 'inv-q1' : 'q1');
+    }
+
+    function goInvQ2() {
+      const sel = getSelected('inv-q1');
+      if (!sel) {
+        document.getElementById('inv-q1-err').classList.remove('hidden');
+        return;
+      }
+      document.getElementById('inv-q1-err').classList.add('hidden');
+      answers.invVehicle = sel;
+      showScreen('inv-q2');
+    }
+
+    function goInvBook() {
+      const sel = getSelected('inv-q2');
+      if (!sel) {
+        document.getElementById('inv-q2-err').classList.remove('hidden');
+        return;
+      }
+      document.getElementById('inv-q2-err').classList.add('hidden');
+      answers.invConcern = sel;
+      const q1El = document.getElementById('inv-summary-q1');
+      const q2El = document.getElementById('inv-summary-q2');
+      if (q1El) q1El.textContent = INV_VEHICLE_LABELS[answers.invVehicle] || answers.invVehicle;
+      if (q2El) q2El.textContent = INV_CONCERN_LABELS[answers.invConcern] || answers.invConcern;
+      showScreen('inv-book');
+    }
+
+    function goInvConfirm() {
+      const email = (document.getElementById('inv-email').value || '').trim();
+      if (!email || !isValidEmail(email)) {
+        document.getElementById('inv-book-err').classList.remove('hidden');
+        return;
+      }
+      document.getElementById('inv-book-err').classList.add('hidden');
+      const c1 = document.getElementById('inv-confirm-q1');
+      const c2 = document.getElementById('inv-confirm-q2');
+      if (c1) c1.textContent = INV_VEHICLE_LABELS[answers.invVehicle] || '—';
+      if (c2) c2.textContent = INV_CONCERN_LABELS[answers.invConcern] || '—';
+      showScreen('inv-confirm');
+    }
+
+    function skipInvBook() {
+      const c1 = document.getElementById('inv-confirm-q1');
+      const c2 = document.getElementById('inv-confirm-q2');
+      if (c1) c1.textContent = INV_VEHICLE_LABELS[answers.invVehicle] || '—';
+      if (c2) c2.textContent = INV_CONCERN_LABELS[answers.invConcern] || '—';
+      showScreen('inv-confirm');
     }
   </script>
 </body>
